@@ -11,15 +11,14 @@
   :root{
     --brand:#0B5ED7; --brand-2:#084cc3;
     --ink:#0f172a; --ink-2:#334155; --muted:#64748b;
-    --paper:#ffffff; --stroke:#e5e7eb;
-    --wa:#25D366;
+    --paper:#ffffff; --stroke:#e5e7eb; --wa:#25D366;
   }
   *{box-sizing:border-box} html,body{height:100%}
   body{margin:0;font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:linear-gradient(135deg,#0b1223,#121a2f);color:#e5e7eb}
   a{text-decoration:none;color:inherit}
   .container{max-width:1040px;margin:0 auto;padding:24px}
 
-  /* Header claro */
+  /* Header */
   .header{background:var(--paper);color:var(--ink);border:1px solid var(--stroke);border-radius:16px;padding:18px 20px;display:flex;align-items:center;gap:16px;box-shadow:0 8px 24px rgba(15,23,42,.16)}
   .brand img{height:56px;width:auto;display:block}
   .brand-title{font-weight:800;font-size:22px;line-height:1.1;color:var(--ink)}
@@ -41,7 +40,6 @@
   .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:22px;margin:16px 0}
   .card h2{margin:0 0 10px;color:#dbe3f3;font-size:20px;font-weight:800}
   .sub{margin:2px 0 14px;color:#cbd5e1;font-size:13px}
-  .note{margin-top:8px;font-size:12px;color:#fce7f3;background:rgba(236,72,153,.15);border:1px solid rgba(236,72,153,.35);padding:8px 10px;border-radius:10px}
 
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
   .group{display:flex;flex-direction:column}
@@ -68,9 +66,6 @@
 
   /* WhatsApp */
   .wa{position:fixed;right:18px;bottom:22px;background:var(--wa);color:#06371a;border-radius:999px;padding:12px 16px;font-weight:800;box-shadow:0 10px 24px rgba(0,0,0,.25);z-index:999}
-
-  .error{display:none;background:rgba(220,53,69,.18);border:1px solid rgba(220,53,69,.4);color:#fecaca;padding:10px;border-radius:10px;margin:8px 0}
-  .error.show{display:block}
 
   /* Portada impresión */
   .print-cover{display:none}
@@ -103,9 +98,7 @@
 
     <!-- Header -->
     <div class="header">
-      <div class="brand">
-        <img src="./logo-garba.png" alt="Christian GarBa"/>
-      </div>
+      <div class="brand"><img src="./logo-garba.png" alt="Christian GarBa"/></div>
       <div>
         <div class="brand-title">Christian GarBa</div>
         <div class="brand-sub">Seguros con Estrategia</div>
@@ -121,13 +114,17 @@
       <strong>¿AFORE (Ley ‘97 en adelante)?</strong> Tu AFORE no será suficiente <em>(y lo sabes)</em>. Empezar <u>hoy</u> tu ahorro adicional marca la diferencia: cuanto antes inicies, <strong>menos tendrás que aportar</strong> para lograr el mismo ingreso y más tranquilidad al llegar a los 65.
     </div>
 
-    <!-- Punto de partida -->
+    <!-- Punto de partida (Nombre + Edad + Meta) -->
     <div class="card">
       <h2>Tu punto de partida</h2>
       <div class="grid">
         <div class="group">
           <label for="nombreOpt">Tu nombre (opcional)</label>
           <input id="nombreOpt" type="text" placeholder="Ej. Fernanda"/>
+        </div>
+        <div class="group">
+          <label for="edad">Edad actual (años)</label>
+          <input id="edad" type="number" value="35" min="18" max="100"/>
         </div>
         <div class="group">
           <label for="ingresoMeta">¿Cuánto te gustaría recibir mensualmente en tu retiro? (MXN, opcional)</label>
@@ -138,8 +135,8 @@
 
       <div class="suggest" id="sugerenciaBox" style="display:none">
         <div>
-          Proyección personalizada: para sostener ese ingreso (en valor futuro), un
-          <strong>ahorro mensual inicial de <span id="sugAhorro">$0</span></strong> podría ser un buen punto de partida.<br>
+          Proyección personalizada: con tu edad y horizonte, un
+          <strong>ahorro mensual inicial de <span id="sugAhorro">$0</span></strong> te acercaría a esa meta (valor futuro).<br/>
           <span class="muted"><strong>Puedes iniciar desde $2,500 MXN/mes</strong>; <strong>lo que no puedes es no tenerlo</strong>.</span>
           <div class="muted" id="sugNota65" style="margin-top:4px;display:none"></div>
         </div>
@@ -153,10 +150,6 @@
       <div class="error" id="errorMsg"></div>
 
       <div class="grid">
-        <div class="group">
-          <label for="edad">Edad actual (años)</label>
-          <input id="edad" type="number" value="35" min="18" max="100"/>
-        </div>
         <div class="group">
           <label for="years">Años que aportará</label>
           <input id="years" type="number" value="25" min="1" max="70"/>
@@ -296,7 +289,7 @@
   </div>
 
 <script>
-  const LS='calc_garba_v3';
+  const LS='calc_garba_v4';
   let lastAhorro=0,lastMens=0;
   const $=id=>document.getElementById(id);
   const money=v=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'}).format(v||0);
@@ -338,7 +331,7 @@
     $('waBtn').href='https://wa.me/526624176032?text='+encodeURIComponent(msg);
   }
 
-  /* Sugerencia: respeta edad y límite 65 */
+  /* Sugerencia: edad arriba y límite 65 */
   function calcSuggest(){
     const ingreso=parseFloat($('ingresoMeta').value);
     const edad=parseFloat($('edad').value);
@@ -350,18 +343,14 @@
 
     const yearsEff = Math.max(0, Math.min(years, Math.max(0, 65 - edad))); // cap a 65
     const sugNote = $('sugNota65');
-    if (yearsEff < years) {
-      sugNote.style.display='block';
-      sugNote.textContent = `La sugerencia considera ${yearsEff} años efectivos hasta los 65 (ingresaste ${years}).`;
-    } else {
-      sugNote.style.display='none';
-    }
+    if (yearsEff < years) { sugNote.style.display='block'; sugNote.textContent = `La sugerencia considera ${yearsEff} años efectivos hasta los 65 (ingresaste ${years}).`; }
+    else { sugNote.style.display='none'; }
 
-    // Necesidad de PV real para sostener ingreso real nivelado
+    // PV necesario (real) para sostener ingreso real nivelado en retiro
     const rRealRet=((1+rateRet)/(1+inflRet))-1, iRet=rRealRet/12, nRet=yrsRet*12;
     const PVnec = Math.abs(iRet)<1e-9 ? ingreso*nRet : ingreso*((1-Math.pow(1+iRet,-nRet))/iRet);
 
-    // Factor de acumulación real durante ahorro (años efectivos)
+    // Factor de acumulación real durante los años efectivos
     const rRealAcc=((1+rate)/(1+infl))-1, iAcc=rRealAcc/12, N=yearsEff*12;
     const factor = Math.abs(iAcc)<1e-9 ? N : (Math.pow(1+iAcc,N)-1)/iAcc;
 
@@ -381,106 +370,88 @@
     const infl = parseFloat($('inflation').value) / 100;  // inflación anual
 
     if ([edad, yearsInput, pmt, lump, rate, infl].some(x => isNaN(x)) || !freq) {
-      const e = $('errorMsg');
-      e.textContent = 'Completa todos los campos correctamente';
-      e.classList.add('show');
-      return;
-    } else {
-      $('errorMsg').classList.remove('show');
-    }
+      const e = $('errorMsg'); e.textContent = 'Completa todos los campos correctamente'; e.classList.add('show'); return;
+    } else { $('errorMsg').classList.remove('show'); }
 
     // Limitar aportaciones hasta los 65
     const yearsEff = Math.max(0, Math.min(yearsInput, Math.max(0, 65 - edad)));
     const nota = $('notaCap');
-    if (yearsEff < yearsInput) {
-      nota.style.display='block';
-      nota.textContent=`Se consideraron ${yearsEff} años efectivos de aportación (hasta los 65).`;
-    } else {
-      nota.style.display='none';
-    }
+    if (yearsEff < yearsInput) { nota.style.display='block'; nota.textContent=`Se consideraron ${yearsEff} años efectivos de aportación (hasta los 65).`; }
+    else { nota.style.display='none'; }
 
     const N = yearsEff * freq;
     const i = rate / freq;
 
-    // FV aportación inicial
-    const FV_lump = lump * Math.pow(1 + i, N);
+    // FV lump
+    const FV_lump = N>0 ? lump * Math.pow(1 + i, N) : lump;
 
-    // FV aportaciones periódicas (pmtYear constante en el año; crece al inicio de cada año por inflación)
-    let FV_pmt = 0;
-    let totalAport = lump;
-    let pmtYear = pmt;
-
+    // FV aportaciones con crecimiento anual por inflación
+    let FV_pmt = 0, totalAport = lump, pmtYear = pmt;
     for (let y = 0; y < yearsEff; y++) {
       if (y > 0) pmtYear *= (1 + infl);
       for (let p = 0; p < freq; p++) {
         const perRest = N - (y * freq + p);
         FV_pmt += pmtYear * Math.pow(1 + i, perRest);
-        totalAport += pmtYear; // suma todas las aportaciones del año
+        totalAport += pmtYear;
       }
     }
 
-    const FV_fin = FV_lump + FV_pmt;     // fondo al terminar aportaciones (puede ser < 65)
+    let saldo = FV_lump + FV_pmt;   // saldo al terminar aportaciones (puede ser <65)
     const edadFin = edad + yearsEff;
-    const rendimiento = FV_fin - totalAport;
+    const rendimiento = saldo - totalAport;
 
     countUp($('edadFinal'), Math.round(edadFin), v => String(Math.round(v)));
-    countUp($('ahorroNominal'), FV_fin, money);
+    countUp($('ahorroNominal'), saldo, money);
     countUp($('totalAportado'), totalAport, money);
     countUp($('rendimiento'), rendimiento, money);
 
-    // Tabla y extensión hasta los 65 (nominal)
+    // Tabla y extensión hasta 65 (solo capitaliza)
     const tbody=$('tbody'); tbody.innerHTML='';
-    let saldo = lump, pmtY = pmt, edadAct = edad;
+    let tablaSaldo = lump, pmtY = pmt, edadAct = edad;
 
     for (let yr = 1; yr <= yearsEff; yr++) {
       edadAct++;
       if (yr > 1) pmtY *= (1 + infl);
       const aportAno = pmtY * freq;
-      for (let k = 0; k < freq; k++) {
-        saldo = saldo * (1 + i) + pmtY;
-      }
+      for (let k = 0; k < freq; k++) { tablaSaldo = tablaSaldo * (1 + i) + pmtY; }
       const tr=document.createElement('tr');
-      tr.innerHTML = `<td>${yr}</td><td>${edadAct} años</td><td>${money(aportAno)}</td><td>${money(saldo)}</td>`;
+      tr.innerHTML = `<td>${yr}</td><td>${edadAct} años</td><td>${money(aportAno)}</td><td>${money(tablaSaldo)}</td>`;
       tbody.appendChild(tr);
     }
 
-    let baseRetiro = saldo;
     if (edadFin < 65) {
       const yearsExtra = 65 - edadFin;
       for (let yr = 1; yr <= yearsExtra; yr++) {
         edadAct++;
-        for (let k = 0; k < freq; k++) { saldo = saldo * (1 + i); }
+        for (let k = 0; k < freq; k++) { tablaSaldo = tablaSaldo * (1 + i); }
         const tr=document.createElement('tr');
         tr.style.background='rgba(11,94,215,0.08)';
-        tr.innerHTML = `<td>${yearsEff + yr}</td><td>${edadAct} años</td><td>—</td><td>${money(saldo)}</td>`;
+        tr.innerHTML = `<td>${yearsEff + yr}</td><td>${edadAct} años</td><td>—</td><td>${money(tablaSaldo)}</td>`;
         tbody.appendChild(tr);
       }
-      baseRetiro = saldo;
+      saldo = tablaSaldo;
       document.querySelector('[data-kpi-65]').style.display='block';
-      document.querySelector('[data-kpi-65-val]').textContent = money(baseRetiro);
+      document.querySelector('[data-kpi-65-val]').textContent = money(saldo);
     } else {
-      const box=document.querySelector('[data-kpi-65]');
-      if (box) box.style.display='none';
+      const box=document.querySelector('[data-kpi-65]'); if (box) box.style.display='none';
     }
 
-    $('pvRet').value = Math.max(0, Math.round(baseRetiro));
-    lastAhorro = baseRetiro;
-    updateWA();
-    calcSuggest();
-    save();
+    $('pvRet').value = Math.max(0, Math.round(saldo));
+    lastAhorro = saldo;
 
+    updateWA(); calcSuggest(); save();
     document.querySelectorAll('.kpi-value').forEach(el=>{ el.style.opacity='1'; el.style.transform='translateY(0)'; });
   }
 
   function calcRet(){
     const PV = parseFloat($('pvRet').value) || 0;
     const yrs = parseInt($('yrsRetSel').value, 10);
-    const rateRet = parseFloat($('rateRet').value) / 100; // nominal anual
-    const infl = parseFloat($('inflRet').value) / 100;    // referencia
+    const rateRet = parseFloat($('rateRet').value) / 100;
+    const infl = parseFloat($('inflRet').value) / 100;
 
     if (PV <= 0) { alert('Primero calcula tu ahorro (Fase 1).'); return; }
 
-    const i = rateRet / 12;   // tasa mensual nominal
+    const i = rateRet / 12;     // nominal mensual
     const n = yrs * 12;
 
     let PMT;
@@ -491,27 +462,21 @@
     countUp($('pmtReal'), PMT, money);
     countUp($('nMeses'), n, v => `${Math.round(v)} meses`);
 
-    // Tasa real mensual (solo informativa)
-    const rReal = ((1 + rateRet) / (1 + infl)) - 1;
+    const rReal = ((1 + rateRet) / (1 + infl)) - 1; // referencia
     countUp($('iRealMes'), (rReal/12)*100, v => `${v.toFixed(3)}%`);
 
     const anual = PV * 0.04, mensual = anual/12;
     $('rule4').textContent = `${money(anual)} /año · ${money(mensual)} /mes`;
 
-    // --------- Tabla de retiro (resumen anual con interés explícito) ----------
-    const retTbody = $('retTbody'); 
-    retTbody.innerHTML='';
-
-    const g = Math.pow(1 + i, 12);                         // crecimiento de 12 meses
-    const factor = (Math.abs(i) < 1e-12) ? 12 : (g - 1) / i; // suma geométrica para 12 pagos
+    // Tabla retiro (anual: interés explícito)
+    const retTbody = $('retTbody'); retTbody.innerHTML='';
+    const g = Math.pow(1 + i, 12);
+    const factor = (Math.abs(i) < 1e-12) ? 12 : (g - 1) / i; // suma geométrica 12 pagos
     const retiroAnual = PMT * 12;
 
     let saldoIni = PV;
     for (let y = 1; y <= yrs; y++) {
-      const saldoFin = (Math.abs(i) < 1e-12)
-        ? (saldoIni - retiroAnual)                 // sin interés
-        : (saldoIni * g - PMT * factor);           // con capitalización mensual
-
+      const saldoFin = (Math.abs(i) < 1e-12) ? (saldoIni - retiroAnual) : (saldoIni * g - PMT * factor);
       const interesAnual = saldoFin - (saldoIni - retiroAnual);
 
       const tr = document.createElement('tr');
@@ -526,12 +491,9 @@
 
       saldoIni = Math.max(0, saldoFin);
     }
-
     $('retDetails').style.display='block';
 
-    lastMens = PMT;
-    updateWA();
-    save();
+    lastMens = PMT; updateWA(); save();
   }
 
   function exportCSV(){
@@ -562,16 +524,21 @@
     ['nombreOpt','ingresoMeta'].forEach(k=>$(k).value='');
     $('edad').value=35;$('years').value=25;$('pmt').value=2500;$('frequency').value=12;$('lumpSum').value=0;$('rate').value=10;$('inflation').value=4;
     $('yrsRetSel').value='20';$('rateRet').value=7;$('inflRet').value=4;
-    $('sugerenciaBox').style.display='none';
-    $('retDetails').style.display='none';
+    $('sugerenciaBox').style.display='none'; $('retDetails').style.display='none';
     calcAccum();
   });
-  document.querySelectorAll('input,select').forEach(el=>el.addEventListener('change',()=>{calcAccum();save();}));
+
+  // Recalcular en vivo
+  document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',()=>{calcAccum();save();}));
+  ['edad','ingresoMeta','years','rate','inflation','yrsRetSel','rateRet','inflRet'].forEach(id=>{
+    $(id).addEventListener('input', calcSuggest);
+  });
+
   $('toggleTable').addEventListener('click',()=>{ const d=$('details'); d.style.display=d.style.display==='block'?'none':'block'; });
   $('toggleRetTable').addEventListener('click',()=>{ const d=$('retDetails'); d.style.display=d.style.display==='block'?'none':'block'; });
 
   // Init
-  window.addEventListener('load',()=>{ load(); calcAccum(); updateWA(); setupCover(); });
+  window.addEventListener('load',()=>{ load(); calcAccum(); calcSuggest(); updateWA(); setupCover(); });
 </script>
 </body>
 </html>
