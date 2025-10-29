@@ -253,10 +253,18 @@
       <div class="details-toggle" id="toggleRetTable"><span><strong>Detalles del retiro (resumen anual)</strong></span><span>▼</span></div>
       <div class="details" id="retDetails">
         <table>
-          <thead><tr><th>Año de retiro</th><th>Retiro anual (12× mensualidad)</th><th>Saldo al cierre</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Año de retiro</th>
+              <th>Saldo inicial</th>
+              <th>Interés del año</th>
+              <th>Retiros del año</th>
+              <th>Saldo final</th>
+            </tr>
+          </thead>
           <tbody id="retTbody"></tbody>
         </table>
-        <div class="muted">*La vista es anual para facilitar lectura. Si prefieres, puedo activarte la vista mensual completa.</div>
+        <div class="muted">*La vista es anual para facilitar lectura. Si prefieres, puedo activar la vista mensual completa.</div>
       </div>
     </div>
 
@@ -349,7 +357,7 @@
       sugNote.style.display='none';
     }
 
-    // Necesidad de PV real para sostener ingreso (flujo nivelado real) => tasa real
+    // Necesidad de PV real para sostener ingreso real nivelado
     const rRealRet=((1+rateRet)/(1+inflRet))-1, iRet=rRealRet/12, nRet=yrsRet*12;
     const PVnec = Math.abs(iRet)<1e-9 ? ingreso*nRet : ingreso*((1-Math.pow(1+iRet,-nRet))/iRet);
 
@@ -407,7 +415,7 @@
       for (let p = 0; p < freq; p++) {
         const perRest = N - (y * freq + p);
         FV_pmt += pmtYear * Math.pow(1 + i, perRest);
-        totalAport += pmtYear; // suma todas las aportaciones del año (todas las veces/frecuencia)
+        totalAport += pmtYear; // suma todas las aportaciones del año
       }
     }
 
@@ -472,7 +480,7 @@
 
     if (PV <= 0) { alert('Primero calcula tu ahorro (Fase 1).'); return; }
 
-    const i = rateRet / 12;
+    const i = rateRet / 12;   // tasa mensual nominal
     const n = yrs * 12;
 
     let PMT;
@@ -490,21 +498,33 @@
     const anual = PV * 0.04, mensual = anual/12;
     $('rule4').textContent = `${money(anual)} /año · ${money(mensual)} /mes`;
 
-    // ---- Tabla de retiro (resumen anual) ----
-    const retTbody = $('retTbody'); retTbody.innerHTML='';
-    let saldo = PV;
-    const retiroAnual = PMT * 12;
-    const im = i; // tasa mensual nominal
+    // --------- Tabla de retiro (resumen anual con interés explícito) ----------
+    const retTbody = $('retTbody'); 
+    retTbody.innerHTML='';
 
-    for (let y=1; y<=yrs; y++){
-      // Simular 12 meses de: capitalizar y retirar al final de cada mes
-      for (let m=0; m<12; m++){
-        saldo = saldo * (1 + im) - PMT;
-      }
-      if (saldo < 0) saldo = 0; // por seguridad numérica
+    const g = Math.pow(1 + i, 12);                         // crecimiento de 12 meses
+    const factor = (Math.abs(i) < 1e-12) ? 12 : (g - 1) / i; // suma geométrica para 12 pagos
+    const retiroAnual = PMT * 12;
+
+    let saldoIni = PV;
+    for (let y = 1; y <= yrs; y++) {
+      const saldoFin = (Math.abs(i) < 1e-12)
+        ? (saldoIni - retiroAnual)                 // sin interés
+        : (saldoIni * g - PMT * factor);           // con capitalización mensual
+
+      const interesAnual = saldoFin - (saldoIni - retiroAnual);
+
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${y}</td><td>${money(retiroAnual)}</td><td>${money(saldo)}</td>`;
+      tr.innerHTML = `
+        <td>${y}</td>
+        <td>${money(saldoIni)}</td>
+        <td>${money(interesAnual)}</td>
+        <td>${money(retiroAnual)}</td>
+        <td>${money(Math.max(0, saldoFin))}</td>
+      `;
       retTbody.appendChild(tr);
+
+      saldoIni = Math.max(0, saldoFin);
     }
 
     $('retDetails').style.display='block';
