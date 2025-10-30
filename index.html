@@ -50,8 +50,14 @@
   .muted{font-size:12px;color:#94a3b8;margin-top:6px}
 
   /* Suggestion (alto contraste) */
-  .suggest{display:none;border:1px solid var(--pill-border);background:linear-gradient(0deg,rgba(11,94,215,.10),rgba(11,94,215,.10));border-left:6px solid var(--brand);border-radius:14px;padding:14px;margin-top:12px}
+  .suggest{display:none;border:1px solid var(--pill-border);background:linear-gradient(0deg,rgba(11,94,215,.12),rgba(11,94,215,.12));border-left:6px solid var(--brand);border-radius:14px;padding:14px;margin-top:12px}
   .suggest strong{color:#eaf2ff}
+
+  /* Lectura estratégica */
+  .insight{display:none;margin-top:10px;border:1px dashed rgba(255,255,255,.25);border-radius:12px;padding:12px;background:rgba(255,255,255,.04);color:#dbeafe}
+  .insight h3{margin:0 0 6px;font-size:13px;color:#93c5fd}
+  .insight ul{margin:0 0 0 18px;padding:0}
+  .insight li{margin:4px 0}
 
   /* KPIs */
   .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:6px}
@@ -72,8 +78,29 @@
   .error{display:none;background:rgba(220,53,69,.18);border:1px solid rgba(220,53,69,.4);color:#fecaca;padding:10px;border-radius:10px;margin:8px 0}
   .error.show{display:block}
 
-  /* Print */
-  @media print{ .wa,.toolbar,.toggle{display:none!important} body{background:#fff;color:#000} }
+  /* Print (oculta elementos web y define pie PDF) */
+  @media print{
+    .wa,.toolbar,.toggle{display:none!important}
+    body{background:#fff;color:#000}
+    .print-footer {
+      position: fixed;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 10.5px;
+      color: #64748B;
+      border-top: 1px solid #CBD5E1;
+      padding-top: 6px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .print-footer img { height: 22px; width: auto; opacity: .9; }
+    .print-footer .print-date { display:block; font-size:9.5px; color:#94A3B8; margin-top:2px; }
+  }
 </style>
 </head>
 <body>
@@ -102,10 +129,12 @@
       <strong>¿AFORE (Ley ‘97 en adelante)?</strong> Tu AFORE no será suficiente <em>(y lo sabes)</em>. Empezar <u>hoy</u> tu ahorro adicional marca la diferencia: cuanto antes inicies, <strong>menos tendrás que aportar</strong> para lograr el mismo ingreso y más tranquilidad al llegar a los 65.
     </div>
 
-    <!-- Punto de partida -->
+    <!-- Panel A · Ahorro hasta los 65 -->
     <div class="card">
-      <h2>Tu punto de partida</h2>
+      <h2>Panel A · Ahorro hasta los 65</h2>
       <div class="help">La edad de retiro considerada es <strong>65 años</strong>. Si tu plan termina antes, el fondo sigue invirtiéndose hasta esa edad.</div>
+
+      <!-- Datos de partida -->
       <div class="grid">
         <div class="group">
           <label for="nombreOpt">Tu nombre (opcional)</label>
@@ -129,24 +158,32 @@
           <div class="muted">Usamos este dato para sugerirte un ahorro mensual inicial realista (tu aporte crece cada año ≈ inflación).</div>
         </div>
       </div>
+
       <div class="toolbar" style="justify-content:flex-start">
         <button class="btn btn-primary" id="planBtn">Calcular mi plan personalizado</button>
         <button class="btn" id="resetTop">Reiniciar datos</button>
       </div>
 
+      <!-- Sugerencia -->
       <div class="suggest" id="sugBox">
-        <div id="sugText">
-          <!-- se llena por JS -->
-        </div>
-        <div class="muted" id="sugSup">
-          <!-- supuestos -->
-        </div>
+        <div id="sugText"></div>
+        <div class="muted" id="sugSup"></div>
+      </div>
+
+      <!-- Lectura estratégica -->
+      <div class="insight" id="insightBox">
+        <h3>🧭 Lectura estratégica</h3>
+        <ul>
+          <li>A los 31 años, cada peso que no se aporta hoy pierde ~15 años de rendimiento compuesto antes del retiro.</li>
+          <li>La aportación requerida ya supera los $4,800, casi el doble de quien empezó a los 25.</li>
+          <li><strong>“A los 25 podías alcanzar tu retiro con $2,600 al mes. A los 31 ya necesitas casi el doble. El tiempo no solo pasa, también se capitaliza.”</strong></li>
+        </ul>
       </div>
     </div>
 
-    <!-- Fase 1 -->
+    <!-- Parámetros y cálculo Ahorro -->
     <div class="card">
-      <h2>Fase 1 • Ahorro con interés compuesto</h2>
+      <h2>Parámetros de acumulación</h2>
       <p class="help">Las aportaciones se actualizan automáticamente cada año con la inflación promedio que definas.</p>
       <div class="error" id="errorMsg"></div>
       <div class="grid">
@@ -159,7 +196,7 @@
           <input id="years" type="number" value="25" min="1" max="70">
         </div>
         <div class="group">
-          <label for="pmt">Aportación periódica inicial (MXN)</label>
+          <label for="pmt">Aportación mensual inicial (MXN)</label>
           <input id="pmt" type="number" value="2500" min="0" step="0.01">
           <div class="muted">Se incrementa cada año ≈ inflación.</div>
         </div>
@@ -192,9 +229,9 @@
       </div>
     </div>
 
-    <!-- Resultados Fase 1 -->
+    <!-- Resultados Ahorro -->
     <div class="card">
-      <h2>Resultados de la Fase 1</h2>
+      <h2>Resultados del ahorro</h2>
       <div class="kpis">
         <div class="kpi"><div class="kpi-label">Edad al finalizar aportaciones</div><div class="kpi-value" id="edadFinal">—</div></div>
         <div class="kpi"><div class="kpi-label">Ahorro acumulado (nominal)</div><div class="kpi-value" id="ahorroNominal">—</div></div>
@@ -212,10 +249,10 @@
       </div>
     </div>
 
-    <!-- Fase 2 -->
+    <!-- Panel B · Pensión desde los 65 -->
     <div class="card">
-      <h2>Fase 2 • Mensualidad de retiro</h2>
-      <p class="help">La mensualidad se calcula en <strong>valor nominal (futuro)</strong> usando el rendimiento y la inflación que definas. Se toma como base el <strong>saldo a los 65</strong> de la Fase 1.</p>
+      <h2>Panel B · Pensión desde los 65</h2>
+      <p class="help">La mensualidad se calcula en <strong>valor nominal (futuro)</strong> con el saldo a los 65 como base.</p>
       <div class="grid">
         <input type="hidden" id="pvRet" value="0">
         <div class="group">
@@ -245,6 +282,23 @@
         <div class="kpi"><div class="kpi-label">Tasa real mensual</div><div class="kpi-value" id="iRealMes">—</div></div>
         <div class="kpi"><div class="kpi-label">Regla 4% (referencia anual)</div><div class="kpi-value" id="rule4">—</div></div>
       </div>
+
+      <!-- Detalle mes a mes (retiro) -->
+      <div class="toggle" id="toggleRetTable"><span><strong>Detalle mes a mes (retiro)</strong></span><span>▼</span></div>
+      <div class="details" id="retDetails">
+        <table>
+          <thead>
+            <tr>
+              <th>Mes</th>
+              <th>Saldo inicial</th>
+              <th>Interés del mes</th>
+              <th>Retiro</th>
+              <th>Saldo final</th>
+            </tr>
+          </thead>
+          <tbody id="retBody"></tbody>
+        </table>
+      </div>
     </div>
 
     <div class="muted">Proyección educativa; no contempla impuestos, comisiones u otros costos. Resultados no garantizados.</div>
@@ -252,6 +306,16 @@
 
   <!-- WhatsApp -->
   <a id="waBtn" class="wa" target="_blank" rel="noopener">Chatear por WhatsApp</a>
+
+  <!-- CTA SOLO PARA IMPRESIÓN / PDF -->
+  <div class="print-footer">
+    <img src="./logo-garba.png" alt="GarBa Logo" />
+    <div>
+      GarBa · Seguros con Estrategia — ¿Necesitas claridad para decidir?<br>
+      Escríbeme: +52 662 417 6032 · christian.garcia@sfgarba.com.mx
+      <div class="print-date"></div>
+    </div>
+  </div>
 
 <script>
   // ------- Utilidades
@@ -271,7 +335,7 @@
     $('waBtn').href = 'https://wa.me/526624176032?text='+encodeURIComponent(msg);
   }
 
-  // ------- Sugerencia PMT inicial (real -> nominal base)
+  // ------- Sugerencia PMT inicial (peras con peras)
   function calcSuggestion(){
     const edad   = parseFloat($('edadTop').value);
     const planY  = parseInt($('planTop').value,10);
@@ -281,7 +345,7 @@
     const rRet   = parseFloat($('rateRet').value)/100;   // misma tasa de retiro
     const yrsRet = parseInt($('yrsRetSel').value,10);
 
-    if(!(edad>0 && planY>0 && meta0>0)){ $('sugBox').style.display='none'; return; }
+    if(!(edad>0 && planY>0 && meta0>0)){ $('sugBox').style.display='none'; $('insightBox').style.display='none'; return; }
 
     const yrsTo65 = Math.max(0,65-edad);
     const yrsAport = Math.min(planY, yrsTo65);             // se detiene a los 65
@@ -306,14 +370,14 @@
     // El PMT que mostramos como "inicial" es ese valor real (de hoy). En la Fase 1 crecerá año con inflación.
     const pmtInicial = Math.max(0, PMT_real);
 
-    // Texto y supuestos
-    const yrsTexto = gapYears>0 ? ` Tu fondo seguirá creciendo **${gapYears} año(s)** más hasta los 65.` : '';
     $('sugText').innerHTML =
-      `💡 <strong>Proyección personalizada:</strong> para lograr el ingreso que buscas en tu retiro, un <strong>ahorro mensual inicial de ${money(pmtInicial)}</strong> sería un buen punto de partida.<br><span style="font-size:12px;color:#cfd8e3">Este es sólo una guía; puedes iniciar desde $2,500 MXN al mes. Lo importante es empezar.${yrsTexto}</span>`;
+      `💡 <strong>Proyección personalizada:</strong> para lograr el ingreso que buscas en tu retiro, un <strong>ahorro mensual inicial de ${money(pmtInicial)}</strong> sería un buen punto de partida.<br>`+
+      `<span style="font-size:12px;color:#cfd8e3">Es una guía; puedes iniciar desde $2,500 MXN al mes. Lo importante es empezar.${gapYears>0?` Tu fondo seguirá creciendo <strong>${gapYears} año(s)</strong> más hasta los 65.`:''}</span>`;
     $('sugSup').innerText =
-      `Supuestos de cálculo: inflación ${ (infl*100).toFixed(1) }%, rendimiento anual en acumulación ${(rAcc*100).toFixed(1)}%, `+
+      `Supuestos de cálculo: inflación ${(infl*100).toFixed(1)}%, rendimiento anual en acumulación ${(rAcc*100).toFixed(1)}%, `+
       `retiro ${yrsRet} años con rendimiento ${(rRet*100).toFixed(1)}% nominal.`;
     $('sugBox').style.display='block';
+    $('insightBox').style.display='block';
 
     // Llevo ese PMT a la Fase 1 para que el usuario pueda probarlo de inmediato
     $('edad').value = String(edad);
@@ -393,6 +457,32 @@
     linkWhatsApp();
   }
 
+  // Construye la tabla mes a mes del retiro
+  function buildRetSchedule(PV, iNom, PMT, n){
+    const tbody = $('retBody');
+    tbody.innerHTML = '';
+    let saldo = PV;
+
+    for(let m=1; m<=n; m++){
+      const interes = saldo * iNom;
+      const retiro  = PMT;
+      const saldoFin = saldo + interes - retiro;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${m}</td>
+        <td>${money(saldo)}</td>
+        <td>${money(interes)}</td>
+        <td>${money(retiro)}</td>
+        <td>${money(Math.max(0, saldoFin))}</td>
+      `;
+      tbody.appendChild(tr);
+
+      saldo = saldoFin;
+      if (saldo <= 0) break;
+    }
+  }
+
   // ------- Fase 2 (retiro desde el saldo a los 65, cálculo en NOMINAL)
   function calcRet(){
     const PV = parseFloat($('pvRet').value)||0;
@@ -400,7 +490,7 @@
     const rateRet = parseFloat($('rateRet').value)/100;
     const infl = parseFloat($('inflRet').value)/100;
 
-    if(PV<=0){ alert('Primero calcula tu ahorro (Fase 1).'); return; }
+    if(PV<=0){ alert('Primero calcula tu ahorro (Panel A).'); return; }
 
     const iNom = rateRet/12, n = yrs*12;
     // PMT nominal constante (fin de periodo) que “consume” PV en n meses
@@ -414,6 +504,9 @@
     $('nMeses').textContent = `${n} meses`;
     $('iRealMes').textContent = `${(iReal*100).toFixed(3)}%`;
     $('rule4').textContent = `${money(PV*0.04)} /año · ${money(PV*0.04/12)} /mes`;
+
+    // Detalle mes a mes (el saldo no retirado sigue generando rendimiento)
+    buildRetSchedule(PV, iNom, PMT, n);
   }
 
   // ------- CSV
@@ -432,7 +525,7 @@
   $('planBtn').addEventListener('click', ()=>{ calcSuggestion(); calcAccum(); });
   $('resetTop').addEventListener('click', ()=>{
     $('nombreOpt').value=''; $('edadTop').value=29; $('planTop').value='25'; $('metaHoy').value=32000;
-    $('sugBox').style.display='none';
+    $('sugBox').style.display='none'; $('insightBox').style.display='none';
   });
 
   $('calcBtn').addEventListener('click', calcAccum);
@@ -443,8 +536,17 @@
 
   $('calcRet').addEventListener('click', calcRet);
   $('csvBtn').addEventListener('click', exportCSV);
-  $('printBtn').addEventListener('click', ()=>{ window.print(); });
+  $('printBtn').addEventListener('click', ()=>{ 
+    // Fecha automática en el pie
+    const dateEl = document.querySelector('.print-footer .print-date');
+    if (dateEl && !dateEl.textContent) {
+      const fecha = new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
+      dateEl.textContent = `Proyección generada el ${fecha}`;
+    }
+    window.print(); 
+  });
   $('toggleTable').addEventListener('click',()=>{ const d=$('details'); d.style.display=d.style.display==='block'?'none':'block'; });
+  $('toggleRetTable').addEventListener('click',()=>{ const d=$('retDetails'); d.style.display=d.style.display==='block'?'none':'block'; });
 
   // recalcula automáticamente cuando cambian supuestos relevantes
   ['edadTop','planTop','metaHoy','rate','inflation','rateRet','yrsRetSel'].forEach(id=>{
