@@ -58,7 +58,7 @@
   .kpi-label{font-size:11px;letter-spacing:.4px;color:#a9b4c7;text-transform:uppercase}
   .kpi-value{font-size:22px;font-weight:800;color:#f8fafc}
 
-  /* Details table */
+  /* Details tables */
   .toggle{display:flex;justify-content:space-between;align-items:center;cursor:pointer;border:1px solid var(--line);padding:12px 14px;border-radius:12px;margin-top:10px}
   .details{display:none;overflow:auto}
   table{width:100%;border-collapse:collapse;margin-top:10px}
@@ -100,7 +100,7 @@
       <strong>¿AFORE (Ley ‘97 en adelante)?</strong> Tu AFORE no será suficiente <em>(y lo sabes)</em>. Empezar <u>hoy</u> tu ahorro adicional marca la diferencia: cuanto antes inicies, <strong>menos tendrás que aportar</strong> para lograr el mismo ingreso y más tranquilidad al llegar a los 65.
     </div>
 
-    <!-- Panel A: Punto de partida -->
+    <!-- Panel A -->
     <div class="card">
       <h2>Panel A · Ahorro hasta los 65</h2>
       <div class="help">La edad de retiro considerada es <strong>65 años</strong>. Si tu plan termina antes, el fondo sigue invirtiéndose hasta esa edad.</div>
@@ -239,6 +239,23 @@
         <div class="kpi"><div class="kpi-label">Tasa real mensual</div><div class="kpi-value" id="iRealMes">—</div></div>
         <div class="kpi"><div class="kpi-label">Regla 4% (referencia anual)</div><div class="kpi-value" id="rule4">—</div></div>
       </div>
+
+      <!-- NUEVO: Detalle mensual del retiro -->
+      <div class="toggle" id="toggleTableRet"><span><strong>Detalle mensual del retiro</strong></span><span>▼</span></div>
+      <div class="details" id="detailsRet">
+        <table>
+          <thead>
+            <tr>
+              <th>Mes</th>
+              <th>Edad</th>
+              <th>Retiro del mes</th>
+              <th>Interés del mes</th>
+              <th>Saldo al cierre</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyRet"></tbody>
+        </table>
+      </div>
     </div>
 
     <div class="muted">Proyección educativa; no contempla impuestos, comisiones u otros costos. Resultados no garantizados.</div>
@@ -283,19 +300,20 @@
     const yrsTo65   = Math.max(0, 65 - edad);
     const metaNom65 = metaHoy * Math.pow(1+infl, yrsTo65);
 
-    // (2) Capital nominal requerido a los 65 para pagar metaNom65 por yrsRet años
+    // (2) Capital nominal requerido a los 65 para pagar metaNom65 por yrsRet años (fin de periodo)
     const iRet = rRet/freq, nRet = yrsRet*freq;
     const PVneed65 = Math.abs(iRet)<1e-12 ? metaNom65*nRet
                       : metaNom65 * ( (1 - Math.pow(1+iRet, -nRet)) / iRet );
 
     // (3) Años reales de aportación y “pausa” hasta 65
-    const yrsAport = Math.min(planY, yrsTo65);
-    const gapYears = Math.max(0, yrsTo65 - yrsAport);
+    const yrsTo65Real = yrsTo65;                 // para claridad
+    const yrsAport    = Math.min(planY, yrsTo65Real);
+    const gapYears    = Math.max(0, yrsTo65Real - yrsAport);
 
-    // (4) Factor de aportaciones que suben anual ≈ inflación (pago mensual dentro de año)
+    // (4) Factor de aportaciones que suben anual ≈ inflación (pago mensual dentro de cada año)
     const iAcc = rAcc/freq;
     const N    = yrsAport*freq;
-    let FV_pagos = 0, pmtYear = 1; // PMT inicial = 1 para obtener factor
+    let FV_pagos = 0, pmtYear = 1; // PMT inicial = 1 para factor
     for(let y=0; y<yrsAport; y++){
       if(y>0) pmtYear *= (1+infl);
       for(let m=0; m<freq; m++){
@@ -303,7 +321,7 @@
         FV_pagos += pmtYear * Math.pow(1+iAcc, perRest);
       }
     }
-    // crecimiento adicional hasta 65 si el plan termina antes
+    // crecimiento adicional hasta 65 si termina antes
     const growTo65    = Math.pow(1+iAcc, gapYears*freq);
     const totalFactor = FV_pagos * growTo65;
 
@@ -373,7 +391,7 @@
     $('rendimiento').textContent = money(rend);
     $('fondo65').textContent = money(fondo65);
 
-    // Tabla
+    // Tabla Fase 1
     const tbody=$('tbody'); tbody.innerHTML='';
     let saldo=lump, pmtY=pmt0, edadAct=edad;
     const totalYrs = Math.max(years, 65-edad);
@@ -398,7 +416,7 @@
     linkWhatsApp();
   }
 
-  // -------------------- Fase 2 (retiro desde saldo a 65, nominal)
+  // -------------------- Fase 2 (retiro desde saldo a 65, nominal) + DETALLE MENSUAL
   function calcRet(){
     const PV = parseFloat($('pvRet').value)||0;
     const yrs = parseInt($('yrsRetSel').value,10);
@@ -417,9 +435,30 @@
     $('nMeses').textContent = `${n} meses`;
     $('iRealMes').textContent = `${(iReal*100).toFixed(3)}%`;
     $('rule4').textContent = `${money(PV*0.04)} /año · ${money(PV*0.04/12)} /mes`;
+
+    // ---- Detalle mensual (tabla)
+    const tbodyRet = $('tbodyRet'); tbodyRet.innerHTML='';
+    let saldo = PV;
+    for(let m=1; m<=n; m++){
+      const interes = saldo * iNom;
+      const saldoAntes = saldo + interes;
+      const retiro = PMT; // retiro al fin de periodo
+      const saldoDesp = Math.max(0, saldoAntes - retiro);
+
+      // Edad: arranca a los 65, sumamos meses
+      const yearsAdd = Math.floor(m/12);
+      const monthsRem = m % 12;
+      const edadTxt = `${65 + yearsAdd} años${monthsRem?` ${monthsRem} mes(es)`:''}`;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${m}</td><td>${edadTxt}</td><td>${money(retiro)}</td><td>${money(interes)}</td><td>${money(saldoDesp)}</td>`;
+      tbodyRet.appendChild(tr);
+
+      saldo = saldoDesp;
+    }
   }
 
-  // -------------------- CSV y eventos
+  // -------------------- CSV (Fase 1) y eventos
   function exportCSV(){
     const rows=[['Año','Edad','Aportado ese año (MXN)','Saldo al cierre (MXN)']];
     document.querySelectorAll('#tbody tr').forEach(tr=>{
@@ -447,6 +486,7 @@
   $('csvBtn').addEventListener('click', exportCSV);
   $('printBtn').addEventListener('click', ()=>{ window.print(); });
   $('toggleTable').addEventListener('click',()=>{ const d=$('details'); d.style.display=d.style.display==='block'?'none':'block'; });
+  $('toggleTableRet').addEventListener('click',()=>{ const d=$('detailsRet'); d.style.display=d.style.display==='block'?'none':'block'; });
 
   // recalcula cuando cambian supuestos relevantes
   ['edadTop','planTop','metaHoy','rate','inflation','rateRet','yrsRetSel'].forEach(id=>{
