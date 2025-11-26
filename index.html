@@ -7,13 +7,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --brand:#0B5ED7; 
-    --brand-2:#084cc3;
-    --ink:#0f172a; 
-    --muted:#64748b;
-    --paper:#f9fafb;
-    --panel:#0b1324;
-    --line:rgba(148,163,184,.6);
+    --brand:#0B5ED7; --brand-2:#084cc3;
+    --ink:#0f172a; --muted:#94a3b8;
+    --paper:#111827; --panel:#0b1324; --line:rgba(255,255,255,.14);
     --wa:#25D366;
   }
   *{box-sizing:border-box}
@@ -27,6 +23,9 @@
   a{color:inherit;text-decoration:none}
   .container{max-width:1040px;margin:0 auto;padding:22px}
 
+  .screen-only{display:block;}
+  .print-only{display:none;}
+
   /* Header */
   .header{
     background:#ffffff;
@@ -36,19 +35,12 @@
     display:flex;
     align-items:center;
     gap:14px;
-    box-shadow:0 8px 24px rgba(15,23,42,.16);
+    box-shadow:0 8px 24px rgba(15,23,42,.16)
   }
   .brand img{height:56px;width:auto;display:block}
   .title{font-weight:800;font-size:22px;color:#0f172a}
   .sub{font-size:13px;color:#475569}
-  .meta{
-    margin-left:auto;
-    text-align:right;
-    font-size:14px;
-    color:#111827;
-    display:flex;
-    gap:24px;
-  }
+  .meta{margin-left:auto;text-align:right;font-size:14px;color:#111827;display:flex;gap:24px}
   .meta span{display:flex;gap:8px;align-items:center}
 
   /* Toolbar */
@@ -56,8 +48,7 @@
     display:flex;
     gap:10px;
     justify-content:flex-end;
-    margin:14px 0 18px;
-    flex-wrap:wrap;
+    margin:14px 0 18px
   }
   .btn{
     appearance:none;
@@ -68,17 +59,16 @@
     border-radius:10px;
     font-weight:700;
     cursor:pointer;
-    transition:.2s;
-    font-size:14px;
+    transition:.2s
   }
   .btn:hover{
     transform:translateY(-1px);
-    box-shadow:0 6px 18px rgba(2,6,23,.10);
+    box-shadow:0 6px 18px rgba(2,6,23,.10)
   }
   .btn-primary{
     background:var(--brand);
     border-color:var(--brand);
-    color:#fff;
+    color:#fff
   }
   .btn-primary:hover{background:var(--brand-2)}
 
@@ -91,85 +81,71 @@
     border-radius:14px;
     padding:14px 16px;
     margin:18px 0;
-    box-shadow:0 4px 14px rgba(2,6,23,.12);
-    font-size:14px;
+    box-shadow:0 4px 14px rgba(2,6,23,.12)
   }
   .banner strong{color:#9a3412}
 
   /* Cards */
   .card{
-    background:rgba(15,23,42,.92);
+    background:rgba(255,255,255,.06);
     border:1px solid var(--line);
     border-radius:16px;
     padding:22px;
-    margin:16px 0;
+    margin:16px 0
   }
   .card h2{
     margin:0 0 10px;
-    color:#e5edff;
+    color:#dbe3f3;
     font-size:20px;
-    font-weight:800;
+    font-weight:800
   }
   .help{
     margin:-2px 0 14px;
     color:#cbd5e1;
-    font-size:13px;
-  }
-  .subhead{
-    margin:2px 0 10px;
-    font-size:16px;
-    font-weight:700;
-    color:#e5edff;
+    font-size:13px
   }
 
   .grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:14px;
+    gap:14px
   }
   .group{display:flex;flex-direction:column}
   label{
     font-size:12px;
     color:#cbd5e1;
     margin-bottom:6px;
-    font-weight:600;
+    font-weight:600
   }
   input,select{
     padding:12px;
-    border:1px solid rgba(148,163,184,.7);
-    background:rgba(15,23,42,.9);
-    color:#f9fafb;
+    border:1px solid rgba(255,255,255,.18);
+    background:rgba(255,255,255,.05);
+    color:#fff;
     border-radius:10px;
     font-size:16px;
-    transition:border .15s, box-shadow .15s, background .15s;
+    transition:border .15s, box-shadow .15s
   }
-  input::placeholder{color:#64748b}
   input:focus,select:focus{
     outline:none;
     border-color:var(--brand);
-    box-shadow:0 0 0 3px rgba(11,94,215,.25);
-    background:#020617;
+    box-shadow:0 0 0 3px rgba(11,94,215,.25)
   }
   .muted{
     font-size:12px;
     color:#94a3b8;
-    margin-top:6px;
-  }
-  .muted-strong{
-    font-size:12px;
-    color:#e5e7eb;
-    margin-top:6px;
+    margin-top:6px
   }
 
   /* Suggestion */
   .suggest{
     display:none;
     border:1px solid rgba(11,94,215,.35);
-    background:linear-gradient(0deg,rgba(15,23,42,.9),rgba(15,23,42,.9));
+    background:linear-gradient(0deg,rgba(11,94,215,.10),rgba(11,94,215,.10));
     border-left:6px solid var(--brand);
     border-radius:14px;
     padding:14px;
-    margin-top:12px;
+    margin-top:12px
   }
   .suggest strong{color:#eaf2ff}
 
@@ -178,25 +154,24 @@
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
     gap:12px;
-    margin-top:6px;
+    margin-top:6px
   }
   .kpi{
-    background:rgba(15,23,42,1);
-    border:1px solid rgba(148,163,184,.5);
+    background:rgba(255,255,255,.06);
+    border:1px solid var(--line);
     border-radius:14px;
-    padding:14px 16px;
+    padding:16px
   }
   .kpi-label{
     font-size:11px;
     letter-spacing:.4px;
     color:#a9b4c7;
-    text-transform:uppercase;
+    text-transform:uppercase
   }
   .kpi-value{
     font-size:22px;
     font-weight:800;
-    color:#f8fafc;
-    margin-top:4px;
+    color:#f8fafc
   }
 
   /* Details tables */
@@ -206,39 +181,27 @@
     align-items:center;
     cursor:pointer;
     border:1px solid var(--line);
-    padding:10px 14px;
+    padding:12px 14px;
     border-radius:12px;
-    margin-top:14px;
-    font-size:14px;
-    background:rgba(15,23,42,1);
+    margin-top:10px
   }
-  .toggle span:last-child{font-size:12px;color:#94a3b8}
-  .details{display:none;overflow:auto;margin-top:8px}
+  .details{display:none;overflow:auto}
   table{
     width:100%;
     border-collapse:collapse;
-    font-size:13px;
+    margin-top:10px
   }
   th{
-    background:rgba(15,23,42,1);
+    background:rgba(255,255,255,.08);
     text-align:left;
-    padding:8px 10px;
-    border-bottom:1px solid rgba(148,163,184,.9);
-    font-size:12px;
-    color:#e5edff;
+    padding:10px;
+    border-bottom:1px solid rgba(255,255,255,.14);
+    font-size:13px
   }
   td{
-    padding:7px 10px;
-    border-bottom:1px solid rgba(51,65,85,.9);
-    font-size:13px;
-    color:#e2e8f0;
-  }
-
-  /* Lectura estratégica */
-  .reading-note{
-    font-size:12px;
-    color:#cbd5e1;
-    margin-top:10px;
+    padding:10px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    font-size:14px
   }
 
   /* WhatsApp */
@@ -251,8 +214,7 @@
     border-radius:999px;
     padding:12px 16px;
     font-weight:800;
-    box-shadow:0 10px 24px rgba(0,0,0,.25);
-    font-size:14px;
+    box-shadow:0 10px 24px rgba(0,0,0,.25)
   }
 
   .error{
@@ -262,55 +224,63 @@
     color:#fecaca;
     padding:10px;
     border-radius:10px;
-    margin:8px 0;
-    font-size:13px;
+    margin:8px 0
   }
 
-  /* Print */
+  /* Print — blanco y negro / escala de grises, legible y ejecutivo */
   @media print{
     body{
-      background:#ffffff;
-      color:#000000;
+      background:#ffffff !important;
+      color:#000000 !important;
     }
-    .container{padding:0 8mm 8mm}
-    .toolbar,.wa,.toggle{display:none!important}
-    .header{
-      box-shadow:none;
-      border-color:#111827;
+    .container{
+      max-width:100%;
+      padding:10mm 12mm;
     }
-    .banner{
-      background:#ffffff;
-      color:#111827;
-      border:1px solid #111827;
-      border-left-width:4px;
-      box-shadow:none;
+    .wa,
+    .toolbar,
+    .toggle,
+    .screen-only{
+      display:none !important;
     }
+    .print-only{
+      display:block !important;
+    }
+    .header,
+    .banner,
     .card{
-      background:#ffffff;
-      color:#000000;
-      border:1px solid #000000;
-      box-shadow:none;
+      background:#ffffff !important;
+      color:#000000 !important;
+      border-color:#d1d5db !important;
+      box-shadow:none !important;
     }
-    label,.help,.muted,.muted-strong,.kpi-label,.reading-note{
-      color:#000000;
+    .title{color:#000000 !important;}
+    .sub{color:#374151 !important;}
+    .meta{color:#111827 !important;}
+    .kpi{
+      background:#ffffff !important;
+      border-color:#d1d5db !important;
+    }
+    .kpi-label{
+      color:#374151 !important;
+    }
+    .kpi-value{
+      color:#111827 !important;
+    }
+    table th{
+      background:#f3f4f6 !important;
+      color:#111827 !important;
+      border-color:#d1d5db !important;
+    }
+    table td{
+      border-color:#e5e7eb !important;
+      color:#111827 !important;
     }
     input,select{
-      border:1px solid #000000;
-      background:#ffffff;
-      color:#000000;
-    }
-    .kpi{
-      background:#ffffff;
-      border:1px solid #000000;
-    }
-    th{
-      background:#f1f5f9;
-      color:#000000;
-      border-bottom:1px solid #000000;
-    }
-    td{
-      color:#000000;
-      border-bottom:1px solid #000000;
+      border:1px solid #d1d5db !important;
+      background:#ffffff !important;
+      color:#000000 !important;
+      box-shadow:none !important;
     }
   }
 </style>
@@ -318,14 +288,16 @@
 <body>
   <div class="container">
     <!-- Acciones -->
-    <div class="toolbar">
+    <div class="toolbar screen-only">
       <button class="btn" id="csvBtn">Exportar CSV</button>
       <button class="btn btn-primary" id="printBtn">Imprimir / Guardar PDF</button>
     </div>
 
     <!-- Encabezado -->
     <div class="header">
-      <div class="brand"><img src="./logo-garba.png" alt="Christian GarBa"></div>
+      <div class="brand">
+        <img src="./logo-garba.png" alt="Christian GarBa">
+      </div>
       <div>
         <div class="title">Christian GarBa</div>
         <div class="sub">Seguros con Estrategia</div>
@@ -338,13 +310,17 @@
 
     <!-- Banner -->
     <div class="banner">
-      <strong>¿AFORE (Ley ‘97 en adelante)?</strong> Tu AFORE no será suficiente <em>(y lo sabes)</em>. Empezar <u>hoy</u> tu ahorro adicional marca la diferencia: cuanto antes inicies, <strong>menos tendrás que aportar</strong> para lograr el mismo ingreso y más tranquilidad al llegar a los 65.
+      <strong>¿AFORE (Ley ‘97 en adelante)?</strong> Tu AFORE no será suficiente <em>(y lo sabes)</em>.
+      Empezar <u>hoy</u> tu ahorro adicional marca la diferencia: cuanto antes inicies,
+      <strong>menos tendrás que aportar</strong> para lograr el mismo ingreso y más tranquilidad al llegar a los 65.
     </div>
 
     <!-- Panel A -->
     <div class="card">
       <h2>Panel A · Ahorro hasta los 65</h2>
-      <div class="help">La edad de retiro considerada es <strong>65 años</strong>. Si tu plan termina antes, el fondo sigue invirtiéndose hasta esa edad.</div>
+      <div class="help">
+        La edad de retiro considerada es <strong>65 años</strong>. Si tu plan termina antes, el fondo sigue invirtiéndose hasta esa edad.
+      </div>
       <div class="grid">
         <div class="group">
           <label for="nombreOpt">Tu nombre (opcional)</label>
@@ -370,7 +346,7 @@
           </div>
         </div>
       </div>
-      <div class="toolbar" style="justify-content:flex-start;margin-top:14px">
+      <div class="toolbar" style="justify-content:flex-start">
         <button class="btn btn-primary" id="planBtn">Calcular mi plan personalizado</button>
         <button class="btn" id="resetTop">Reiniciar datos</button>
       </div>
@@ -384,7 +360,9 @@
     <!-- Fase 1 -->
     <div class="card">
       <h2>Fase 1 • Ahorro con interés compuesto</h2>
-      <p class="help">Las aportaciones se actualizan automáticamente cada año con la inflación promedio que definas.</p>
+      <p class="help">
+        Las aportaciones se actualizan automáticamente cada año con la inflación promedio que definas.
+      </p>
       <div class="error" id="errorMsg"></div>
       <div class="grid">
         <div class="group">
@@ -421,9 +399,36 @@
           <label for="inflation">Inflación promedio anual (%)</label>
           <input id="inflation" type="number" value="4" min="0" max="100" step="0.01">
         </div>
+
+        <!-- Bloque fiscal (solo pantalla) -->
+        <div class="group screen-only">
+          <label for="regimen">Tratamiento fiscal del plan (estimación educativa)</label>
+          <select id="regimen">
+            <option value="93" selected>Art. 93 LISR · Plan no deducible</option>
+            <option value="151">Art. 151 LISR · Plan deducible (PPR)</option>
+            <option value="0">Sin beneficio fiscal inmediato</option>
+          </select>
+          <div class="muted">
+            Solo el <strong>Art. 151</strong> genera una devolución estimada de ISR en esta simulación.
+          </div>
+        </div>
+        <div class="group screen-only">
+          <label for="isrRate">Tasa marginal de ISR estimada (%)</label>
+          <input id="isrRate" type="number" value="30" min="0" max="40" step="1">
+          <div class="muted">
+            Ejemplo típico de sueldos y honorarios: 20%–35% según nivel de ingresos.
+          </div>
+        </div>
+        <div class="group screen-only">
+          <label for="reinvierteISR">¿Reinvertir la devolución anual en el plan?</label>
+          <select id="reinvierteISR">
+            <option value="1" selected>Sí, se reinvierte</option>
+            <option value="0">No, solo la recibo en efectivo</option>
+          </select>
+        </div>
       </div>
 
-      <div class="toolbar" style="justify-content:flex-start;margin-top:14px">
+      <div class="toolbar" style="justify-content:flex-start">
         <button class="btn btn-primary" id="calcBtn">Calcular</button>
         <button class="btn" id="resetBtn">Limpiar</button>
       </div>
@@ -453,6 +458,11 @@
           <div class="kpi-label">Fondo a los 65 (si aplica)</div>
           <div class="kpi-value" id="fondo65">—</div>
         </div>
+        <!-- KPI fiscal solo pantalla -->
+        <div class="kpi screen-only">
+          <div class="kpi-label">ISR devuelto (proyección)</div>
+          <div class="kpi-value" id="isrDev">—</div>
+        </div>
       </div>
 
       <div class="toggle" id="toggleTable">
@@ -477,7 +487,10 @@
     <!-- Fase 2 -->
     <div class="card">
       <h2>Fase 2 • Mensualidad de retiro</h2>
-      <p class="help">La mensualidad se calcula en <strong>valor nominal (futuro)</strong>. Se toma como base el <strong>saldo a los 65</strong> de la Fase 1.</p>
+      <p class="help">
+        La mensualidad se calcula en <strong>valor nominal (futuro)</strong>.
+        Se toma como base el <strong>saldo a los 65</strong> de la Fase 1.
+      </p>
       <div class="grid">
         <input type="hidden" id="pvRet" value="0">
         <div class="group">
@@ -497,7 +510,7 @@
           <input id="inflRet" type="number" value="4" min="0" step="0.01">
         </div>
       </div>
-      <div class="toolbar" style="justify-content:flex-start;margin-top:14px">
+      <div class="toolbar" style="justify-content:flex-start">
         <button class="btn btn-primary" id="calcRet">Calcular mensualidad</button>
       </div>
 
@@ -520,6 +533,7 @@
         </div>
       </div>
 
+      <!-- Detalle mensual del retiro -->
       <div class="toggle" id="toggleTableRet">
         <span><strong>Detalle mensual del retiro</strong></span>
         <span>▼</span>
@@ -540,59 +554,57 @@
       </div>
     </div>
 
-    <!-- Lectura estratégica -->
-    <div class="card">
+    <!-- Lectura estratégica: solo PDF / impresión -->
+    <div class="card print-only">
       <h2>Lectura estratégica · Lo que pasa si sigues posponiendo tu ahorro</h2>
-      <p class="help">
-        Con los supuestos de esta proyección, si buscas el mismo fondo a la edad de retiro, esto es lo que tendría que cambiar tu aportación mensual inicial
-        si decides empezar después:
+      <p class="help" style="color:#4b5563;">
+        Con los supuestos de esta proyección, si buscas el mismo fondo a la edad de retiro,
+        esto es lo que tendría que cambiar tu aportación mensual inicial si decides empezar después:
       </p>
-      <div class="details" style="display:block">
-        <table>
-          <thead>
-            <tr>
-              <th>Inicio de tu plan</th>
-              <th>Aportación mensual inicial</th>
-              <th>Diferencia vs hoy</th>
-              <th>Diferencia %</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Empiezas hoy</td>
-              <td id="aportaHoy">—</td>
-              <td>—</td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <td>Empiezas en 1 año</td>
-              <td id="aporta1">—</td>
-              <td id="diff1Abs">—</td>
-              <td id="diff1Pct">—</td>
-            </tr>
-            <tr>
-              <td>Empiezas en 3 años</td>
-              <td id="aporta3">—</td>
-              <td id="diff3Abs">—</td>
-              <td id="diff3Pct">—</td>
-            </tr>
-            <tr>
-              <td>Empiezas en 5 años</td>
-              <td id="aporta5">—</td>
-              <td id="diff5Abs">—</td>
-              <td id="diff5Pct">—</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="reading-note">
-        Todos los escenarios usan el mismo objetivo de fondo, el mismo rendimiento y la misma inflación. La conclusión es simple:
-        <strong>cada año que se pospone el inicio, el precio del mismo retiro aumenta.</strong>
+      <table>
+        <thead>
+          <tr>
+            <th>Inicio de tu plan</th>
+            <th>Aportación mensual inicial</th>
+            <th>Diferencia vs hoy</th>
+            <th>Diferencia %</th>
+          </tr>
+        </thead>
+        <tbody id="timingBody">
+          <tr>
+            <td>Empiezas hoy</td>
+            <td id="t0_pmt">—</td>
+            <td id="t0_abs">—</td>
+            <td id="t0_pct">—</td>
+          </tr>
+          <tr>
+            <td>Empiezas en 1 año</td>
+            <td id="t1_pmt">—</td>
+            <td id="t1_abs">—</td>
+            <td id="t1_pct">—</td>
+          </tr>
+          <tr>
+            <td>Empiezas en 3 años</td>
+            <td id="t3_pmt">—</td>
+            <td id="t3_abs">—</td>
+            <td id="t3_pct">—</td>
+          </tr>
+          <tr>
+            <td>Empiezas en 5 años</td>
+            <td id="t5_pmt">—</td>
+            <td id="t5_abs">—</td>
+            <td id="t5_pct">—</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="muted" style="color:#4b5563;margin-top:12px;">
+        Todos los escenarios usan el mismo objetivo de fondo, el mismo rendimiento y la misma inflación.
+        La conclusión es simple: <strong>cada año que se pospone el inicio, el precio del mismo retiro aumenta</strong>.
       </p>
     </div>
 
     <div class="muted">
-      Proyección educativa; no contempla impuestos, comisiones u otros costos. Resultados no garantizados.
+      Proyección educativa; no contempla impuestos reales, comisiones u otros costos. Resultados no garantizados.
     </div>
   </div>
 
@@ -613,79 +625,8 @@
       `• Edad: ${$('edad').value} años`,
       `• Años de aportación: ${$('years').value}`,
       `• Aportación ${({'12':'Mensual','4':'Trimestral','2':'Semestral','1':'Anual'})[$('frequency').value]}: $${$('pmt').value}`
-    ].filter(Boolean).join('\\n');
+    ].filter(Boolean).join('\n');
     $('waBtn').href = 'https://wa.me/526624176032?text='+encodeURIComponent(msg);
-  }
-
-  // -------------------- Lectura estratégica: costo de posponer 1,3,5 años
-  function updateDelayTable(ctx){
-    const ids = [
-      ['aportaHoy', null, null, 0],
-      ['aporta1', 'diff1Abs', 'diff1Pct', 1],
-      ['aporta3', 'diff3Abs', 'diff3Pct', 3],
-      ['aporta5', 'diff5Abs', 'diff5Pct', 5],
-    ];
-
-    // Si no hay contexto válido, reseteamos todo
-    if(!ctx || !(ctx.PVneed65>0) || !(ctx.PMT_hoy>0)){
-      ids.forEach(([id, diffAbsId, diffPctId])=>{
-        if(id) $(id).textContent = '—';
-        if(diffAbsId) $(diffAbsId).textContent = '—';
-        if(diffPctId) $(diffPctId).textContent = '—';
-      });
-      return;
-    }
-
-    const {edad, planY, infl, rAcc, yrsRet, freq, PVneed65, PMT_hoy} = ctx;
-
-    function computePMTDelay(delayY){
-      const edadDelay = edad + delayY;
-      const yrsTo65 = Math.max(0, 65 - edadDelay);
-      if(yrsTo65 <= 0) return null;
-
-      const yrsAport = Math.min(planY, yrsTo65);
-      if(yrsAport <= 0) return null;
-
-      const gapYears = Math.max(0, yrsTo65 - yrsAport);
-      const iAcc = rAcc/freq;
-      const N = yrsAport * freq;
-      let FV_pagos = 0, pmtYear = 1;
-
-      for(let y=0; y<yrsAport; y++){
-        if(y>0) pmtYear *= (1+infl);
-        for(let m=0; m<freq; m++){
-          const perRest = N - (y*freq + m);
-          FV_pagos += pmtYear * Math.pow(1+iAcc, perRest);
-        }
-      }
-      const growTo65 = Math.pow(1+iAcc, gapYears*freq);
-      const totalFactor = FV_pagos * growTo65;
-      if(totalFactor <= 0) return null;
-      return PVneed65 / totalFactor;
-    }
-
-    ids.forEach(([id, diffAbsId, diffPctId, delayY])=>{
-      if(delayY === 0){
-        $(id).textContent = money(PMT_hoy);
-        return;
-      }
-      const pmtDelay = computePMTDelay(delayY);
-      if(!pmtDelay){
-        $(id).textContent = 'N/D';
-        if(diffAbsId) $(diffAbsId).textContent = '—';
-        if(diffPctId) $(diffPctId).textContent = '—';
-        return;
-      }
-      $(id).textContent = money(pmtDelay);
-      if(diffAbsId){
-        const diffAbs = pmtDelay - PMT_hoy;
-        $(diffAbsId).textContent = diffAbs >= 0 ? '+'+money(diffAbs) : money(diffAbs);
-      }
-      if(diffPctId){
-        const diffPct = (pmtDelay/PMT_hoy - 1)*100;
-        $(diffPctId).textContent = (isFinite(diffPct)? diffPct.toFixed(1)+' %':'—');
-      }
-    });
   }
 
   // -------------------- Sugerencia PMT inicial (peras con peras, NOMINAL a 65)
@@ -702,28 +643,24 @@
 
     if(!(edad>0 && planY>0 && metaHoy>0)){
       $('sugBox').style.display='none';
-      updateDelayTable(null);
+      updateTimingTable(); // limpia tabla
       return;
     }
 
-    // (1) Meta mensual en NOMINAL a los 65
     const yrsTo65   = Math.max(0, 65 - edad);
     const metaNom65 = metaHoy * Math.pow(1+infl, yrsTo65);
 
-    // (2) Capital nominal requerido a los 65 para pagar metaNom65 por yrsRet años
     const iRet = rRet/freq, nRet = yrsRet*freq;
     const PVneed65 = Math.abs(iRet)<1e-12 ? metaNom65*nRet
                       : metaNom65 * ( (1 - Math.pow(1+iRet, -nRet)) / iRet );
 
-    // (3) Años reales de aportación y “pausa” hasta 65
     const yrsTo65Real = yrsTo65;
     const yrsAport    = Math.min(planY, yrsTo65Real);
     const gapYears    = Math.max(0, yrsTo65Real - yrsAport);
 
-    // (4) Factor de aportaciones con step-up por inflación
     const iAcc = rAcc/freq;
     const N    = yrsAport*freq;
-    let FV_pagos = 0, pmtYear = 1; // PMT inicial = 1 para factor
+    let FV_pagos = 0, pmtYear = 1;
     for(let y=0; y<yrsAport; y++){
       if(y>0) pmtYear *= (1+infl);
       for(let m=0; m<freq; m++){
@@ -733,13 +670,9 @@
     }
     const growTo65    = Math.pow(1+iAcc, gapYears*freq);
     const totalFactor = FV_pagos * growTo65;
-
     const PMT_inicial = totalFactor>0 ? PVneed65 / totalFactor : 0;
 
-    const yrsTexto = gapYears>0
-      ? ` Tu fondo seguirá creciendo ${gapYears} año(s) más hasta los 65.`
-      : '';
-
+    const yrsTexto = gapYears>0 ? ` Tu fondo seguirá creciendo ${gapYears} año(s) más hasta los 65.` : '';
     $('sugText').innerHTML =
       `💡 <strong>Proyección personalizada:</strong> para lograr el ingreso que buscas en tu retiro, `+
       `un <strong>ahorro mensual inicial de ${money(PMT_inicial)}</strong> sería un buen punto de partida.`+
@@ -755,20 +688,11 @@
     $('years').value = String(planY);
     $('pmt').value   = String(PMT_inicial.toFixed(2));
 
-    // Actualiza lectura estratégica
-    updateDelayTable({
-      edad,
-      planY,
-      infl,
-      rAcc,
-      yrsRet,
-      freq,
-      PVneed65,
-      PMT_hoy: PMT_inicial
-    });
+    // Actualiza tabla de timing (1,3,5 años)
+    updateTimingTable();
   }
 
-  // -------------------- Fase 1 (acumulación nominal con step-up por inflación)
+  // -------------------- Fase 1 (acumulación nominal con step-up por inflación + ISR opcional)
   function calcAccum(){
     const edad = parseFloat($('edad').value);
     const years = parseFloat($('years').value);
@@ -778,72 +702,98 @@
     const freq = parseFloat($('frequency').value);
     const infl = parseFloat($('inflation').value)/100;
 
+    const regimen   = $('regimen') ? $('regimen').value : '93';
+    const isrRate   = $('isrRate') ? (parseFloat($('isrRate').value)/100 || 0) : 0;
+    const reinvISR  = $('reinvierteISR') ? $('reinvierteISR').value === '1' : false;
+
     if([edad,years,pmt0,lump,rate,freq,infl].some(x=>isNaN(x))){
       const e=$('errorMsg');
-      e.textContent='Completa todos los campos correctamente.';
+      e.textContent='Completa todos los campos correctamente';
       e.style.display='block';
       return;
     } else {
       $('errorMsg').style.display='none';
     }
 
-    const N = Math.round(years*freq);
+    const yearsInt = Math.max(1, Math.round(years));
     const i = rate/freq;
 
-    let FV_pmt = 0, total = lump, pmtYear = pmt0;
-    for(let y=0;y<years;y++){
-      if(y>0) pmtYear *= (1+infl);
-      for(let p=0;p<freq;p++){
-        const perRest = N - (y*freq + p);
-        FV_pmt += pmtYear * Math.pow(1+i, perRest);
-        total += pmtYear;
-      }
-    }
-    const FV_nom_end = lump*Math.pow(1+i,N) + FV_pmt;
-    const rend = FV_nom_end - total;
-    const edadFin = edad + years;
+    let saldo = lump;
+    let totalAport = lump;
+    let totalISRDev = 0;
+    let edadAct = edad;
+    let pmtYear = pmt0;
 
-    // Fondo a los 65
-    let fondo65 = FV_nom_end;
-    if(edadFin < 65){
-      const extraYears = 65 - edadFin;
-      const Nextra = Math.round(extraYears*freq);
-      fondo65 = FV_nom_end * Math.pow(1+i, Nextra);
-    }
-
-    $('edadFinal').textContent = String(Math.round(edadFin));
-    $('ahorroNominal').textContent = money(FV_nom_end);
-    $('totalAportado').textContent = money(total);
-    $('rendimiento').textContent = money(rend);
-    $('fondo65').textContent = money(fondo65);
-
-    // Tabla Fase 1
     const tbody=$('tbody');
     tbody.innerHTML='';
-    let saldo=lump, pmtY=pmt0, edadAct=edad;
-    const totalYrs = Math.max(years, 65-edad);
-    for(let yr=1; yr<=totalYrs; yr++){
+
+    // Años con aportaciones
+    for(let yr=1; yr<=yearsInt; yr++){
       edadAct++;
-      let aport=0;
-      if(yr<=years){
-        if(yr>1) pmtY *= (1+infl);
-        aport = pmtY*freq;
-        for(let k=0;k<freq;k++){
-          saldo = saldo*(1+i) + pmtY;
-        }
-      }else{
-        for(let k=0;k<freq;k++){
-          saldo = saldo*(1+i);
+      if(yr>1) pmtYear *= (1+infl);
+      let aportAnual = 0;
+
+      for(let k=0;k<freq;k++){
+        saldo = saldo*(1+i) + pmtYear;
+        aportAnual += pmtYear;
+      }
+      totalAport += aportAnual;
+
+      let devolAnual = 0;
+      if(regimen==='151' && isrRate>0){
+        devolAnual = aportAnual * isrRate;
+        totalISRDev += devolAnual;
+        if(reinvISR){
+          saldo += devolAnual; // se reinvierte al final de cada año
         }
       }
+
       const tr=document.createElement('tr');
-      if(yr>years) tr.style.background='rgba(15,23,42,.6)';
-      tr.innerHTML=`<td>${yr}</td><td>${edadAct} años</td><td>${yr>years?'—':money(aport)}</td><td>${money(saldo)}</td>`;
+      tr.innerHTML =
+        `<td>${yr}</td>`+
+        `<td>${edadAct} años</td>`+
+        `<td>${money(aportAnual)}</td>`+
+        `<td>${money(saldo)}</td>`;
       tbody.appendChild(tr);
     }
 
-    // Base para Fase 2
+    const saldoFinAport = saldo;
+    const edadFin = edad + yearsInt;
+
+    // Años sin aportaciones hasta los 65 (fondo sigue invertido)
+    if(edadFin < 65){
+      const extraYears = 65 - edadFin;
+      for(let e=1; e<=extraYears; e++){
+        edadAct++;
+        for(let k=0;k<freq;k++){
+          saldo = saldo*(1+i);
+        }
+        const tr=document.createElement('tr');
+        tr.style.background='rgba(11,94,215,.08)';
+        tr.innerHTML =
+          `<td>${yearsInt+e}</td>`+
+          `<td>${edadAct} años</td>`+
+          `<td>—</td>`+
+          `<td>${money(saldo)}</td>`;
+        tbody.appendChild(tr);
+      }
+    }
+
+    const FV_nom_end = saldoFinAport;
+    const fondo65 = (edadFin < 65) ? saldo : saldoFinAport;
+    const rendimiento = FV_nom_end - totalAport;
+
+    $('edadFinal').textContent   = String(Math.round(edadFin));
+    $('ahorroNominal').textContent = money(FV_nom_end);
+    $('totalAportado').textContent = money(totalAport);
+    $('rendimiento').textContent   = money(rendimiento);
+    $('fondo65').textContent       = money(fondo65);
+    if($('isrDev')){
+      $('isrDev').textContent = totalISRDev>0 ? money(totalISRDev) : '—';
+    }
+
     $('pvRet').value = String(fondo65);
+
     linkWhatsApp();
   }
 
@@ -862,8 +812,7 @@
     const iNom = rateRet/12, n = yrs*12;
     const PMT = Math.abs(iNom)<1e-9 ? PV/n : PV * ( iNom / (1 - Math.pow(1+iNom,-n)) );
 
-    const rReal = ((1+rateRet)/(1+infl))-1;
-    const iReal = rReal/12;
+    const rReal = ((1+rateRet)/(1+infl))-1, iReal = rReal/12;
 
     $('retBox').style.display='grid';
     $('pmtReal').textContent = money(PMT);
@@ -871,7 +820,7 @@
     $('iRealMes').textContent = `${(iReal*100).toFixed(3)}%`;
     $('rule4').textContent = `${money(PV*0.04)} /año · ${money(PV*0.04/12)} /mes`;
 
-    const tbodyRet = $('tbodyRet'); 
+    const tbodyRet = $('tbodyRet');
     tbodyRet.innerHTML='';
     let saldo = PV;
     for(let m=1; m<=n; m++){
@@ -885,76 +834,170 @@
       const edadTxt = `${65 + yearsAdd} años${monthsRem?` ${monthsRem} mes(es)`:''}`;
 
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${m}</td><td>${edadTxt}</td><td>${money(retiro)}</td><td>${money(interes)}</td><td>${money(saldoDesp)}</td>`;
+      tr.innerHTML =
+        `<td>${m}</td>`+
+        `<td>${edadTxt}</td>`+
+        `<td>${money(retiro)}</td>`+
+        `<td>${money(interes)}</td>`+
+        `<td>${money(saldoDesp)}</td>`;
       tbodyRet.appendChild(tr);
 
       saldo = saldoDesp;
     }
   }
 
-  // -------------------- CSV (Fase 1) y eventos
+  // -------------------- CSV (Fase 1)
   function exportCSV(){
     const rows=[['Año','Edad','Aportado ese año (MXN)','Saldo al cierre (MXN)']];
     document.querySelectorAll('#tbody tr').forEach(tr=>{
-      const t=[...tr.querySelectorAll('td')].map(td=>td.textContent.replace(/[^\d.,\\-a-zñ ]/gi,''));
+      const t=[...tr.querySelectorAll('td')].map(td=>td.textContent.replace(/[^\d.,\-a-zñ ]/gi,''));
       rows.push(t);
     });
-    const blob=new Blob([rows.map(r=>r.join(',')).join('\\n')],{type:'text/csv;charset=utf-8;'});
-    const a=document.createElement('a'); 
-    const name=$('nombreOpt').value||'Proyeccion'; 
+    const blob=new Blob([rows.map(r=>r.join(',')).join('\n')],{type:'text/csv;charset=utf-8;'});
+    const a=document.createElement('a');
+    const name=$('nombreOpt').value||'Proyeccion';
     const f=new Date().toISOString().slice(0,10);
-    a.href=URL.createObjectURL(blob); 
-    a.download=`${name}_corrida_${f}.csv`; 
-    a.click(); 
+    a.href=URL.createObjectURL(blob);
+    a.download=`${name}_corrida_${f}.csv`;
+    a.click();
     URL.revokeObjectURL(a.href);
   }
 
-  $('planBtn').addEventListener('click', ()=>{ calcSuggestion(); calcAccum(); });
+  // -------------------- Tabla de timing (empiezas hoy / en 1 / 3 / 5 años)
+  function computePMTForDelay(delayYears){
+    const edadTop = parseFloat($('edadTop').value);
+    const metaHoy = parseFloat($('metaHoy').value||0);
+    const infl    = parseFloat($('inflation').value)/100;
+    const rAcc    = parseFloat($('rate').value)/100;
+    const rRet    = parseFloat($('rateRet').value)/100;
+    const yrsRet  = parseInt($('yrsRetSel').value,10);
+    const freq    = 12;
+
+    if(!(edadTop>0 && metaHoy>0)) return null;
+
+    const yrsTo65Base = Math.max(0, 65 - edadTop);
+    const metaNom65 = metaHoy * Math.pow(1+infl, yrsTo65Base);
+
+    const iRet = rRet/freq;
+    const nRet = yrsRet*freq;
+    const PVneed65 = Math.abs(iRet)<1e-12 ? metaNom65*nRet
+                        : metaNom65 * ((1 - Math.pow(1+iRet,-nRet))/iRet);
+
+    const yrsTo65 = Math.max(0, 65 - (edadTop + delayYears));
+    if(yrsTo65<=0) return null;
+
+    const yrsAport = yrsTo65;
+    const iAcc = rAcc/freq;
+    const N    = yrsAport*freq;
+    let FV_pagos = 0, pmtYear = 1;
+    for(let y=0; y<yrsAport; y++){
+      if(y>0) pmtYear *= (1+infl);
+      for(let m=0; m<freq; m++){
+        const perRest = N - (y*freq + m);
+        FV_pagos += pmtYear * Math.pow(1+iAcc, perRest);
+      }
+    }
+    if(FV_pagos<=0) return null;
+    return PVneed65 / FV_pagos;
+  }
+
+  function updateTimingTable(){
+    const ids = ['0','1','3','5'];
+    const pmts = {
+      '0': computePMTForDelay(0),
+      '1': computePMTForDelay(1),
+      '3': computePMTForDelay(3),
+      '5': computePMTForDelay(5)
+    };
+    const base = pmts['0'];
+
+    ids.forEach(k=>{
+      const p = pmts[k];
+      if(!p || !base){
+        const suf = k==='0'?'0':k;
+        if($('t'+k+'_pmt')){
+          $('t'+k+'_pmt').textContent = '—';
+          $('t'+k+'_abs').textContent = '—';
+          $('t'+k+'_pct').textContent = '—';
+        }
+        return;
+      }
+      const diff = p - base;
+      const pct  = base!==0 ? (diff/base*100) : 0;
+      if($('t'+k+'_pmt')){
+        $('t'+k+'_pmt').textContent = money(p);
+        $('t'+k+'_abs').textContent = k==='0' ? '—' : (diff>=0?'+':'')+money(diff);
+        $('t'+k+'_pct').textContent = k==='0' ? '—' : `${diff>=0?'+':''}${pct.toFixed(1)}%`;
+      }
+    });
+  }
+
+  // -------------------- Eventos
+  $('planBtn').addEventListener('click', ()=>{
+    calcSuggestion();
+    calcAccum();
+  });
   $('resetTop').addEventListener('click', ()=>{
-    $('nombreOpt').value=''; 
-    $('edadTop').value=29; 
-    $('planTop').value='25'; 
+    $('nombreOpt').value='';
+    $('edadTop').value=29;
+    $('planTop').value='25';
     $('metaHoy').value=32000;
     $('sugBox').style.display='none';
-    updateDelayTable(null);
+    updateTimingTable();
   });
 
   $('calcBtn').addEventListener('click', calcAccum);
   $('resetBtn').addEventListener('click', ()=>{
-    $('edad').value=29; 
-    $('years').value=25; 
-    $('pmt').value=2500; 
-    $('frequency').value=12; 
+    $('edad').value=29;
+    $('years').value=25;
+    $('pmt').value=2500;
+    $('frequency').value=12;
     $('lumpSum').value=0;
-    $('rate').value=10; 
-    $('inflation').value=4; 
+    $('rate').value=10;
+    $('inflation').value=4;
+    if($('regimen')) $('regimen').value='93';
+    if($('isrRate')) $('isrRate').value=30;
+    if($('reinvierteISR')) $('reinvierteISR').value='1';
     calcAccum();
   });
 
   $('calcRet').addEventListener('click', calcRet);
   $('csvBtn').addEventListener('click', exportCSV);
   $('printBtn').addEventListener('click', ()=>{ window.print(); });
+
   $('toggleTable').addEventListener('click',()=>{
-    const d=$('details'); 
+    const d=$('details');
     d.style.display=d.style.display==='block'?'none':'block';
   });
   $('toggleTableRet').addEventListener('click',()=>{
-    const d=$('detailsRet'); 
+    const d=$('detailsRet');
     d.style.display=d.style.display==='block'?'none':'block';
   });
 
-  // recalcula cuando cambian supuestos relevantes del panel A
+  // recalcula cuando cambian supuestos relevantes
   ['edadTop','planTop','metaHoy','rate','inflation','rateRet','yrsRetSel'].forEach(id=>{
-    $(id).addEventListener('change', ()=>{ calcSuggestion(); });
+    const el=$(id);
+    if(el){
+      el.addEventListener('change', ()=>{
+        calcSuggestion();
+        updateTimingTable();
+      });
+    }
   });
-  // recalcula acumulación cuando cambian inputs de Fase 1
-  ['edad','years','pmt','frequency','lumpSum','rate','inflation'].forEach(id=>{
-    $(id).addEventListener('change', ()=>{ calcAccum(); });
+  ['edad','years','pmt','frequency','lumpSum','rate','inflation','regimen','isrRate','reinvierteISR'].forEach(id=>{
+    const el=$(id);
+    if(el){
+      el.addEventListener('change', ()=>{
+        calcAccum();
+      });
+    }
   });
 
+  // init
   window.addEventListener('load', ()=>{
     calcSuggestion();
     calcAccum();
+    updateTimingTable();
     linkWhatsApp();
   });
 </script>
