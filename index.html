@@ -13,284 +13,169 @@
     --wa:#25D366;
   }
   *{box-sizing:border-box} html,body{height:100%}
-  body{
-    margin:0;
-    font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
-    background:linear-gradient(135deg,#0b1223,#121a2f);
-    color:#e5e7eb;
-  }
+  body{margin:0;font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:linear-gradient(135deg,#0b1223,#121a2f);color:#e5e7eb}
   a{color:inherit;text-decoration:none}
   .container{max-width:1040px;margin:0 auto;padding:22px}
 
   /* Header */
-  .header{
-    background:#ffffff;
-    border:1px solid #e5e7eb;
-    border-radius:16px;
-    padding:16px 18px;
-    display:flex;
-    align-items:center;
-    gap:14px;
-    box-shadow:0 8px 24px rgba(15,23,42,.16)
-  }
+  .header{background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 24px rgba(15,23,42,.16)}
   .brand img{height:56px;width:auto;display:block}
   .title{font-weight:800;font-size:22px;color:#0f172a}
   .sub{font-size:13px;color:#475569}
-  .meta{
-    margin-left:auto;
-    text-align:right;
-    font-size:14px;
-    color:#111827;
-    display:flex;
-    gap:24px;
-  }
+  .meta{margin-left:auto;text-align:right;font-size:14px;color:#111827; display:flex; gap:24px}
   .meta span{display:flex;gap:8px;align-items:center}
 
   /* Toolbar */
-  .toolbar{
-    display:flex;
-    gap:10px;
-    justify-content:flex-end;
-    margin:14px 0 18px;
-    flex-wrap:wrap;
-  }
-  .btn{
-    appearance:none;
-    border:1px solid #e5e7eb;
-    background:#fff;
-    color:#0f172a;
-    padding:10px 14px;
-    border-radius:10px;
-    font-weight:700;
-    cursor:pointer;
-    transition:.2s;
-  }
-  .btn:hover{
-    transform:translateY(-1px);
-    box-shadow:0 6px 18px rgba(2,6,23,.10)
-  }
-  .btn-primary{
-    background:var(--brand);
-    border-color:var(--brand);
-    color:#fff
-  }
+  .toolbar{display:flex;gap:10px;justify-content:flex-end;margin:14px 0 18px}
+  .btn{appearance:none;border:1px solid #e5e7eb;background:#fff;color:#0f172a;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer;transition:.2s}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(2,6,23,.10)}
+  .btn-primary{background:var(--brand);border-color:var(--brand);color:#fff}
   .btn-primary:hover{background:var(--brand-2)}
 
   /* Banner */
-  .banner{
-    background:#fff7ed;
-    color:#7c2d12;
-    border:1px solid #fed7aa;
-    border-left:6px solid #fb923c;
-    border-radius:14px;
-    padding:14px 16px;
-    margin:18px 0;
-    box-shadow:0 4px 14px rgba(2,6,23,.12)
-  }
+  .banner{background:#fff7ed;color:#7c2d12;border:1px solid #fed7aa;border-left:6px solid #fb923c;border-radius:14px;padding:14px 16px;margin:18px 0;box-shadow:0 4px 14px rgba(2,6,23,.12)}
   .banner strong{color:#9a3412}
 
   /* Cards */
-  .card{
-    background:rgba(255,255,255,.06);
-    border:1px solid var(--line);
-    border-radius:16px;
-    padding:22px;
-    margin:16px 0
-  }
-  .card h2{
-    margin:0 0 10px;
-    color:#dbe3f3;
-    font-size:20px;
-    font-weight:800
-  }
+  .card{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:16px;padding:22px;margin:16px 0}
+  .card h2{margin:0 0 10px;color:#dbe3f3;font-size:20px;font-weight:800}
   .help{margin:-2px 0 14px;color:#cbd5e1;font-size:13px}
 
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:14px
-  }
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
   .group{display:flex;flex-direction:column}
-  label{
-    font-size:12px;
-    color:#cbd5e1;
-    margin-bottom:6px;
-    font-weight:600
-  }
-  input,select{
-    padding:12px;
-    border:1px solid rgba(255,255,255,.18);
-    background:rgba(255,255,255,.05);
-    color:#fff;
-    border-radius:10px;
-    font-size:16px;
-    transition:border .15s, box-shadow .15s
-  }
-  input:focus,select:focus{
-    outline:none;
-    border-color:var(--brand);
-    box-shadow:0 0 0 3px rgba(11,94,215,.25)
-  }
+  label{font-size:12px;color:#cbd5e1;margin-bottom:6px;font-weight:600}
+  input,select{padding:12px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:#fff;border-radius:10px;font-size:16px;transition:border .15s, box-shadow .15s}
+  input:focus,select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(11,94,215,.25)}
   .muted{font-size:12px;color:#94a3b8;margin-top:6px}
 
   /* Suggestion */
-  .suggest{
-    display:none;
-    border:1px solid rgba(11,94,215,.35);
-    background:linear-gradient(0deg,rgba(11,94,215,.10),rgba(11,94,215,.10));
-    border-left:6px solid var(--brand);
-    border-radius:14px;
-    padding:14px;
-    margin-top:12px
-  }
+  .suggest{display:none;border:1px solid rgba(11,94,215,.35);background:linear-gradient(0deg,rgba(11,94,215,.10),rgba(11,94,215,.10));border-left:6px solid var(--brand);border-radius:14px;padding:14px;margin-top:12px}
   .suggest strong{color:#eaf2ff}
 
   /* KPIs */
-  .kpis{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:12px;
-    margin-top:6px
-  }
-  .kpi{
-    background:rgba(255,255,255,.06);
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:16px
-  }
-  .kpi-label{
-    font-size:11px;
-    letter-spacing:.4px;
-    color:#a9b4c7;
-    text-transform:uppercase
-  }
-  .kpi-value{
-    font-size:22px;
-    font-weight:800;
-    color:#f8fafc
-  }
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:6px}
+  .kpi{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .kpi-label{font-size:11px;letter-spacing:.4px;color:#a9b4c7;text-transform:uppercase}
+  .kpi-value{font-size:22px;font-weight:800;color:#f8fafc}
 
   /* Details tables */
-  .toggle{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    cursor:pointer;
-    border:1px solid var(--line);
-    padding:12px 14px;
-    border-radius:12px;
-    margin-top:10px
-  }
+  .toggle{display:flex;justify-content:space-between;align-items:center;cursor:pointer;border:1px solid var(--line);padding:12px 14px;border-radius:12px;margin-top:10px}
   .details{display:none;overflow:auto}
   table{width:100%;border-collapse:collapse;margin-top:10px}
-  th{
-    background:rgba(255,255,255,.08);
-    text-align:left;
-    padding:10px;
-    border-bottom:1px solid rgba(255,255,255,.14);
-    font-size:13px
-  }
-  td{
-    padding:10px;
-    border-bottom:1px solid rgba(255,255,255,.08);
-    font-size:14px
-  }
+  th{background:rgba(255,255,255,.08);text-align:left;padding:10px;border-bottom:1px solid rgba(255,255,255,.14);font-size:13px}
+  td{padding:10px;border-bottom:1px solid rgba(255,255,255,.08);font-size:14px}
 
   /* WhatsApp */
-  .wa{
-    position:fixed;
-    right:18px;
-    bottom:22px;
-    background:var(--wa);
-    color:#06371a;
-    border-radius:999px;
-    padding:12px 16px;
-    font-weight:800;
-    box-shadow:0 10px 24px rgba(0,0,0,.25);
-    z-index:50;
-  }
+  .wa{position:fixed;right:18px;bottom:22px;background:var(--wa);color:#06371a;border-radius:999px;padding:12px 16px;font-weight:800;box-shadow:0 10px 24px rgba(0,0,0,.25)}
 
-  .error{
-    display:none;
-    background:rgba(220,53,69,.18);
-    border:1px solid rgba(220,53,69,.4);
-    color:#fecaca;
-    padding:10px;
-    border-radius:10px;
-    margin:8px 0
-  }
+  .error{display:none;background:rgba(220,53,69,.18);border:1px solid rgba(220,53,69,.4);color:#fecaca;padding:10px;border-radius:10px;margin:8px 0}
 
-  /* PRINT REPORT (PDF amigable) */
-  .print-report{
-    display:none;
-    background:#ffffff;
-    color:#111827;
-    padding:24px 12px 12px;
-    font-size:13px;
-  }
-  .pr-inner{max-width:800px;margin:0 auto}
-  .pr-header{
-    display:flex;
-    gap:14px;
-    align-items:center;
-    border-bottom:1px solid #e5e7eb;
-    padding-bottom:12px;
-    margin-bottom:16px;
-  }
-  .pr-header img{height:46px;width:auto;display:block}
-  .pr-title{font-size:20px;font-weight:800;margin:0;color:#111827}
-  .pr-sub{margin:2px 0;font-size:12px;color:#4b5563}
-  .pr-block{
-    border:1px solid #e5e7eb;
-    border-radius:10px;
-    padding:12px 14px;
-    margin-bottom:10px;
-    background:#ffffff;
-  }
-  .pr-block h2{
-    margin:0 0 6px;
-    font-size:14px;
-    color:#111827;
-  }
-  .pr-block p, .pr-block li{
-    margin:2px 0;
-    font-size:12px;
-    color:#111827;
-  }
-  .pr-list{padding-left:18px;margin:4px 0}
-  .pr-footer{
-    margin-top:10px;
-    padding-top:8px;
-    border-top:1px solid #e5e7eb;
-    font-size:11px;
-    color:#4b5563;
-    text-align:left;
-  }
-
-  /* Print */
+  /* Print: versión informe ejecutivo en blanco y negro / grises */
   @media print{
+    /* Fondo blanco limpio y texto oscuro */
     body{
       background:#ffffff !important;
-      color:#000000 !important;
+      color:#111827 !important;
     }
-    .banner,
-    .card,
-    .toolbar,
-    .wa,
-    .toggle,
-    .details{
-      display:none !important;
-    }
+
     .container{
       max-width:100%;
-      padding:12px !important;
-      background:#ffffff !important;
+      margin:0;
+      padding:0 12mm 12mm;
     }
-    .header{
+
+    /* Ocultar cosas solo útiles en pantalla */
+    .wa,
+    .toolbar,
+    .toggle{
       display:none !important;
     }
-    .print-report{
-      display:block !important;
+
+    /* Encabezado tipo informe ejecutivo */
+    .header{
+      background:#ffffff !important;
+      border:1px solid #111827 !important;
+      box-shadow:none !important;
+    }
+    .header .title{
+      color:#111827 !important;
+    }
+    .header .sub{
+      color:#374151 !important;
+    }
+    .header .meta{
+      color:#111827 !important;
+    }
+
+    /* Quitar fondos oscuros de las tarjetas en PDF */
+    .card{
+      background:#ffffff !important;
+      border:1px solid #111827 !important;
+      box-shadow:none !important;
+      color:#111827 !important;
+      page-break-inside:avoid;
+    }
+
+    /* Títulos y textos de ayuda más oscuros */
+    .card h2{
+      color:#111827 !important;
+      page-break-after:avoid;
+    }
+    .help,
+    .muted{
+      color:#374151 !important;
+    }
+
+    /* Banner en modo “mensaje importante” sin color fuerte */
+    .banner{
+      background:#ffffff !important;
+      border:1px solid #111827 !important;
+      color:#111827 !important;
+      box-shadow:none !important;
+    }
+    .banner strong{
+      color:#111827 !important;
+    }
+
+    /* KPIs en blanco con bordes grises */
+    .kpi{
+      background:#ffffff !important;
+      border:1px solid #111827 !important;
+    }
+    .kpi-label{
+      color:#4b5563 !important;
+    }
+    .kpi-value{
+      color:#111827 !important;
+    }
+
+    /* Tablas muy legibles en B/N */
+    table{
+      width:100%;
+      border-collapse:collapse;
+      border:1px solid #111827;
+    }
+    th{
+      background:#f3f4f6 !important;
+      color:#111827 !important;
+      border-bottom:1px solid #111827 !important;
+    }
+    td{
+      border-bottom:1px solid #d1d5db !important;
+      color:#111827 !important;
+    }
+
+    /* Inputs / selects impresos como texto normal si salen en PDF */
+    input, select{
+      border:1px solid #9ca3af !important;
+      background:#ffffff !important;
+      color:#111827 !important;
+    }
+
+    /* Links sin azul chillón */
+    a{
+      color:#111827 !important;
+      text-decoration:none;
     }
   }
 </style>
@@ -399,32 +284,6 @@
           <label for="inflation">Inflación promedio anual (%)</label>
           <input id="inflation" type="number" value="4" min="0" max="100" step="0.01">
         </div>
-        <div class="group">
-          <label for="fiscalMode">Tratamiento fiscal del plan</label>
-          <select id="fiscalMode">
-            <option value="none" selected>Sin beneficio fiscal inmediato</option>
-            <option value="art93">Art. 93 LISR (no deducible)</option>
-            <option value="art151">Art. 151 LISR (deducible, devolución ISR)</option>
-          </select>
-          <div class="muted">Solo Art. 151 genera devolución anual de ISR.</div>
-        </div>
-        <div class="group" id="isrGroup">
-          <label for="isrPct">Devolución aproximada de ISR (%)</label>
-          <select id="isrPct">
-            <option value="0.15">15% aprox.</option>
-            <option value="0.20" selected>20% aprox.</option>
-            <option value="0.30">30% aprox.</option>
-            <option value="0.35">35% aprox.</option>
-          </select>
-          <div class="muted">Estimado de tu tasa marginal de ISR.</div>
-        </div>
-        <div class="group" id="isrReinvGroup">
-          <label for="isrReinv">¿Qué hacer con la devolución?</label>
-          <select id="isrReinv">
-            <option value="reinv" selected>Reinvertirla en el mismo plan</option>
-            <option value="gasto">Usarla para otros gastos (no reinvertir)</option>
-          </select>
-        </div>
       </div>
 
       <div class="toolbar" style="justify-content:flex-start">
@@ -437,46 +296,17 @@
     <div class="card">
       <h2>Resultados de la Fase 1</h2>
       <div class="kpis">
-        <div class="kpi">
-          <div class="kpi-label">Edad al finalizar aportaciones</div>
-          <div class="kpi-value" id="edadFinal">—</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Ahorro acumulado (nominal)</div>
-          <div class="kpi-value" id="ahorroNominal">—</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Total aportado de tu bolsa</div>
-          <div class="kpi-value" id="totalAportado">—</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">ISR devuelto reinvertido</div>
-          <div class="kpi-value" id="isrReinvTot">—</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Rendimiento ganado</div>
-          <div class="kpi-value" id="rendimiento">—</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Fondo a los 65 (si aplica)</div>
-          <div class="kpi-value" id="fondo65">—</div>
-        </div>
+        <div class="kpi"><div class="kpi-label">Edad al finalizar aportaciones</div><div class="kpi-value" id="edadFinal">—</div></div>
+        <div class="kpi"><div class="kpi-label">Ahorro acumulado (nominal)</div><div class="kpi-value" id="ahorroNominal">—</div></div>
+        <div class="kpi"><div class="kpi-label">Total aportado</div><div class="kpi-value" id="totalAportado">—</div></div>
+        <div class="kpi"><div class="kpi-label">Rendimiento ganado</div><div class="kpi-value" id="rendimiento">—</div></div>
+        <div class="kpi"><div class="kpi-label">Fondo a los 65 (si aplica)</div><div class="kpi-value" id="fondo65">—</div></div>
       </div>
 
-      <div class="toggle" id="toggleTable">
-        <span><strong>Detalles año por año</strong></span><span>▼</span>
-      </div>
+      <div class="toggle" id="toggleTable"><span><strong>Detalles año por año</strong></span><span>▼</span></div>
       <div class="details" id="details">
         <table>
-          <thead>
-            <tr>
-              <th>Año</th>
-              <th>Edad</th>
-              <th>Aportado ese año</th>
-              <th>ISR devuelto ese año</th>
-              <th>Saldo al cierre</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Año</th><th>Edad</th><th>Aportado ese año</th><th>Saldo al cierre</th></tr></thead>
           <tbody id="tbody"></tbody>
         </table>
       </div>
@@ -510,28 +340,14 @@
       </div>
 
       <div class="kpis" id="retBox" style="display:none">
-        <div class="kpi">
-          <div class="kpi-label">Ingreso mensual estimado</div>
-          <div class="kpi-value" id="pmtReal">—</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Meses de retiro</div>
-          <div class="kpi-value" id="nMeses">—</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Tasa real mensual</div>
-          <div class="kpi-value" id="iRealMes">—</div>
-        </div>
-        <div class="kpi">
-          <div class="kpi-label">Regla 4% (referencia anual)</div>
-          <div class="kpi-value" id="rule4">—</div>
-        </div>
+        <div class="kpi"><div class="kpi-label">Ingreso mensual estimado</div><div class="kpi-value" id="pmtReal">—</div></div>
+        <div class="kpi"><div class="kpi-label">Meses de retiro</div><div class="kpi-value" id="nMeses">—</div></div>
+        <div class="kpi"><div class="kpi-label">Tasa real mensual</div><div class="kpi-value" id="iRealMes">—</div></div>
+        <div class="kpi"><div class="kpi-label">Regla 4% (referencia anual)</div><div class="kpi-value" id="rule4">—</div></div>
       </div>
 
       <!-- Detalle mensual del retiro -->
-      <div class="toggle" id="toggleTableRet">
-        <span><strong>Detalle mensual del retiro</strong></span><span>▼</span>
-      </div>
+      <div class="toggle" id="toggleTableRet"><span><strong>Detalle mensual del retiro</strong></span><span>▼</span></div>
       <div class="details" id="detailsRet">
         <table>
           <thead>
@@ -549,61 +365,6 @@
     </div>
 
     <div class="muted">Proyección educativa; no contempla impuestos, comisiones u otros costos. Resultados no garantizados.</div>
-
-    <!-- PRINT REPORT (para PDF/impresión) -->
-    <section id="printReport" class="print-report">
-      <div class="pr-inner">
-        <div class="pr-header">
-          <img src="./logo-garba.png" alt="Christian GarBa">
-          <div>
-            <h1 class="pr-title">Plan Personal de Retiro</h1>
-            <p class="pr-sub">Resumen de tu proyección de ahorro e ingreso en retiro</p>
-            <p class="pr-sub">Generado el <span id="prFecha"></span></p>
-          </div>
-        </div>
-
-        <div class="pr-block">
-          <h2>1. Datos clave del plan</h2>
-          <ul class="pr-list">
-            <li>Nombre: <strong id="prNombre">—</strong></li>
-            <li>Edad actual: <strong id="prEdad">—</strong></li>
-            <li>Años de aportación: <strong id="prYears">—</strong></li>
-            <li>Aportación periódica inicial: <strong id="prPmt">—</strong></li>
-            <li>Aportación inicial única: <strong id="prLump">—</strong></li>
-            <li>Frecuencia de aportación: <strong id="prFreq">—</strong></li>
-            <li>Rendimiento anual esperado (nominal): <strong id="prRateAcc">—</strong></li>
-            <li>Inflación promedio anual: <strong id="prInflAcc">—</strong></li>
-            <li>Tratamiento fiscal: <strong id="prFiscal">—</strong></li>
-          </ul>
-        </div>
-
-        <div class="pr-block">
-          <h2>2. Proyección de ahorro</h2>
-          <p>Ahorro acumulado al finalizar aportaciones (edad <strong id="prEdadFin"></strong>): <strong id="prAhorroNom"></strong></p>
-          <p>Total aportado de tu bolsa: <strong id="prTotalAport"></strong></p>
-          <p>ISR devuelto reinvertido (si aplica): <strong id="prISRDev"></strong></p>
-          <p>Crecimiento sobre tu dinero (rendimiento + ISR): <strong id="prRend"></strong></p>
-          <p>Fondo estimado a los 65 años: <strong id="prFondo65"></strong></p>
-        </div>
-
-        <div class="pr-block">
-          <h2>3. Ingreso estimado en retiro</h2>
-          <p>Años de retiro considerados: <strong id="prYrsRet"></strong></p>
-          <p>Ingreso mensual estimado (valor futuro): <strong id="prPmtRet"></strong></p>
-          <p>Referencias:</p>
-          <ul class="pr-list">
-            <li>Meses de retiro: <strong id="prMesesRet"></strong></li>
-            <li>Tasa real mensual aproximada: <strong id="prRealMes"></strong></li>
-            <li>Regla 4% (retiro sostenible anual): <strong id="prRule4"></strong></li>
-          </ul>
-        </div>
-
-        <div class="pr-footer">
-          <p>Esta proyección es educativa y no constituye una oferta ni garantía de rendimiento. No incluye impuestos, comisiones ni cambios regulatorios futuros.</p>
-          <p><strong>Asesor:</strong> Christian GarBa · Seguros con Estrategia · Tel. 662 417 6032 · christian.garcia@sfgarba.com.mx</p>
-        </div>
-      </div>
-    </section>
   </div>
 
   <!-- WhatsApp -->
@@ -622,48 +383,12 @@
       '*Datos:*',
       `• Edad: ${$('edad').value} años`,
       `• Años de aportación: ${$('years').value}`,
-      `• Aportación ${({'12':'mensual','4':'trimestral','2':'semestral','1':'anual'})[$('frequency').value]}: $${$('pmt').value}`
-    ].filter(Boolean).join('\\n');
+      `• Aportación ${({'12':'Mensual','4':'Trimestral','2':'Semestral','1':'Anual'})[$('frequency').value]}: $${$('pmt').value}`
+    ].filter(Boolean).join('\n');
     $('waBtn').href = 'https://wa.me/526624176032?text='+encodeURIComponent(msg);
   }
 
-  // Estado para el reporte de impresión
-  const state = {
-    edad: null,
-    years: null,
-    pmt0: null,
-    lump: null,
-    freq: null,
-    rateAcc: null,
-    inflAcc: null,
-    fiscalMode: 'none',
-    edadFin: null,
-    ahorroNominal: 0,
-    totalAportado: 0,
-    isrReinvTot: 0,
-    rendimiento: 0,
-    fondo65: 0,
-    yrsRet: null,
-    pmtRet: 0,
-    nMeses: 0,
-    iRealMes: 0,
-    rule4: 0
-  };
-
-  function fiscalLabel(mode){
-    if(mode === 'art93') return 'Art. 93 LISR (no deducible, exento a futuro)';
-    if(mode === 'art151') return 'Art. 151 LISR (deducible con devolución anual de ISR)';
-    return 'Sin beneficio fiscal inmediato';
-  }
-
-  function updateFiscalVisibility(){
-    const mode = $('fiscalMode').value;
-    const showISR = (mode === 'art151');
-    $('isrGroup').style.opacity = showISR ? '1' : '0.4';
-    $('isrReinvGroup').style.opacity = showISR ? '1' : '0.4';
-  }
-
-  // -------------------- Sugerencia PMT inicial (ignorando fiscal para simplificar)
+  // -------------------- Sugerencia PMT inicial (peras con peras, NOMINAL a 65)
   function calcSuggestion(){
     const edad    = parseFloat($('edadTop').value);
     const planY   = parseInt($('planTop').value,10);
@@ -681,7 +406,7 @@
     const yrsTo65   = Math.max(0, 65 - edad);
     const metaNom65 = metaHoy * Math.pow(1+infl, yrsTo65);
 
-    // (2) Capital nominal requerido a los 65 para pagar metaNom65 por yrsRet años
+    // (2) Capital nominal requerido a los 65 para pagar metaNom65 por yrsRet años (fin de periodo)
     const iRet = rRet/freq, nRet = yrsRet*freq;
     const PVneed65 = Math.abs(iRet)<1e-12 ? metaNom65*nRet
                       : metaNom65 * ( (1 - Math.pow(1+iRet, -nRet)) / iRet );
@@ -691,26 +416,25 @@
     const yrsAport    = Math.min(planY, yrsTo65Real);
     const gapYears    = Math.max(0, yrsTo65Real - yrsAport);
 
-    // (4) Simulación simple para factor con PMT = 1 y sin ISR
+    // (4) Factor de aportaciones que suben anual ≈ inflación (pago mensual dentro de cada año)
     const iAcc = rAcc/freq;
     const N    = yrsAport*freq;
-    let saldoFactor = 0;
-    let pmtYear = 1;
+    let FV_pagos = 0, pmtYear = 1; // PMT inicial = 1 para factor
     for(let y=0; y<yrsAport; y++){
       if(y>0) pmtYear *= (1+infl);
       for(let m=0; m<freq; m++){
-        saldoFactor = (saldoFactor + pmtYear) * (1+iAcc);
+        const perRest = N - (y*freq + m);
+        FV_pagos += pmtYear * Math.pow(1+iAcc, perRest);
       }
     }
-    // Crece hasta 65 si se acaba antes
-    for(let y=0; y<gapYears; y++){
-      for(let m=0; m<freq; m++){
-        saldoFactor = saldoFactor * (1+iAcc);
-      }
-    }
+    // crecimiento adicional hasta 65 si termina antes
+    const growTo65    = Math.pow(1+iAcc, gapYears*freq);
+    const totalFactor = FV_pagos * growTo65;
 
-    const PMT_inicial = saldoFactor>0 ? PVneed65 / saldoFactor : 0;
+    // (5) PMT inicial requerido
+    const PMT_inicial = totalFactor>0 ? PVneed65 / totalFactor : 0;
 
+    // UI
     const yrsTexto = gapYears>0 ? ` Tu fondo seguirá creciendo ${gapYears} año(s) más hasta los 65.` : '';
     $('sugText').innerHTML =
       `💡 <strong>Proyección personalizada:</strong> para lograr el ingreso que buscas en tu retiro, `+
@@ -728,7 +452,7 @@
     $('pmt').value   = String(PMT_inicial.toFixed(2));
   }
 
-  // -------------------- Fase 1 (simulación con ISR reinvertido opcional)
+  // -------------------- Fase 1 (acumulación nominal con step-up por inflación)
   function calcAccum(){
     const edad = parseFloat($('edad').value);
     const years = parseFloat($('years').value);
@@ -737,141 +461,80 @@
     const rate = parseFloat($('rate').value)/100;
     const freq = parseFloat($('frequency').value);
     const infl = parseFloat($('inflation').value)/100;
-    const fiscalMode = $('fiscalMode').value;
-    const isrPct = parseFloat($('isrPct').value||'0');
-    const reinv = $('isrReinv').value === 'reinv';
 
     if([edad,years,pmt0,lump,rate,freq,infl].some(x=>isNaN(x))){
-      const e=$('errorMsg');
-      e.textContent='Completa todos los campos correctamente';
-      e.style.display='block';
-      return;
-    } else {
-      $('errorMsg').style.display='none';
-    }
+      const e=$('errorMsg'); e.textContent='Completa todos los campos correctamente'; e.style.display='block'; return;
+    } else { $('errorMsg').style.display='none'; }
 
-    const yearsTo65 = Math.max(0,65-edad);
-    const totalYearsSim = Math.max(years, yearsTo65);
+    const N = Math.round(years*freq);
     const i = rate/freq;
 
-    let saldo = lump;
-    let edadAct = edad;
-    let pmtYear = pmt0;
-    let totalAportado = 0;
-    let totalISRReinv = 0;
+    let FV_pmt = 0, total = lump, pmtYear = pmt0;
+    for(let y=0;y<years;y++){
+      if(y>0) pmtYear *= (1+infl);
+      for(let p=0;p<freq;p++){
+        const perRest = N - (y*freq + p);
+        FV_pmt += pmtYear * Math.pow(1+i, perRest);
+        total += pmtYear;
+      }
+    }
+    const FV_nom_end = lump*Math.pow(1+i,N) + FV_pmt;
+    const rend = FV_nom_end - total;
+    const edadFin = edad + years;
 
-    let saldoPlanEnd = lump;
-    let saldoAt65 = null;
+    // Fondo a los 65
+    let fondo65 = FV_nom_end;
+    if(edadFin < 65){
+      const extraYears = 65 - edadFin;
+      const Nextra = Math.round(extraYears*freq);
+      fondo65 = FV_nom_end * Math.pow(1+i, Nextra);
+    }
 
-    const tbody = $('tbody');
-    tbody.innerHTML = '';
+    // KPIs
+    $('edadFinal').textContent = String(Math.round(edadFin));
+    $('ahorroNominal').textContent = money(FV_nom_end);
+    $('totalAportado').textContent = money(total);
+    $('rendimiento').textContent = money(rend);
+    $('fondo65').textContent = money(fondo65);
 
-    for(let yr=1; yr<=totalYearsSim; yr++){
+    // Tabla Fase 1
+    const tbody=$('tbody'); tbody.innerHTML='';
+    let saldo=lump, pmtY=pmt0, edadAct=edad;
+    const totalYrs = Math.max(years, 65-edad);
+    for(let yr=1; yr<=totalYrs; yr++){
       edadAct++;
-      let aportAnual = 0;
-      let isrYear = 0;
-
-      if(yr === 1){
-        pmtYear = pmt0;
-      } else if(yr <= years){
-        pmtYear *= (1+infl);
+      let aport=0;
+      if(yr<=years){
+        if(yr>1) pmtY *= (1+infl);
+        aport = pmtY*freq;
+        for(let k=0;k<freq;k++){ saldo = saldo*(1+i) + pmtY; }
+      }else{
+        for(let k=0;k<freq;k++){ saldo = saldo*(1+i); }
       }
-
-      if(yr <= years){
-        for(let k=0; k<freq; k++){
-          saldo += pmtYear;
-          aportAnual += pmtYear;
-          saldo *= (1+i);
-        }
-        totalAportado += aportAnual;
-
-        if(fiscalMode === 'art151'){
-          isrYear = aportAnual * isrPct;
-          if(reinv){
-            saldo += isrYear;
-            totalISRReinv += isrYear;
-          }
-        }
-      } else {
-        // Ya no hay aportaciones, solo crecimiento
-        for(let k=0; k<freq; k++){
-          saldo *= (1+i);
-        }
-      }
-
-      if(yr === years){
-        saldoPlanEnd = saldo;
-      }
-      if(edadAct >= 65 && saldoAt65 === null){
-        saldoAt65 = saldo;
-      }
-
-      const tr = document.createElement('tr');
-      if(yr > years){
-        tr.style.background = 'rgba(11,94,215,.08)';
-      }
-      tr.innerHTML =
-        `<td>${yr}</td>`+
-        `<td>${edadAct} años</td>`+
-        `<td>${yr>years?'—':money(aportAnual)}</td>`+
-        `<td>${isrYear>0?money(isrYear):'—'}</td>`+
-        `<td>${money(saldo)}</td>`;
+      const tr=document.createElement('tr');
+      if(yr>years) tr.style.background='rgba(11,94,215,.08)';
+      tr.innerHTML=`<td>${yr}</td><td>${edadAct} años</td><td>${yr>years?'—':money(aport)}</td><td>${money(saldo)}</td>`;
       tbody.appendChild(tr);
     }
 
-    if(saldoAt65 === null){
-      // Si nunca llegamos a 65 en la simulación, usamos saldoPlanEnd
-      saldoAt65 = saldoPlanEnd;
-    }
-
-    const rendimiento = saldoPlanEnd - totalAportado;
-
-    $('edadFinal').textContent = String(Math.round(edad + years));
-    $('ahorroNominal').textContent = money(saldoPlanEnd);
-    $('totalAportado').textContent = money(totalAportado);
-    $('isrReinvTot').textContent = totalISRReinv>0 ? money(totalISRReinv) : '—';
-    $('rendimiento').textContent = money(rendimiento);
-    $('fondo65').textContent = money(saldoAt65);
-
     // Base para Fase 2
-    $('pvRet').value = String(saldoAt65);
-
-    // Actualizamos estado para el PDF
-    state.edad = edad;
-    state.years = years;
-    state.pmt0 = pmt0;
-    state.lump = lump;
-    state.freq = freq;
-    state.rateAcc = rate;
-    state.inflAcc = infl;
-    state.fiscalMode = fiscalMode;
-    state.edadFin = edad + years;
-    state.ahorroNominal = saldoPlanEnd;
-    state.totalAportado = totalAportado;
-    state.isrReinvTot = totalISRReinv;
-    state.rendimiento = rendimiento;
-    state.fondo65 = saldoAt65;
-
+    $('pvRet').value = String(fondo65);
     linkWhatsApp();
   }
 
-  // -------------------- Fase 2 (retiro desde saldo a 65, nominal)
+  // -------------------- Fase 2 (retiro desde saldo a 65, nominal) + DETALLE MENSUAL
   function calcRet(){
     const PV = parseFloat($('pvRet').value)||0;
     const yrs = parseInt($('yrsRetSel').value,10);
     const rateRet = parseFloat($('rateRet').value)/100;
     const infl = parseFloat($('inflRet').value)/100;
 
-    if(PV<=0){
-      alert('Primero calcula tu ahorro (Fase 1).');
-      return;
-    }
+    if(PV<=0){ alert('Primero calcula tu ahorro (Fase 1).'); return; }
 
     const iNom = rateRet/12, n = yrs*12;
     const PMT = Math.abs(iNom)<1e-9 ? PV/n : PV * ( iNom / (1 - Math.pow(1+iNom,-n)) );
 
-    const rReal = ((1+rateRet)/(1+infl))-1;
-    const iReal = rReal/12;
+    const rReal = ((1+rateRet)/(1+infl))-1, iReal = rReal/12;
 
     $('retBox').style.display='grid';
     $('pmtReal').textContent = money(PMT);
@@ -879,139 +542,57 @@
     $('iRealMes').textContent = `${(iReal*100).toFixed(3)}%`;
     $('rule4').textContent = `${money(PV*0.04)} /año · ${money(PV*0.04/12)} /mes`;
 
-    // Detalle mensual
-    const tbodyRet = $('tbodyRet');
-    tbodyRet.innerHTML='';
+    // ---- Detalle mensual (tabla)
+    const tbodyRet = $('tbodyRet'); tbodyRet.innerHTML='';
     let saldo = PV;
     for(let m=1; m<=n; m++){
       const interes = saldo * iNom;
       const saldoAntes = saldo + interes;
-      const retiro = PMT;
+      const retiro = PMT; // retiro al fin de periodo
       const saldoDesp = Math.max(0, saldoAntes - retiro);
 
+      // Edad: arranca a los 65, sumamos meses
       const yearsAdd = Math.floor(m/12);
       const monthsRem = m % 12;
       const edadTxt = `${65 + yearsAdd} años${monthsRem?` ${monthsRem} mes(es)`:''}`;
 
       const tr = document.createElement('tr');
-      tr.innerHTML =
-        `<td>${m}</td>`+
-        `<td>${edadTxt}</td>`+
-        `<td>${money(retiro)}</td>`+
-        `<td>${money(interes)}</td>`+
-        `<td>${money(saldoDesp)}</td>`;
+      tr.innerHTML = `<td>${m}</td><td>${edadTxt}</td><td>${money(retiro)}</td><td>${money(interes)}</td><td>${money(saldoDesp)}</td>`;
       tbodyRet.appendChild(tr);
 
       saldo = saldoDesp;
     }
-
-    // Guardar en estado para el PDF
-    state.yrsRet = yrs;
-    state.pmtRet = PMT;
-    state.nMeses = n;
-    state.iRealMes = iReal;
-    state.rule4 = PV*0.04;
   }
 
   // -------------------- CSV (Fase 1) y eventos
   function exportCSV(){
-    const rows=[['Año','Edad','Aportado ese año (MXN)','ISR devuelto ese año (MXN)','Saldo al cierre (MXN)']];
+    const rows=[['Año','Edad','Aportado ese año (MXN)','Saldo al cierre (MXN)']];
     document.querySelectorAll('#tbody tr').forEach(tr=>{
-      const t=[...tr.querySelectorAll('td')].map(td=>td.textContent.replace(/[^\d.,\\-a-zñ ]/gi,''));
+      const t=[...tr.querySelectorAll('td')].map(td=>td.textContent.replace(/[^\d.,\-a-zñ ]/gi,''));
       rows.push(t);
     });
-    const blob=new Blob([rows.map(r=>r.join(',')).join('\\n')],{type:'text/csv;charset=utf-8;'});
-    const a=document.createElement('a');
-    const name=$('nombreOpt').value||'Proyeccion';
-    const f=new Date().toISOString().slice(0,10);
-    a.href=URL.createObjectURL(blob);
-    a.download=`${name}_corrida_${f}.csv`;
-    a.click();
-    URL.revokeObjectURL(a.href);
+    const blob=new Blob([rows.map(r=>r.join(',')).join('\n')],{type:'text/csv;charset=utf-8;'});
+    const a=document.createElement('a'); const name=$('nombreOpt').value||'Proyeccion', f=new Date().toISOString().slice(0,10);
+    a.href=URL.createObjectURL(blob); a.download=`${name}_corrida_${f}.csv`; a.click(); URL.revokeObjectURL(a.href);
   }
 
-  function fillPrintReport(){
-    const today = new Date();
-    $('prFecha').textContent = today.toLocaleDateString('es-MX');
-
-    const nombre = ($('nombreOpt').value||'').trim();
-    $('prNombre').textContent = nombre || '—';
-    $('prEdad').textContent = state.edad != null ? `${state.edad} años` : '—';
-    $('prYears').textContent = state.years != null ? `${state.years} años` : '—';
-    $('prPmt').textContent = state.pmt0 != null ? money(state.pmt0) : '—';
-    $('prLump').textContent = state.lump != null ? money(state.lump) : '—';
-    const freqMap = {1:'anual',2:'semestral',4:'trimestral',12:'mensual'};
-    $('prFreq').textContent = state.freq != null ? freqMap[state.freq] || '—' : '—';
-    $('prRateAcc').textContent = state.rateAcc != null ? (state.rateAcc*100).toFixed(2)+'% nominal' : '—';
-    $('prInflAcc').textContent = state.inflAcc != null ? (state.inflAcc*100).toFixed(2)+'%' : '—';
-    $('prFiscal').textContent = fiscalLabel(state.fiscalMode);
-
-    $('prEdadFin').textContent = state.edadFin != null ? state.edadFin : '—';
-    $('prAhorroNom').textContent = money(state.ahorroNominal);
-    $('prTotalAport').textContent = money(state.totalAportado);
-    $('prISRDev').textContent = state.isrReinvTot>0 ? money(state.isrReinvTot) : '—';
-    $('prRend').textContent = money(state.ahorroNominal - state.totalAportado);
-    $('prFondo65').textContent = money(state.fondo65);
-
-    $('prYrsRet').textContent = state.yrsRet != null ? `${state.yrsRet} años` : '—';
-    $('prPmtRet').textContent = state.pmtRet ? money(state.pmtRet) : '—';
-    $('prMesesRet').textContent = state.nMeses || '—';
-    $('prRealMes').textContent = state.iRealMes ? (state.iRealMes*100).toFixed(3)+'%' : '—';
-    $('prRule4').textContent = state.rule4 ? money(state.rule4)+' /año' : '—';
-  }
-
-  // -------------------- Listeners
   $('planBtn').addEventListener('click', ()=>{ calcSuggestion(); calcAccum(); });
   $('resetTop').addEventListener('click', ()=>{
-    $('nombreOpt').value='';
-    $('edadTop').value=29;
-    $('planTop').value='25';
-    $('metaHoy').value=32000;
+    $('nombreOpt').value=''; $('edadTop').value=29; $('planTop').value='25'; $('metaHoy').value=32000;
     $('sugBox').style.display='none';
   });
 
   $('calcBtn').addEventListener('click', calcAccum);
   $('resetBtn').addEventListener('click', ()=>{
-    $('edad').value=29;
-    $('years').value=25;
-    $('pmt').value=2500;
-    $('frequency').value=12;
-    $('lumpSum').value=0;
-    $('rate').value=10;
-    $('inflation').value=4;
-    $('fiscalMode').value='none';
-    $('isrPct').value='0.20';
-    $('isrReinv').value='reinv';
-    updateFiscalVisibility();
-    calcAccum();
+    $('edad').value=29; $('years').value=25; $('pmt').value=2500; $('frequency').value=12; $('lumpSum').value=0;
+    $('rate').value=10; $('inflation').value=4; calcAccum();
   });
-
-  $('fiscalMode').addEventListener('change', ()=>{
-    updateFiscalVisibility();
-    calcAccum();
-  });
-  $('isrPct').addEventListener('change', calcAccum);
-  $('isrReinv').addEventListener('change', calcAccum);
 
   $('calcRet').addEventListener('click', calcRet);
   $('csvBtn').addEventListener('click', exportCSV);
-
-  $('printBtn').addEventListener('click', ()=>{
-    // Nos aseguramos de que los cálculos estén al día
-    calcAccum();
-    calcRet();
-    fillPrintReport();
-    window.print();
-  });
-
-  $('toggleTable').addEventListener('click',()=>{
-    const d=$('details');
-    d.style.display=d.style.display==='block'?'none':'block';
-  });
-  $('toggleTableRet').addEventListener('click',()=>{
-    const d=$('detailsRet');
-    d.style.display=d.style.display==='block'?'none':'block';
-  });
+  $('printBtn').addEventListener('click', ()=>{ window.print(); });
+  $('toggleTable').addEventListener('click',()=>{ const d=$('details'); d.style.display=d.style.display==='block'?'none':'block'; });
+  $('toggleTableRet').addEventListener('click',()=>{ const d=$('detailsRet'); d.style.display=d.style.display==='block'?'none':'block'; });
 
   // recalcula cuando cambian supuestos relevantes
   ['edadTop','planTop','metaHoy','rate','inflation','rateRet','yrsRetSel'].forEach(id=>{
@@ -1021,12 +602,8 @@
     $(id).addEventListener('change', ()=>{ calcAccum(); });
   });
 
-  window.addEventListener('load', ()=>{
-    updateFiscalVisibility();
-    calcSuggestion();
-    calcAccum();
-    linkWhatsApp();
-  });
+  // init
+  window.addEventListener('load', ()=>{ calcSuggestion(); calcAccum(); linkWhatsApp(); });
 </script>
 </body>
 </html>
