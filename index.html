@@ -4,12 +4,16 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Calculadora de Ahorro & Retiro — Christian GarBa</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --brand:#0B5ED7; --brand-2:#084cc3;
-    --ink:#0f172a; --muted:#94a3b8;
-    --paper:#111827; --panel:#0b1324; --line:rgba(255,255,255,.14);
+    --brand:#0B5ED7; 
+    --brand-2:#084cc3;
+    --ink:#0f172a; 
+    --muted:#94a3b8;
+    --paper:#111827; 
+    --panel:#0b1324; 
+    --line:rgba(255,255,255,.14);
     --wa:#25D366;
   }
   *{box-sizing:border-box}
@@ -23,8 +27,9 @@
   a{color:inherit;text-decoration:none}
   .container{max-width:1040px;margin:0 auto;padding:22px}
 
-  .screen-only{display:block;}
-  .print-only{display:none;}
+  /* WEB VIEW (pantalla) */
+  .web-view{display:block}
+  .report-view{display:none}
 
   /* Header */
   .header{
@@ -59,7 +64,8 @@
     border-radius:10px;
     font-weight:700;
     cursor:pointer;
-    transition:.2s
+    transition:.2s;
+    font-size:14px;
   }
   .btn:hover{
     transform:translateY(-1px);
@@ -72,18 +78,39 @@
   }
   .btn-primary:hover{background:var(--brand-2)}
 
-  /* Banner */
-  .banner{
-    background:#fff7ed;
-    color:#7c2d12;
-    border:1px solid #fed7aa;
-    border-left:6px solid #fb923c;
-    border-radius:14px;
-    padding:14px 16px;
-    margin:18px 0;
-    box-shadow:0 4px 14px rgba(2,6,23,.12)
+  /* Banner comparativo */
+  .banner-wrap{margin-top:16px;margin-bottom:18px}
+  .banner-label{
+    font-size:12px;
+    color:#cbd5e1;
+    margin-bottom:6px;
+    font-weight:500;
   }
-  .banner strong{color:#9a3412}
+  .bars{
+    display:grid;
+    grid-template-columns:1fr 1.3fr;
+    gap:10px;
+  }
+  .bar{
+    border-radius:999px;
+    border:1px solid rgba(148,163,184,.45);
+    padding:8px 12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:11px;
+    letter-spacing:.4px;
+    text-transform:uppercase;
+  }
+  .bar span:first-child{font-weight:600}
+  .bar-afore{
+    background:linear-gradient(90deg,#111827,#1f2937);
+  }
+  .bar-plan{
+    background:linear-gradient(90deg,#e5f0ff,#c7d7ff);
+    color:#0b1726;
+    border-color:#93c5fd;
+  }
 
   /* Cards */
   .card{
@@ -91,7 +118,7 @@
     border:1px solid var(--line);
     border-radius:16px;
     padding:22px;
-    margin:16px 0
+    margin:16px 0;
   }
   .card h2{
     margin:0 0 10px;
@@ -104,7 +131,6 @@
     color:#cbd5e1;
     font-size:13px
   }
-
   .grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -137,7 +163,7 @@
     margin-top:6px
   }
 
-  /* Suggestion */
+  /* Sugerencia */
   .suggest{
     display:none;
     border:1px solid rgba(11,94,215,.35);
@@ -174,7 +200,46 @@
     color:#f8fafc
   }
 
-  /* Details tables */
+  /* Fiscal card */
+  .fiscal-card{
+    margin-top:16px;
+    padding:14px;
+    border-radius:12px;
+    border:1px dashed rgba(148,163,184,.6);
+    background:rgba(15,23,42,.65);
+    font-size:13px;
+  }
+  .fiscal-inline{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-top:10px;
+  }
+  .pill-label{
+    font-size:12px;
+    font-weight:600;
+    margin-bottom:4px;
+    color:#cbd5e1;
+  }
+  .pill{
+    display:flex;
+    flex-direction:column;
+    min-width:140px;
+  }
+  .pill input[type="checkbox"]{
+    width:auto;
+    margin-right:6px;
+  }
+  .pill-row{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-top:4px;
+    font-size:12px;
+    color:#cbd5e1;
+  }
+
+  /* Tables / toggles web */
   .toggle{
     display:flex;
     justify-content:space-between;
@@ -214,7 +279,8 @@
     border-radius:999px;
     padding:12px 16px;
     font-weight:800;
-    box-shadow:0 10px 24px rgba(0,0,0,.25)
+    box-shadow:0 10px 24px rgba(0,0,0,.25);
+    font-size:14px;
   }
 
   .error{
@@ -227,68 +293,135 @@
     margin:8px 0
   }
 
-  /* Print — blanco y negro / escala de grises, legible y ejecutivo */
+  /* ============= ESTILO PDF / IMPRESIÓN (EXECUTIVE REPORT) ============= */
+
   @media print{
     body{
       background:#ffffff !important;
       color:#000000 !important;
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+      font-size:12px;
     }
-    .container{
-      max-width:100%;
-      padding:10mm 12mm;
-    }
-    .wa,
-    .toolbar,
-    .toggle,
-    .screen-only{
+    .web-view,
+    .wa{
       display:none !important;
     }
-    .print-only{
+    .report-view{
       display:block !important;
+      max-width:800px;
+      margin:0 auto;
+      padding:12mm 10mm 18mm;
     }
-    .header,
-    .banner,
-    .card{
-      background:#ffffff !important;
-      color:#000000 !important;
-      border-color:#d1d5db !important;
-      box-shadow:none !important;
+    .report-header{
+      border-bottom:1px solid #d1d5db;
+      padding-bottom:10px;
+      margin-bottom:14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
     }
-    .title{color:#000000 !important;}
-    .sub{color:#374151 !important;}
-    .meta{color:#111827 !important;}
-    .kpi{
-      background:#ffffff !important;
-      border-color:#d1d5db !important;
+    .report-header-left{
+      display:flex;
+      align-items:center;
+      gap:12px;
     }
-    .kpi-label{
-      color:#374151 !important;
+    .report-logo img{
+      height:48px;
+      width:auto;
     }
-    .kpi-value{
-      color:#111827 !important;
+    .report-title{
+      font-size:18px;
+      font-weight:800;
+      color:#111827;
     }
-    table th{
-      background:#f3f4f6 !important;
-      color:#111827 !important;
-      border-color:#d1d5db !important;
+    .report-sub{
+      font-size:11px;
+      color:#4b5563;
     }
-    table td{
-      border-color:#e5e7eb !important;
-      color:#111827 !important;
+    .report-meta{
+      font-size:10px;
+      color:#6b7280;
+      text-align:right;
     }
-    input,select{
-      border:1px solid #d1d5db !important;
-      background:#ffffff !important;
-      color:#000000 !important;
-      box-shadow:none !important;
+    .report-section{
+      margin-bottom:14px;
+      page-break-inside:avoid;
+    }
+    .report-section h3{
+      font-size:13px;
+      font-weight:700;
+      color:#111827;
+      margin:0 0 4px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+    .report-section p{
+      margin:2px 0;
+      font-size:11px;
+      color:#111827;
+    }
+    .report-grid-2{
+      display:grid;
+      grid-template-columns:1.2fr 1fr;
+      gap:8px;
+    }
+    .r-label{font-size:11px;color:#4b5563}
+    .r-value{font-size:12px;font-weight:600;color:#111827}
+    .r-small{font-size:10px;color:#6b7280;margin-top:2px}
+    .report-table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:4px;
+      font-size:10.5px;
+    }
+    .report-table th{
+      border-bottom:1px solid #d1d5db;
+      text-align:left;
+      padding:4px 3px;
+      font-weight:600;
+      color:#111827;
+    }
+    .report-table td{
+      border-bottom:1px solid #e5e7eb;
+      padding:4px 3px;
+      color:#111827;
+    }
+    .report-note{
+      font-size:10px;
+      color:#6b7280;
+      margin-top:4px;
+    }
+    .report-quote{
+      border-left:3px solid #9ca3af;
+      padding-left:8px;
+      margin-top:4px;
+      font-size:11px;
+      color:#111827;
+      font-style:italic;
+    }
+    .report-footer{
+      border-top:1px solid #d1d5db;
+      margin-top:10px;
+      padding-top:6px;
+      font-size:9.5px;
+      color:#6b7280;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
     }
   }
 </style>
 </head>
 <body>
-  <div class="container">
+<div class="container">
+
+  <!-- =============== VISTA WEB INTERACTIVA =============== -->
+  <div class="web-view">
+
     <!-- Acciones -->
-    <div class="toolbar screen-only">
+    <div class="toolbar">
       <button class="btn" id="csvBtn">Exportar CSV</button>
       <button class="btn btn-primary" id="printBtn">Imprimir / Guardar PDF</button>
     </div>
@@ -308,18 +441,27 @@
       </div>
     </div>
 
-    <!-- Banner -->
-    <div class="banner">
-      <strong>¿AFORE (Ley ‘97 en adelante)?</strong> Tu AFORE no será suficiente <em>(y lo sabes)</em>.
-      Empezar <u>hoy</u> tu ahorro adicional marca la diferencia: cuanto antes inicies,
-      <strong>menos tendrás que aportar</strong> para lograr el mismo ingreso y más tranquilidad al llegar a los 65.
+    <!-- Barras comparativas AFORE vs Plan -->
+    <div class="banner-wrap">
+      <div class="banner-label">Comparativo rápido</div>
+      <div class="bars">
+        <div class="bar bar-afore">
+          <span>AFORE (Ley 97 en adelante)</span>
+          <span>Ingreso limitado, sin estrategia</span>
+        </div>
+        <div class="bar bar-plan">
+          <span>Proyección personalizada GarBa</span>
+          <span>Ingreso diseñado a tu medida</span>
+        </div>
+      </div>
     </div>
 
     <!-- Panel A -->
     <div class="card">
-      <h2>Panel A · Ahorro hasta los 65</h2>
+      <h2>Panel A · Punto de partida</h2>
       <div class="help">
-        La edad de retiro considerada es <strong>65 años</strong>. Si tu plan termina antes, el fondo sigue invirtiéndose hasta esa edad.
+        Definimos la meta y te sugerimos una aportación mensual inicial.  
+        La edad de retiro considerada es <strong>65 años</strong>.
       </div>
       <div class="grid">
         <div class="group">
@@ -331,7 +473,7 @@
           <input id="edadTop" type="number" min="18" max="100" value="29">
         </div>
         <div class="group">
-          <label for="planTop">Años de plan</label>
+          <label for="planTop">Años de plan (aportando)</label>
           <select id="planTop">
             <option value="15">15 años</option>
             <option value="20">20 años</option>
@@ -339,15 +481,15 @@
           </select>
         </div>
         <div class="group" style="grid-column:1/-1">
-          <label for="metaHoy">¿Cuánto te gustaría recibir al mes en tu retiro? (MXN, valor de hoy)</label>
+          <label for="metaHoy">Ingreso mensual que te gustaría en tu retiro (MXN, valor de hoy)</label>
           <input id="metaHoy" type="number" min="0" step="1000" placeholder="Ej. 32,000" value="32000">
           <div class="muted">
-            Usamos este dato para sugerirte un ahorro mensual inicial realista. Tu aportación se actualiza cada año ≈ inflación.
+            Usamos este dato como referencia para estimar cuánto tendrías que ahorrar para acercarte a ese nivel de ingreso.
           </div>
         </div>
       </div>
       <div class="toolbar" style="justify-content:flex-start">
-        <button class="btn btn-primary" id="planBtn">Calcular mi plan personalizado</button>
+        <button class="btn btn-primary" id="planBtn">Calcular plan sugerido</button>
         <button class="btn" id="resetTop">Reiniciar datos</button>
       </div>
 
@@ -361,7 +503,7 @@
     <div class="card">
       <h2>Fase 1 • Ahorro con interés compuesto</h2>
       <p class="help">
-        Las aportaciones se actualizan automáticamente cada año con la inflación promedio que definas.
+        Tus aportaciones crecen cada año según inflación. El fondo sigue invertido hasta los 65 años aunque dejes de aportar antes.
       </p>
       <div class="error" id="errorMsg"></div>
       <div class="grid">
@@ -370,13 +512,13 @@
           <input id="edad" type="number" value="29" min="18" max="100">
         </div>
         <div class="group">
-          <label for="years">Años que aportará</label>
+          <label for="years">Años que aportarás</label>
           <input id="years" type="number" value="25" min="1" max="70">
         </div>
         <div class="group">
           <label for="pmt">Aportación periódica inicial (MXN)</label>
           <input id="pmt" type="number" value="2500" min="0" step="0.01">
-          <div class="muted">Se incrementa cada año ≈ inflación.</div>
+          <div class="muted">Se actualiza cada año aproximadamente con la inflación.</div>
         </div>
         <div class="group">
           <label for="frequency">Frecuencia de aportación</label>
@@ -388,7 +530,7 @@
           </select>
         </div>
         <div class="group">
-          <label for="lumpSum">Aportación inicial (MXN)</label>
+          <label for="lumpSum">Aportación inicial única (MXN)</label>
           <input id="lumpSum" type="number" value="0" min="0" step="0.01">
         </div>
         <div class="group">
@@ -399,32 +541,43 @@
           <label for="inflation">Inflación promedio anual (%)</label>
           <input id="inflation" type="number" value="4" min="0" max="100" step="0.01">
         </div>
+      </div>
 
-        <!-- Bloque fiscal (solo pantalla) -->
-        <div class="group screen-only">
-          <label for="regimen">Tratamiento fiscal del plan (estimación educativa)</label>
-          <select id="regimen">
-            <option value="93" selected>Art. 93 LISR · Plan no deducible</option>
-            <option value="151">Art. 151 LISR · Plan deducible (PPR)</option>
-            <option value="0">Sin beneficio fiscal inmediato</option>
-          </select>
-          <div class="muted">
-            Solo el <strong>Art. 151</strong> genera una devolución estimada de ISR en esta simulación.
+      <!-- MÓDULO FISCAL (Fase de acumulación) -->
+      <div class="fiscal-card">
+        <strong>Tratamiento fiscal (opcional)</strong>
+        <div class="muted">
+          Solo se considera en la fase de ahorro (hasta los 65 años). No se modelan impuestos durante el retiro.
+        </div>
+        <div class="fiscal-inline">
+          <div class="pill">
+            <span class="pill-label">Régimen</span>
+            <select id="regimenFiscal">
+              <option value="ninguno">Sin beneficio fiscal inmediato</option>
+              <option value="93">Art. 93 (no deducible, diferido)</option>
+              <option value="151">Art. 151 (deducible anual)</option>
+            </select>
+          </div>
+          <div class="pill">
+            <span class="pill-label">% estimado de devolución ISR (sobre aportación anual)</span>
+            <select id="isrPct">
+              <option value="0">0% (no reinvertir / no aplica)</option>
+              <option value="10">10%</option>
+              <option value="20" selected>20%</option>
+              <option value="30">30%</option>
+              <option value="35">35%</option>
+            </select>
+          </div>
+          <div class="pill">
+            <span class="pill-label">Uso de la devolución</span>
+            <div class="pill-row">
+              <input id="reinvertISR" type="checkbox" checked>
+              <label for="reinvertISR" style="margin:0;font-weight:500;font-size:12px;">Reinvertir devolución en el plan</label>
+            </div>
           </div>
         </div>
-        <div class="group screen-only">
-          <label for="isrRate">Tasa marginal de ISR estimada (%)</label>
-          <input id="isrRate" type="number" value="30" min="0" max="40" step="1">
-          <div class="muted">
-            Ejemplo típico de sueldos y honorarios: 20%–35% según nivel de ingresos.
-          </div>
-        </div>
-        <div class="group screen-only">
-          <label for="reinvierteISR">¿Reinvertir la devolución anual en el plan?</label>
-          <select id="reinvierteISR">
-            <option value="1" selected>Sí, se reinvierte</option>
-            <option value="0">No, solo la recibo en efectivo</option>
-          </select>
+        <div class="muted" style="margin-top:6px;">
+          Aproximación educativa. El cálculo real de ISR depende de tu situación fiscal y topes de deducción.
         </div>
       </div>
 
@@ -443,41 +596,40 @@
           <div class="kpi-value" id="edadFinal">—</div>
         </div>
         <div class="kpi">
-          <div class="kpi-label">Ahorro acumulado (nominal)</div>
+          <div class="kpi-label">Ahorro acumulado al final del plan</div>
           <div class="kpi-value" id="ahorroNominal">—</div>
         </div>
         <div class="kpi">
-          <div class="kpi-label">Total aportado</div>
+          <div class="kpi-label">Total aportado de tu bolsillo</div>
           <div class="kpi-value" id="totalAportado">—</div>
         </div>
         <div class="kpi">
-          <div class="kpi-label">Rendimiento ganado</div>
+          <div class="kpi-label">Rendimiento / beneficio</div>
           <div class="kpi-value" id="rendimiento">—</div>
         </div>
         <div class="kpi">
-          <div class="kpi-label">Fondo a los 65 (si aplica)</div>
+          <div class="kpi-label">Fondo estimado a los 65 años</div>
           <div class="kpi-value" id="fondo65">—</div>
         </div>
-        <!-- KPI fiscal solo pantalla -->
-        <div class="kpi screen-only">
-          <div class="kpi-label">ISR devuelto (proyección)</div>
-          <div class="kpi-value" id="isrDev">—</div>
+        <div class="kpi" id="kpiFiscalBox" style="display:none">
+          <div class="kpi-label">Beneficio fiscal reinvertido</div>
+          <div class="kpi-value" id="benefFiscal">—</div>
         </div>
       </div>
 
       <div class="toggle" id="toggleTable">
-        <span><strong>Detalles año por año</strong></span>
-        <span>▼</span>
+        <span><strong>Detalles año por año</strong></span><span>▼</span>
       </div>
       <div class="details" id="details">
         <table>
           <thead>
-            <tr>
-              <th>Año</th>
-              <th>Edad</th>
-              <th>Aportado ese año</th>
-              <th>Saldo al cierre</th>
-            </tr>
+          <tr>
+            <th>Año</th>
+            <th>Edad</th>
+            <th>Aportado ese año</th>
+            <th>Beneficio fiscal reinvertido</th>
+            <th>Saldo al cierre</th>
+          </tr>
           </thead>
           <tbody id="tbody"></tbody>
         </table>
@@ -488,8 +640,8 @@
     <div class="card">
       <h2>Fase 2 • Mensualidad de retiro</h2>
       <p class="help">
-        La mensualidad se calcula en <strong>valor nominal (futuro)</strong>.
-        Se toma como base el <strong>saldo a los 65</strong> de la Fase 1.
+        La mensualidad se calcula a partir del fondo estimado a los 65 años.  
+        No se modelan impuestos en la etapa de retiro; el enfoque es educativo.
       </p>
       <div class="grid">
         <input type="hidden" id="pvRet" value="0">
@@ -524,145 +676,261 @@
           <div class="kpi-value" id="nMeses">—</div>
         </div>
         <div class="kpi">
-          <div class="kpi-label">Tasa real mensual</div>
+          <div class="kpi-label">Tasa real mensual aprox.</div>
           <div class="kpi-value" id="iRealMes">—</div>
         </div>
         <div class="kpi">
-          <div class="kpi-label">Regla 4% (referencia anual)</div>
+          <div class="kpi-label">Referencia regla 4% (anual)</div>
           <div class="kpi-value" id="rule4">—</div>
         </div>
       </div>
 
-      <!-- Detalle mensual del retiro -->
+      <!-- Detalle mensual retiro -->
       <div class="toggle" id="toggleTableRet">
-        <span><strong>Detalle mensual del retiro</strong></span>
-        <span>▼</span>
+        <span><strong>Detalle mensual del retiro</strong></span><span>▼</span>
       </div>
       <div class="details" id="detailsRet">
         <table>
           <thead>
-            <tr>
-              <th>Mes</th>
-              <th>Edad</th>
-              <th>Retiro del mes</th>
-              <th>Interés del mes</th>
-              <th>Saldo al cierre</th>
-            </tr>
+          <tr>
+            <th>Mes</th>
+            <th>Edad</th>
+            <th>Retiro del mes</th>
+            <th>Interés del mes</th>
+            <th>Saldo al cierre</th>
+          </tr>
           </thead>
           <tbody id="tbodyRet"></tbody>
         </table>
       </div>
     </div>
 
-    <!-- Lectura estratégica: solo PDF / impresión -->
-    <div class="card print-only">
-      <h2>Lectura estratégica · Lo que pasa si sigues posponiendo tu ahorro</h2>
-      <p class="help" style="color:#4b5563;">
-        Con los supuestos de esta proyección, si buscas el mismo fondo a la edad de retiro,
-        esto es lo que tendría que cambiar tu aportación mensual inicial si decides empezar después:
-      </p>
-      <table>
-        <thead>
-          <tr>
-            <th>Inicio de tu plan</th>
-            <th>Aportación mensual inicial</th>
-            <th>Diferencia vs hoy</th>
-            <th>Diferencia %</th>
-          </tr>
-        </thead>
-        <tbody id="timingBody">
-          <tr>
-            <td>Empiezas hoy</td>
-            <td id="t0_pmt">—</td>
-            <td id="t0_abs">—</td>
-            <td id="t0_pct">—</td>
-          </tr>
-          <tr>
-            <td>Empiezas en 1 año</td>
-            <td id="t1_pmt">—</td>
-            <td id="t1_abs">—</td>
-            <td id="t1_pct">—</td>
-          </tr>
-          <tr>
-            <td>Empiezas en 3 años</td>
-            <td id="t3_pmt">—</td>
-            <td id="t3_abs">—</td>
-            <td id="t3_pct">—</td>
-          </tr>
-          <tr>
-            <td>Empiezas en 5 años</td>
-            <td id="t5_pmt">—</td>
-            <td id="t5_abs">—</td>
-            <td id="t5_pct">—</td>
-          </tr>
-        </tbody>
-      </table>
-      <p class="muted" style="color:#4b5563;margin-top:12px;">
-        Todos los escenarios usan el mismo objetivo de fondo, el mismo rendimiento y la misma inflación.
-        La conclusión es simple: <strong>cada año que se pospone el inicio, el precio del mismo retiro aumenta</strong>.
-      </p>
-    </div>
-
     <div class="muted">
-      Proyección educativa; no contempla impuestos reales, comisiones u otros costos. Resultados no garantizados.
+      Proyección educativa; no contempla comisiones específicas, cambios regulatorios ni impuestos en la fase de retiro. Resultados no garantizados.
     </div>
   </div>
 
-  <!-- WhatsApp -->
-  <a id="waBtn" class="wa" target="_blank" rel="noopener">Chatear por WhatsApp</a>
+  <!-- =============== VISTA PDF / INFORME EJECUTIVO (SOLO IMPRESIÓN) =============== -->
+  <div class="report-view">
+    <div class="report-header">
+      <div class="report-header-left">
+        <div class="report-logo">
+          <img src="./logo-garba.png" alt="Christian GarBa">
+        </div>
+        <div>
+          <div class="report-title">Plan de Ahorro y Retiro Personalizado</div>
+          <div class="report-sub">Proyección financiera basada en supuestos conservadores</div>
+        </div>
+      </div>
+      <div class="report-meta">
+        <div id="rptFecha"></div>
+        <div>Asesor: Christian GarBa</div>
+        <div>Seguros con Estrategia</div>
+      </div>
+    </div>
+
+    <!-- Sección 1: Datos del cliente -->
+    <div class="report-section">
+      <h3>1. Datos del cliente y objetivo</h3>
+      <div class="report-grid-2">
+        <div>
+          <p><span class="r-label">Nombre:</span> <span class="r-value" id="rptNombre">—</span></p>
+          <p><span class="r-label">Edad actual:</span> <span class="r-value" id="rptEdad">—</span></p>
+          <p><span class="r-label">Meta mensual (valor de hoy):</span> <span class="r-value" id="rptMetaHoy">—</span></p>
+          <p><span class="r-label">Horizonte de aportación:</span> <span class="r-value" id="rptPlazo">—</span></p>
+          <p><span class="r-label">Aportación inicial sugerida:</span> <span class="r-value" id="rptAportSug">—</span></p>
+        </div>
+        <div>
+          <p class="r-label">Supuestos principales:</p>
+          <p class="r-small" id="rptSupuestos1">—</p>
+          <p class="r-small" id="rptSupuestosFiscal">—</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección 2: Acumulación -->
+    <div class="report-section">
+      <h3>2. Fase de acumulación hasta los 65 años</h3>
+      <table class="report-table">
+        <tr>
+          <th>Concepto</th>
+          <th>Monto estimado</th>
+        </tr>
+        <tr>
+          <td>Total aportado de tu bolsillo</td>
+          <td id="rptTotalAportado">—</td>
+        </tr>
+        <tr>
+          <td>Beneficio / rendimiento sobre tus aportaciones</td>
+          <td id="rptRendimiento">—</td>
+        </tr>
+        <tr>
+          <td>Fondo estimado al terminar el plan</td>
+          <td id="rptAhorroNominal">—</td>
+        </tr>
+        <tr>
+          <td>Proyección de fondo a los 65 años</td>
+          <td id="rptFondo65">—</td>
+        </tr>
+        <tr id="rptFilaFiscal" style="display:none">
+          <td>Beneficio fiscal reinvertido estimado</td>
+          <td id="rptBenefFiscal">—</td>
+        </tr>
+      </table>
+      <p class="report-note">
+        La proyección asume que mantienes el plan sin interrupciones y que los rendimientos e inflación se comportan en promedio como se indica en los supuestos.
+      </p>
+    </div>
+
+    <!-- Sección 3: Ingreso de retiro -->
+    <div class="report-section">
+      <h3>3. Fase de retiro</h3>
+      <div class="report-grid-2">
+        <div>
+          <p><span class="r-label">Ingreso mensual estimado:</span> <span class="r-value" id="rptIngresoMensual">—</span></p>
+          <p><span class="r-label">Duración estimada del retiro:</span> <span class="r-value" id="rptDuracion">—</span></p>
+          <p><span class="r-label">Tasa real mensual aproximada:</span> <span class="r-value" id="rptTasaReal">—</span></p>
+        </div>
+        <div>
+          <p class="r-label">Referencia de prudencia:</p>
+          <p class="r-small" id="rptRegla4">—</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección 4: Costo de posponer la decisión -->
+    <div class="report-section">
+      <h3>4. Costo de posponer el inicio del plan</h3>
+      <table class="report-table">
+        <thead>
+        <tr>
+          <th>Momento en que inicias</th>
+          <th>Aportación mensual inicial estimada</th>
+          <th>Incremento vs. empezar hoy</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>Empiezas hoy</td>
+          <td id="rptHoyMonto">—</td>
+          <td id="rptHoyDelta">—</td>
+        </tr>
+        <tr>
+          <td>Si decides empezar dentro de 1 año</td>
+          <td id="rpt1Monto">—</td>
+          <td id="rpt1Delta">—</td>
+        </tr>
+        <tr>
+          <td>Si decides empezar dentro de 3 años</td>
+          <td id="rpt3Monto">—</td>
+          <td id="rpt3Delta">—</td>
+        </tr>
+        <tr>
+          <td>Si decides empezar dentro de 5 años</td>
+          <td id="rpt5Monto">—</td>
+          <td id="rpt5Delta">—</td>
+        </tr>
+        </tbody>
+      </table>
+      <p class="report-quote" id="rptMensajePosponer">
+        — 
+      </p>
+    </div>
+
+    <!-- Sección 5: Mensaje final -->
+    <div class="report-section">
+      <h3>5. Comentario estratégico</h3>
+      <p class="report-note" id="rptComentario">
+        Este documento tiene fines informativos y de planeación. El siguiente paso es ajustar el plan a tu realidad de ingresos, obligaciones y prioridades familiares para que sea sostenible en el tiempo.
+      </p>
+    </div>
+
+    <div class="report-footer">
+      <div>
+        Christian GarBa · Seguros con Estrategia  
+        Tel. 662 417 6032 · christian.garcia@sfgarba.com.mx
+      </div>
+      <div>
+        Proyección ilustrativa. No constituye oferta vinculante ni garantiza rendimientos futuros.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- WhatsApp -->
+<a id="waBtn" class="wa" target="_blank" rel="noopener">Chatear por WhatsApp</a>
 
 <script>
-  // -------------------- Utilidades
   const $ = id => document.getElementById(id);
   const money = v => new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'}).format(Number(v)||0);
+
+  const freqMap = {'12':'Mensual','4':'Trimestral','2':'Semestral','1':'Anual'};
+
+  const reportState = {
+    nombre:'',
+    edad:null,
+    metaHoy:null,
+    planYears:null,
+    pmtSugerido:null,
+    infl:null,
+    rAcc:null,
+    rRet:null,
+    yrsRet:null,
+    totalAportado:0,
+    rendimiento:0,
+    ahorroNominal:0,
+    fondo65:0,
+    benefFiscal:0,
+    ingresoMensual:0,
+    tasaRealMes:0,
+    regimenFiscal:'ninguno',
+    isrPct:0,
+    delayScenarios:null
+  };
 
   function linkWhatsApp(){
     const nombre = ($('nombreOpt').value||'').trim();
     const msg = [
-      'Hola Christian, me interesa revisar mi plan.',
+      'Hola Christian, me interesa revisar mi plan de retiro.',
       nombre?('Soy '+nombre+'.'):'',
       '*Datos:*',
       `• Edad: ${$('edad').value} años`,
       `• Años de aportación: ${$('years').value}`,
-      `• Aportación ${({'12':'Mensual','4':'Trimestral','2':'Semestral','1':'Anual'})[$('frequency').value]}: $${$('pmt').value}`
+      `• Aportación ${freqMap[$('frequency').value]}: $${$('pmt').value}`
     ].filter(Boolean).join('\n');
     $('waBtn').href = 'https://wa.me/526624176032?text='+encodeURIComponent(msg);
   }
 
-  // -------------------- Sugerencia PMT inicial (peras con peras, NOMINAL a 65)
-  function calcSuggestion(){
-    const edad    = parseFloat($('edadTop').value);
-    const planY   = parseInt($('planTop').value,10);
-    const metaHoy = parseFloat($('metaHoy').value||0);        // MXN de HOY
+  // ---------- Función base para PMT requerido dado edad de inicio ----------
+  function calcularPMTRequerido(edadInicio, planY, metaHoy, infl, rAcc, rRet, yrsRet, freq){
+    if(!(edadInicio>0 && planY>0 && metaHoy>0)) return 0;
 
-    const infl    = parseFloat($('inflation').value)/100;     // inflación
-    const rAcc    = parseFloat($('rate').value)/100;          // rendimiento acumulación (nominal)
-    const rRet    = parseFloat($('rateRet').value)/100;       // rendimiento retiro (nominal)
-    const yrsRet  = parseInt($('yrsRetSel').value,10);
-    const freq    = 12;
+    const yrsTo65   = Math.max(0, 65 - edadInicio);
+    const yrsAport  = Math.min(planY, yrsTo65);
+    const gapYears  = Math.max(0, yrsTo65 - yrsAport);
 
-    if(!(edad>0 && planY>0 && metaHoy>0)){
-      $('sugBox').style.display='none';
-      updateTimingTable(); // limpia tabla
-      return;
-    }
+    if(yrsAport<=0) return 0;
 
-    const yrsTo65   = Math.max(0, 65 - edad);
-    const metaNom65 = metaHoy * Math.pow(1+infl, yrsTo65);
+    const inflDec   = infl/100;
+    const rAccDec   = rAcc/100;
+    const rRetDec   = rRet/100;
 
-    const iRet = rRet/freq, nRet = yrsRet*freq;
+    // 1) Meta nominal a los 65
+    const metaNom65 = metaHoy * Math.pow(1+inflDec, yrsTo65);
+
+    // 2) Capital requerido a los 65 para pagar esa renta
+    const iRet = rRetDec/freq;
+    const nRet = yrsRet*freq;
     const PVneed65 = Math.abs(iRet)<1e-12 ? metaNom65*nRet
-                      : metaNom65 * ( (1 - Math.pow(1+iRet, -nRet)) / iRet );
+                    : metaNom65 * ( (1 - Math.pow(1+iRet, -nRet)) / iRet );
 
-    const yrsTo65Real = yrsTo65;
-    const yrsAport    = Math.min(planY, yrsTo65Real);
-    const gapYears    = Math.max(0, yrsTo65Real - yrsAport);
-
-    const iAcc = rAcc/freq;
+    // 3) Factor de aportaciones que suben ≈ inflación
+    const iAcc = rAccDec/freq;
     const N    = yrsAport*freq;
     let FV_pagos = 0, pmtYear = 1;
     for(let y=0; y<yrsAport; y++){
-      if(y>0) pmtYear *= (1+infl);
+      if(y>0) pmtYear *= (1+inflDec);
       for(let m=0; m<freq; m++){
         const perRest = N - (y*freq + m);
         FV_pagos += pmtYear * Math.pow(1+iAcc, perRest);
@@ -670,137 +938,186 @@
     }
     const growTo65    = Math.pow(1+iAcc, gapYears*freq);
     const totalFactor = FV_pagos * growTo65;
-    const PMT_inicial = totalFactor>0 ? PVneed65 / totalFactor : 0;
-
-    const yrsTexto = gapYears>0 ? ` Tu fondo seguirá creciendo ${gapYears} año(s) más hasta los 65.` : '';
-    $('sugText').innerHTML =
-      `💡 <strong>Proyección personalizada:</strong> para lograr el ingreso que buscas en tu retiro, `+
-      `un <strong>ahorro mensual inicial de ${money(PMT_inicial)}</strong> sería un buen punto de partida.`+
-      `<br><span style="font-size:12px;color:#cfd8e3">Es una guía; puedes iniciar desde $2,500 MXN/mes. `+
-      `Lo importante es empezar.${yrsTexto}</span>`;
-    $('sugSup').innerText =
-      `Supuestos: inflación ${(infl*100).toFixed(1)}%, acumulación ${(rAcc*100).toFixed(1)}% nominal, `+
-      `retiro ${yrsRet} años con ${(rRet*100).toFixed(1)}% nominal.`;
-    $('sugBox').style.display='block';
-
-    // Precarga Fase 1 con el PMT sugerido
-    $('edad').value  = String(edad);
-    $('years').value = String(planY);
-    $('pmt').value   = String(PMT_inicial.toFixed(2));
-
-    // Actualiza tabla de timing (1,3,5 años)
-    updateTimingTable();
+    if(totalFactor<=0) return 0;
+    return PVneed65 / totalFactor;
   }
 
-  // -------------------- Fase 1 (acumulación nominal con step-up por inflación + ISR opcional)
-  function calcAccum(){
-    const edad = parseFloat($('edad').value);
-    const years = parseFloat($('years').value);
-    const pmt0 = parseFloat($('pmt').value);
-    const lump = parseFloat($('lumpSum').value);
-    const rate = parseFloat($('rate').value)/100;
-    const freq = parseFloat($('frequency').value);
-    const infl = parseFloat($('inflation').value)/100;
+  // ---------- Sugerencia Panel A + escenarios de posponer ----------
+  function calcSuggestion(){
+    const edadTop   = parseFloat($('edadTop').value);
+    const planY     = parseInt($('planTop').value,10);
+    const metaHoy   = parseFloat($('metaHoy').value||0);
+    const infl      = parseFloat($('inflation').value);
+    const rAcc      = parseFloat($('rate').value);
+    const rRet      = parseFloat($('rateRet').value||7);
+    const yrsRet    = parseInt($('yrsRetSel').value||20,10);
+    const freq      = 12;
 
-    const regimen   = $('regimen') ? $('regimen').value : '93';
-    const isrRate   = $('isrRate') ? (parseFloat($('isrRate').value)/100 || 0) : 0;
-    const reinvISR  = $('reinvierteISR') ? $('reinvierteISR').value === '1' : false;
+    if(!(edadTop>0 && planY>0 && metaHoy>0)){
+      $('sugBox').style.display='none';
+      return;
+    }
+
+    const pmt0 = calcularPMTRequerido(edadTop, planY, metaHoy, infl, rAcc, rRet, yrsRet, freq);
+    const yrsTo65 = Math.max(0,65-edadTop);
+    const gapYears = Math.max(0, yrsTo65 - Math.min(planY, yrsTo65));
+
+    // escenarios de posponer
+    const delays = [0,1,3,5];
+    const escenarios = {};
+    delays.forEach(d=>{
+      const pmtd = calcularPMTRequerido(edadTop + d, planY, metaHoy, infl, rAcc, rRet, yrsRet, freq);
+      escenarios[d] = pmtd;
+    });
+
+    // Copy sugerencia
+    const yrsTexto = gapYears>0 ? ` Tu fondo podría seguir creciendo aproximadamente ${gapYears} año(s) más hasta los 65, aunque termines de aportar antes.` : '';
+    $('sugText').innerHTML =
+      `💡 <strong>Proyección personalizada:</strong> para acercarte al ingreso que buscas en tu retiro, `+
+      `un <strong>ahorro mensual inicial de ${money(pmt0)}</strong> sería un punto de partida razonable.`+
+      `<br><span style="font-size:12px;color:#cfd8e3">Lo importante es iniciar; el plan siempre se puede ajustar contigo en asesoría uno a uno.${yrsTexto}</span>`;
+
+    $('sugSup').innerText =
+      `Supuestos: inflación ${(infl).toFixed(1)}%, rendimiento en acumulación ${(rAcc).toFixed(1)}% nominal, `+
+      `retiro de ${yrsRet} años con ${(rRet).toFixed(1)}% nominal.`;
+
+    $('sugBox').style.display='block';
+
+    // Precarga Fase 1 con PMT sugerido
+    $('edad').value  = String(edadTop);
+    $('years').value = String(planY);
+    $('pmt').value   = String(pmt0.toFixed(2));
+
+    // Guardamos en estado de reporte (base)
+    reportState.metaHoy   = metaHoy;
+    reportState.planYears = planY;
+    reportState.pmtSugerido = pmt0;
+    reportState.infl      = infl;
+    reportState.rAcc      = rAcc;
+    reportState.rRet      = rRet;
+    reportState.yrsRet    = yrsRet;
+    reportState.delayScenarios = escenarios;
+
+    actualizarSeccionPosponer();
+  }
+
+  // ---------- Fase 1: simulación con reinversión ISR opcional ----------
+  function calcAccum(){
+    const edad   = parseFloat($('edad').value);
+    const years  = parseFloat($('years').value);
+    const pmt0   = parseFloat($('pmt').value);
+    const lump   = parseFloat($('lumpSum').value);
+    const rate   = parseFloat($('rate').value)/100;
+    const freq   = parseFloat($('frequency').value);
+    const infl   = parseFloat($('inflation').value)/100;
+
+    const regimen = $('regimenFiscal').value;
+    const isrPct  = parseFloat($('isrPct').value)/100;
+    const reinv   = $('reinvertISR').checked;
 
     if([edad,years,pmt0,lump,rate,freq,infl].some(x=>isNaN(x))){
       const e=$('errorMsg');
-      e.textContent='Completa todos los campos correctamente';
+      e.textContent='Completa todos los campos correctamente.';
       e.style.display='block';
       return;
-    } else {
+    }else{
       $('errorMsg').style.display='none';
     }
 
-    const yearsInt = Math.max(1, Math.round(years));
+    const yrsTo65   = Math.max(0,65-edad);
+    const yrsAport  = years;
+    const yrsExtra  = Math.max(0, yrsTo65 - yrsAport); // años sólo invirtiendo
+
     const i = rate/freq;
 
     let saldo = lump;
-    let totalAport = lump;
-    let totalISRDev = 0;
+    let totalAportado = lump;
+    let benefFiscal = 0;
     let edadAct = edad;
     let pmtYear = pmt0;
-
-    const tbody=$('tbody');
+    let fvEndPlan = lump;
+    const tbody = $('tbody');
     tbody.innerHTML='';
 
-    // Años con aportaciones
-    for(let yr=1; yr<=yearsInt; yr++){
+    const totalYearsSim = yrsAport + yrsExtra;
+
+    for(let yr=1; yr<=totalYearsSim; yr++){
       edadAct++;
-      if(yr>1) pmtYear *= (1+infl);
-      let aportAnual = 0;
+      let aportAno = 0;
+      let benefAno = 0;
 
-      for(let k=0;k<freq;k++){
-        saldo = saldo*(1+i) + pmtYear;
-        aportAnual += pmtYear;
-      }
-      totalAport += aportAnual;
-
-      let devolAnual = 0;
-      if(regimen==='151' && isrRate>0){
-        devolAnual = aportAnual * isrRate;
-        totalISRDev += devolAnual;
-        if(reinvISR){
-          saldo += devolAnual; // se reinvierte al final de cada año
+      if(yr<=yrsAport){
+        if(yr>1) pmtYear *= (1+infl);
+        for(let k=0;k<freq;k++){
+          saldo *= (1+i);
+          saldo += pmtYear;
+          aportAno += pmtYear;
+          totalAportado += pmtYear;
+        }
+        if(regimen==='151' && reinv && isrPct>0){
+          benefAno = aportAno * isrPct;
+          saldo += benefAno;
+          benefFiscal += benefAno;
+        }
+      }else{
+        for(let k=0;k<freq;k++){
+          saldo *= (1+i);
         }
       }
 
-      const tr=document.createElement('tr');
-      tr.innerHTML =
-        `<td>${yr}</td>`+
-        `<td>${edadAct} años</td>`+
-        `<td>${money(aportAnual)}</td>`+
-        `<td>${money(saldo)}</td>`;
+      if(yr===yrsAport){
+        fvEndPlan = saldo;
+      }
+
+      const tr = document.createElement('tr');
+      if(yr>yrsAport) tr.style.background='rgba(148,163,184,.16)';
+      tr.innerHTML = `
+        <td>${yr}</td>
+        <td>${edadAct} años</td>
+        <td>${yr>yrsAport?'—':money(aportAno)}</td>
+        <td>${benefAno>0?money(benefAno):'—'}</td>
+        <td>${money(saldo)}</td>
+      `;
       tbody.appendChild(tr);
     }
 
-    const saldoFinAport = saldo;
-    const edadFin = edad + yearsInt;
+    const ahorroNominal = fvEndPlan;
+    const fondo65 = saldo;
+    const rendimiento = ahorroNominal - totalAportado;
 
-    // Años sin aportaciones hasta los 65 (fondo sigue invertido)
-    if(edadFin < 65){
-      const extraYears = 65 - edadFin;
-      for(let e=1; e<=extraYears; e++){
-        edadAct++;
-        for(let k=0;k<freq;k++){
-          saldo = saldo*(1+i);
-        }
-        const tr=document.createElement('tr');
-        tr.style.background='rgba(11,94,215,.08)';
-        tr.innerHTML =
-          `<td>${yearsInt+e}</td>`+
-          `<td>${edadAct} años</td>`+
-          `<td>—</td>`+
-          `<td>${money(saldo)}</td>`;
-        tbody.appendChild(tr);
-      }
-    }
-
-    const FV_nom_end = saldoFinAport;
-    const fondo65 = (edadFin < 65) ? saldo : saldoFinAport;
-    const rendimiento = FV_nom_end - totalAport;
-
-    $('edadFinal').textContent   = String(Math.round(edadFin));
-    $('ahorroNominal').textContent = money(FV_nom_end);
-    $('totalAportado').textContent = money(totalAport);
+    $('edadFinal').textContent   = String(Math.round(edad + yrsAport));
+    $('ahorroNominal').textContent = money(ahorroNominal);
+    $('totalAportado').textContent = money(totalAportado);
     $('rendimiento').textContent   = money(rendimiento);
     $('fondo65').textContent       = money(fondo65);
-    if($('isrDev')){
-      $('isrDev').textContent = totalISRDev>0 ? money(totalISRDev) : '—';
-    }
-
     $('pvRet').value = String(fondo65);
 
+    if(benefFiscal>0){
+      $('kpiFiscalBox').style.display='block';
+      $('benefFiscal').textContent = money(benefFiscal);
+    }else{
+      $('kpiFiscalBox').style.display='none';
+      $('benefFiscal').textContent = '—';
+    }
+
+    // Actualizamos estado reporte
+    reportState.edad          = edad;
+    reportState.totalAportado = totalAportado;
+    reportState.rendimiento   = rendimiento;
+    reportState.ahorroNominal = ahorroNominal;
+    reportState.fondo65       = fondo65;
+    reportState.benefFiscal   = benefFiscal;
+    reportState.regimenFiscal = regimen;
+    reportState.isrPct        = isrPct*100;
+
+    actualizarReporteBase();
     linkWhatsApp();
   }
 
-  // -------------------- Fase 2 (retiro desde saldo a 65, nominal) + DETALLE MENSUAL
+  // ---------- Fase 2: retiro ----------
   function calcRet(){
-    const PV = parseFloat($('pvRet').value)||0;
-    const yrs = parseInt($('yrsRetSel').value,10);
+    const PV   = parseFloat($('pvRet').value)||0;
+    const yrs  = parseInt($('yrsRetSel').value,10);
     const rateRet = parseFloat($('rateRet').value)/100;
     const infl = parseFloat($('inflRet').value)/100;
 
@@ -809,17 +1126,20 @@
       return;
     }
 
-    const iNom = rateRet/12, n = yrs*12;
-    const PMT = Math.abs(iNom)<1e-9 ? PV/n : PV * ( iNom / (1 - Math.pow(1+iNom,-n)) );
+    const iNom = rateRet/12;
+    const n    = yrs*12;
+    const PMT  = Math.abs(iNom)<1e-9 ? PV/n : PV * ( iNom / (1 - Math.pow(1+iNom,-n)) );
 
-    const rReal = ((1+rateRet)/(1+infl))-1, iReal = rReal/12;
+    const rReal = ((1+rateRet)/(1+infl))-1;
+    const iReal = rReal/12;
 
     $('retBox').style.display='grid';
     $('pmtReal').textContent = money(PMT);
-    $('nMeses').textContent = `${n} meses`;
+    $('nMeses').textContent  = `${n} meses`;
     $('iRealMes').textContent = `${(iReal*100).toFixed(3)}%`;
-    $('rule4').textContent = `${money(PV*0.04)} /año · ${money(PV*0.04/12)} /mes`;
+    $('rule4').textContent   = `${money(PV*0.04)} /año · ${money(PV*0.04/12)} /mes`;
 
+    // Detalle mensual
     const tbodyRet = $('tbodyRet');
     tbodyRet.innerHTML='';
     let saldo = PV;
@@ -834,21 +1154,151 @@
       const edadTxt = `${65 + yearsAdd} años${monthsRem?` ${monthsRem} mes(es)`:''}`;
 
       const tr = document.createElement('tr');
-      tr.innerHTML =
-        `<td>${m}</td>`+
-        `<td>${edadTxt}</td>`+
-        `<td>${money(retiro)}</td>`+
-        `<td>${money(interes)}</td>`+
-        `<td>${money(saldoDesp)}</td>`;
+      tr.innerHTML = `
+        <td>${m}</td>
+        <td>${edadTxt}</td>
+        <td>${money(retiro)}</td>
+        <td>${money(interes)}</td>
+        <td>${money(saldoDesp)}</td>
+      `;
       tbodyRet.appendChild(tr);
-
       saldo = saldoDesp;
     }
+
+    // Reporte
+    reportState.ingresoMensual = PMT;
+    reportState.yrsRet         = yrs;
+    reportState.tasaRealMes    = iReal;
+    actualizarReporteBase();
   }
 
-  // -------------------- CSV (Fase 1)
+  // ---------- Sección de posponer en reporte ----------
+  function actualizarSeccionPosponer(){
+    const esc = reportState.delayScenarios;
+    if(!esc || reportState.pmtSugerido==null) return;
+
+    const base = esc[0] || 0;
+    function deltaTxt(pmtDelay){
+      if(!base || !pmtDelay) return '—';
+      const diff = pmtDelay - base;
+      if(diff<=0) return 'Igual que hoy';
+      const pct  = diff/base*100;
+      return `${money(diff)} (+${pct.toFixed(1)}%)`;
+    }
+
+    $('rptHoyMonto').textContent = base?money(base):'—';
+    $('rptHoyDelta').textContent = '—';
+    $('rpt1Monto').textContent   = esc[1]?money(esc[1]):'—';
+    $('rpt1Delta').textContent   = deltaTxt(esc[1]);
+    $('rpt3Monto').textContent   = esc[3]?money(esc[3]):'—';
+    $('rpt3Delta').textContent   = deltaTxt(esc[3]);
+    $('rpt5Monto').textContent   = esc[5]?money(esc[5]):'—';
+    $('rpt5Delta').textContent   = deltaTxt(esc[5]);
+
+    const nombre = (reportState.nombre||'').trim() || 'Tú';
+    $('rptMensajePosponer').textContent =
+      `${nombre}, el futuro que hoy estás proyectando tiene un "precio" en términos de ahorro mensual. `+
+      `Si postergas tu decisión 1, 3 o 5 años, el esfuerzo mensual requerido aumenta de forma importante. `+
+      `Empezar antes casi siempre es más barato que corregir después.`;
+  }
+
+  // ---------- Relleno de secciones del reporte ----------
+  function actualizarReporteBase(){
+    const nombre = ($('nombreOpt').value||'').trim();
+    reportState.nombre = nombre;
+
+    const hoy = new Date();
+    $('rptFecha').textContent = `Fecha de proyección: ${hoy.toLocaleDateString('es-MX')}`;
+    $('rptNombre').textContent = nombre || '—';
+
+    if(reportState.edad!=null){
+      $('rptEdad').textContent = `${reportState.edad} años`;
+    }else{
+      const eTop = parseFloat($('edadTop').value||0);
+      $('rptEdad').textContent = eTop?`${eTop} años`:'—';
+    }
+
+    if(reportState.metaHoy!=null){
+      $('rptMetaHoy').textContent = money(reportState.metaHoy);
+    }else{
+      const mH = parseFloat($('metaHoy').value||0);
+      $('rptMetaHoy').textContent = mH?money(mH):'—';
+    }
+
+    if(reportState.planYears!=null){
+      $('rptPlazo').textContent = `${reportState.planYears} años aportando`;
+    }else{
+      const y = parseFloat($('years').value||0);
+      $('rptPlazo').textContent = y?`${y} años aportando`:'—';
+    }
+
+    if(reportState.pmtSugerido!=null){
+      $('rptAportSug').textContent = money(reportState.pmtSugerido);
+    }else{
+      const p = parseFloat($('pmt').value||0);
+      $('rptAportSug').textContent = p?money(p):'—';
+    }
+
+    // Supuestos
+    const infl = reportState.infl!=null?reportState.infl:parseFloat($('inflation').value||0);
+    const rAcc = reportState.rAcc!=null?reportState.rAcc:parseFloat($('rate').value||0);
+    const yrsRet = reportState.yrsRet!=null?reportState.yrsRet:parseInt($('yrsRetSel').value||20,10);
+    const rRet = reportState.rRet!=null?reportState.rRet:parseFloat($('rateRet').value||7);
+
+    $('rptSupuestos1').textContent =
+      `Inflación media anual ${infl.toFixed(1)}%, rendimiento anual en acumulación ${rAcc.toFixed(1)}% nominal, `+
+      `retiro estimado de ${yrsRet} años con ${rRet.toFixed(1)}% nominal durante la etapa de retiro.`;
+
+    // Fiscal
+    if(reportState.regimenFiscal==='151' && reportState.isrPct>0 && reportState.benefFiscal>0){
+      $('rptSupuestosFiscal').textContent =
+        `Se asume que el plan se contrata bajo Art. 151 (deducible), con devolución aproximada de ISR de ${reportState.isrPct.toFixed(0)}% `+
+        `sobre la aportación anual y reinversión total de dicha devolución en el propio plan.`;
+      $('rptFilaFiscal').style.display='table-row';
+      $('rptBenefFiscal').textContent = money(reportState.benefFiscal);
+    }else if(reportState.regimenFiscal==='93'){
+      $('rptSupuestosFiscal').textContent =
+        `Tratamiento bajo Art. 93 (no deducible en el corto plazo). No se modela devolución anual de ISR en esta proyección.`;
+      $('rptFilaFiscal').style.display='none';
+    }else{
+      $('rptSupuestosFiscal').textContent =
+        `No se considera beneficio fiscal inmediato sobre las aportaciones en esta proyección.`;
+      $('rptFilaFiscal').style.display='none';
+    }
+
+    // Tabla de acumulación
+    $('rptTotalAportado').textContent = reportState.totalAportado?money(reportState.totalAportado):'—';
+    $('rptRendimiento').textContent   = reportState.rendimiento?money(reportState.rendimiento):'—';
+    $('rptAhorroNominal').textContent = reportState.ahorroNominal?money(reportState.ahorroNominal):'—';
+    $('rptFondo65').textContent       = reportState.fondo65?money(reportState.fondo65):'—';
+
+    // Ingreso retiro
+    $('rptIngresoMensual').textContent = reportState.ingresoMensual?money(reportState.ingresoMensual):'—';
+    $('rptDuracion').textContent       = reportState.yrsRet?`${reportState.yrsRet} años`:'—';
+    $('rptTasaReal').textContent       = reportState.tasaRealMes?`${(reportState.tasaRealMes*100).toFixed(3)}% mensual`:'—';
+
+    if(reportState.fondo65 && reportState.fondo65>0){
+      const anual4 = reportState.fondo65*0.04;
+      $('rptRegla4').textContent =
+        `Como referencia prudente, la “regla del 4%” sugiere un retiro anual de alrededor de ${money(anual4)} `+
+        `(${money(anual4/12)} mensuales) para cuidar la probabilidad de que el capital alcance toda la etapa de retiro.`;
+    }else{
+      $('rptRegla4').textContent = '—';
+    }
+
+    // Comentario final rápido:
+    const nombreShow = nombre || 'Tu plan';
+    $('rptComentario').textContent =
+      `${nombreShow} no necesita adivinar su futuro financiero: ahora tiene una guía numérica para tomar decisiones. `+
+      `La recomendación es revisar este plan en conjunto con Christian GarBa para afinar montos, horizonte y tipo de cobertura, `+
+      `de modo que el ahorro sea realista y compatible con tus demás proyectos de vida.`;
+
+    actualizarSeccionPosponer();
+  }
+
+  // ---------- CSV ----------
   function exportCSV(){
-    const rows=[['Año','Edad','Aportado ese año (MXN)','Saldo al cierre (MXN)']];
+    const rows=[['Año','Edad','Aportado ese año (MXN)','Beneficio fiscal reinvertido (MXN)','Saldo al cierre (MXN)']];
     document.querySelectorAll('#tbody tr').forEach(tr=>{
       const t=[...tr.querySelectorAll('td')].map(td=>td.textContent.replace(/[^\d.,\-a-zñ ]/gi,''));
       rows.push(t);
@@ -863,101 +1313,28 @@
     URL.revokeObjectURL(a.href);
   }
 
-  // -------------------- Tabla de timing (empiezas hoy / en 1 / 3 / 5 años)
-  function computePMTForDelay(delayYears){
-    const edadTop = parseFloat($('edadTop').value);
-    const metaHoy = parseFloat($('metaHoy').value||0);
-    const infl    = parseFloat($('inflation').value)/100;
-    const rAcc    = parseFloat($('rate').value)/100;
-    const rRet    = parseFloat($('rateRet').value)/100;
-    const yrsRet  = parseInt($('yrsRetSel').value,10);
-    const freq    = 12;
-
-    if(!(edadTop>0 && metaHoy>0)) return null;
-
-    const yrsTo65Base = Math.max(0, 65 - edadTop);
-    const metaNom65 = metaHoy * Math.pow(1+infl, yrsTo65Base);
-
-    const iRet = rRet/freq;
-    const nRet = yrsRet*freq;
-    const PVneed65 = Math.abs(iRet)<1e-12 ? metaNom65*nRet
-                        : metaNom65 * ((1 - Math.pow(1+iRet,-nRet))/iRet);
-
-    const yrsTo65 = Math.max(0, 65 - (edadTop + delayYears));
-    if(yrsTo65<=0) return null;
-
-    const yrsAport = yrsTo65;
-    const iAcc = rAcc/freq;
-    const N    = yrsAport*freq;
-    let FV_pagos = 0, pmtYear = 1;
-    for(let y=0; y<yrsAport; y++){
-      if(y>0) pmtYear *= (1+infl);
-      for(let m=0; m<freq; m++){
-        const perRest = N - (y*freq + m);
-        FV_pagos += pmtYear * Math.pow(1+iAcc, perRest);
-      }
-    }
-    if(FV_pagos<=0) return null;
-    return PVneed65 / FV_pagos;
-  }
-
-  function updateTimingTable(){
-    const ids = ['0','1','3','5'];
-    const pmts = {
-      '0': computePMTForDelay(0),
-      '1': computePMTForDelay(1),
-      '3': computePMTForDelay(3),
-      '5': computePMTForDelay(5)
-    };
-    const base = pmts['0'];
-
-    ids.forEach(k=>{
-      const p = pmts[k];
-      if(!p || !base){
-        const suf = k==='0'?'0':k;
-        if($('t'+k+'_pmt')){
-          $('t'+k+'_pmt').textContent = '—';
-          $('t'+k+'_abs').textContent = '—';
-          $('t'+k+'_pct').textContent = '—';
-        }
-        return;
-      }
-      const diff = p - base;
-      const pct  = base!==0 ? (diff/base*100) : 0;
-      if($('t'+k+'_pmt')){
-        $('t'+k+'_pmt').textContent = money(p);
-        $('t'+k+'_abs').textContent = k==='0' ? '—' : (diff>=0?'+':'')+money(diff);
-        $('t'+k+'_pct').textContent = k==='0' ? '—' : `${diff>=0?'+':''}${pct.toFixed(1)}%`;
-      }
-    });
-  }
-
-  // -------------------- Eventos
-  $('planBtn').addEventListener('click', ()=>{
-    calcSuggestion();
-    calcAccum();
-  });
+  // ---------- Eventos ----------
+  $('planBtn').addEventListener('click', ()=>{ calcSuggestion(); calcAccum(); });
   $('resetTop').addEventListener('click', ()=>{
     $('nombreOpt').value='';
     $('edadTop').value=29;
     $('planTop').value='25';
     $('metaHoy').value=32000;
     $('sugBox').style.display='none';
-    updateTimingTable();
   });
 
   $('calcBtn').addEventListener('click', calcAccum);
   $('resetBtn').addEventListener('click', ()=>{
-    $('edad').value=29;
-    $('years').value=25;
-    $('pmt').value=2500;
-    $('frequency').value=12;
+    $('edad').value=29; 
+    $('years').value=25; 
+    $('pmt').value=2500; 
+    $('frequency').value=12; 
     $('lumpSum').value=0;
-    $('rate').value=10;
+    $('rate').value=10; 
     $('inflation').value=4;
-    if($('regimen')) $('regimen').value='93';
-    if($('isrRate')) $('isrRate').value=30;
-    if($('reinvierteISR')) $('reinvierteISR').value='1';
+    $('regimenFiscal').value='ninguno';
+    $('isrPct').value='20';
+    $('reinvertISR').checked=true;
     calcAccum();
   });
 
@@ -974,31 +1351,18 @@
     d.style.display=d.style.display==='block'?'none':'block';
   });
 
-  // recalcula cuando cambian supuestos relevantes
   ['edadTop','planTop','metaHoy','rate','inflation','rateRet','yrsRetSel'].forEach(id=>{
-    const el=$(id);
-    if(el){
-      el.addEventListener('change', ()=>{
-        calcSuggestion();
-        updateTimingTable();
-      });
-    }
+    $(id).addEventListener('change', ()=>{ calcSuggestion(); });
   });
-  ['edad','years','pmt','frequency','lumpSum','rate','inflation','regimen','isrRate','reinvierteISR'].forEach(id=>{
-    const el=$(id);
-    if(el){
-      el.addEventListener('change', ()=>{
-        calcAccum();
-      });
-    }
+  ['edad','years','pmt','frequency','lumpSum','rate','inflation','regimenFiscal','isrPct','reinvertISR'].forEach(id=>{
+    $(id).addEventListener('change', ()=>{ calcAccum(); });
   });
 
-  // init
   window.addEventListener('load', ()=>{
     calcSuggestion();
     calcAccum();
-    updateTimingTable();
     linkWhatsApp();
+    actualizarReporteBase();
   });
 </script>
 </body>
