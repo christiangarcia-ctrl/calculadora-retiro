@@ -5,100 +5,147 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Calculadora de Ahorro & Retiro — Christian GarBa</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700;800;900&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <style>
   :root{
-    --navy:#071338;
-    --navy-2:#091a4a;
-    --navy-3:#0b1f5c;
+    --navy:#0A1D66;
     --electric:#1A4BFF;
-    --gold:#F6C046;
-    --gold-2:#f0b52f;
-    --cream:#F7F8FC;
-    --text:#EAF0FF;
-    --muted:rgba(234,240,255,.68);
-    --line:rgba(255,255,255,.12);
-    --panel:rgba(255,255,255,.04);
-    --panel-2:rgba(255,255,255,.06);
-    --success:#22c55e;
+    --gold:#F59E0B;
+    --cream:#FFFBF5;
+    --slate:#1E293B;
+    --success:#10B981;
     --red:#EF4444;
     --orange:#F97316;
   }
-
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
+  html,body{height:100%;overflow:hidden}
   body{
     font-family:'DM Sans',sans-serif;
-    background:
-      radial-gradient(circle at 20% 10%, rgba(34,82,255,.16), transparent 28%),
-      radial-gradient(circle at 80% 20%, rgba(246,192,70,.10), transparent 24%),
-      linear-gradient(180deg,#06112f 0%, #07173d 100%);
-    color:var(--text);
+    background:var(--cream);
+    color:var(--slate);
     font-size:14px;
-    overflow:hidden;
   }
 
   .app-container{
     display:grid;
-    grid-template-columns:390px 1fr;
+    grid-template-columns:380px 1fr;
     height:100vh;
+    position:relative;
   }
 
   .control-panel{
-    background:
-      radial-gradient(circle at 20% 10%, rgba(255,255,255,.06), transparent 22%),
-      linear-gradient(180deg, #05122f 0%, #071744 100%);
+    background:linear-gradient(180deg, var(--navy) 0%, #0D2575 100%);
     color:var(--cream);
-    padding:18px 18px 28px;
+    padding:28px 24px;
     overflow-y:auto;
-    border-right:1px solid rgba(255,255,255,.08);
-    box-shadow:8px 0 24px rgba(0,0,0,.22);
+    box-shadow:8px 0 24px rgba(10,29,102,.2);
     position:relative;
     z-index:10;
   }
 
+  .logo-header{
+    margin-bottom:20px;
+    padding-bottom:20px;
+    border-bottom:1px solid rgba(255,251,245,.15);
+  }
+  .logo-header img{display:block;}
+  .logo-title{
+    font-family:'Playfair Display',serif;
+    font-size:20px;
+    font-weight:900;
+    letter-spacing:-.02em;
+    margin-bottom:4px;
+  }
+  .logo-subtitle{
+    font-size:12px;
+    opacity:.7;
+    letter-spacing:.05em;
+  }
+
   .camera-box{
     width:100%;
-    height:300px;
-    border-radius:26px;
-    border:2px dashed rgba(255,255,255,.20);
-    background:
-      radial-gradient(circle at 20% 15%, rgba(255,255,255,.09), transparent 18%),
-      radial-gradient(circle at 50% 50%, rgba(26,75,255,.18), transparent 30%),
-      linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+    aspect-ratio:16/9;
+    border:2px dashed rgba(255,251,245,.28);
+    border-radius:14px;
     display:flex;
     align-items:center;
     justify-content:center;
     text-align:center;
-    color:rgba(255,255,255,.42);
-    font-weight:800;
-    letter-spacing:.04em;
-    text-transform:uppercase;
+    padding:18px;
+    background:rgba(255,251,245,.06);
+    margin-top:16px;
     margin-bottom:22px;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);
+    font-size:13px;
+    color:rgba(255,251,245,.78);
+    line-height:1.4;
+  }
+
+  .asesoria-box{
+    background:rgba(255,251,245,.08);
+    border:2px solid rgba(245,158,11,.4);
+    border-radius:10px;
+    padding:18px 16px;
+    margin-bottom:24px;
+    text-align:center;
+  }
+  .asesoria-title{
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:14px;
+    color:var(--gold);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    letter-spacing:-.01em;
+  }
+  .asesoria-instruccion{
+    font-size:12px;
+    color:rgba(255,251,245,.85);
+    margin-bottom:10px;
+    font-weight:600;
+  }
+  .asesoria-mensaje{
+    background:rgba(37,211,102,.15);
+    border:1px solid rgba(37,211,102,.4);
+    color:#D1FAE5;
+    padding:10px 14px;
+    border-radius:6px;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:10px;
+    font-family:'DM Mono',monospace;
+  }
+  .asesoria-phone{
+    font-size:16px;
+    font-weight:800;
+    color:var(--cream);
+    margin-top:8px;
+    letter-spacing:.02em;
+    font-family:'DM Mono',monospace;
   }
 
   .step-indicator{
-    display:inline-flex;
-    width:36px;
-    height:36px;
+    display:inline-block;
+    width:24px;
+    height:24px;
     background:var(--gold);
-    color:#091b4d;
-    border-radius:999px;
-    align-items:center;
-    justify-content:center;
+    color:var(--navy);
+    border-radius:50%;
+    text-align:center;
+    line-height:24px;
     font-weight:900;
-    font-size:18px;
-    margin-right:10px;
-    box-shadow:0 10px 24px rgba(246,192,70,.25);
+    font-size:13px;
+    margin-right:8px;
   }
 
   .section-block{margin-bottom:28px;}
   .section-header{
-    font-size:18px;
-    font-weight:900;
+    font-family:'Playfair Display',serif;
+    font-size:16px;
+    font-weight:700;
     margin-bottom:16px;
     color:var(--gold);
     letter-spacing:-.01em;
@@ -109,115 +156,98 @@
   .form-group{margin-bottom:14px;}
   .form-label{
     display:block;
-    font-size:12px;
-    font-weight:800;
+    font-size:11px;
+    font-weight:700;
     text-transform:uppercase;
-    letter-spacing:.06em;
-    margin-bottom:7px;
-    opacity:.9;
-    color:rgba(255,255,255,.88);
+    letter-spacing:.08em;
+    margin-bottom:6px;
+    opacity:.8;
   }
   .form-input{
     width:100%;
-    padding:14px 16px;
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.14);
-    border-radius:16px;
-    color:#fff;
-    font-size:16px;
-    font-weight:700;
+    padding:11px 14px;
+    background:rgba(255,251,245,.12);
+    border:1px solid rgba(255,251,245,.2);
+    border-radius:6px;
+    color:var(--cream);
+    font-size:15px;
+    font-weight:500;
     transition:all .2s;
     font-family:'DM Sans',sans-serif;
-    min-height:56px;
   }
   .form-input.suggested{
-    background:rgba(246,192,70,.10);
-    border-color:rgba(246,192,70,.42);
+    background:rgba(245,158,11,.15);
+    border-color:rgba(245,158,11,.4);
   }
   .form-input:focus{
     outline:none;
-    background:rgba(255,255,255,.11);
-    border-color:rgba(246,192,70,.85);
-    box-shadow:0 0 0 4px rgba(246,192,70,.12);
+    background:rgba(255,251,245,.18);
+    border-color:var(--gold);
+    box-shadow:0 0 0 3px rgba(245,158,11,.15);
   }
-  .form-input::placeholder{color:rgba(255,255,255,.34);}
+  .form-input::placeholder{color:rgba(255,251,245,.4);}
   .form-input:disabled{
     opacity:.5;
     cursor:not-allowed;
   }
-  .form-hint{
-    font-size:12px;
-    opacity:.72;
-    margin-top:6px;
-    line-height:1.4;
-    color:rgba(255,255,255,.72);
-  }
+  .form-hint{font-size:10px;opacity:.6;margin-top:4px;line-height:1.4;}
 
   .suggestion-badge{
     display:inline-block;
     background:var(--gold);
-    color:#091b4d;
-    padding:5px 12px;
-    border-radius:999px;
+    color:var(--navy);
+    padding:4px 10px;
+    border-radius:4px;
     font-size:11px;
-    font-weight:900;
+    font-weight:800;
     margin-bottom:8px;
-    letter-spacing:.06em;
   }
 
   .btn-primary{
     width:100%;
-    padding:15px 18px;
+    padding:14px;
     background:var(--gold);
-    color:#091b4d;
+    color:var(--navy);
     border:none;
-    border-radius:16px;
-    font-weight:900;
+    border-radius:6px;
+    font-weight:700;
     font-size:13px;
     text-transform:uppercase;
     letter-spacing:.08em;
     cursor:pointer;
     transition:all .25s;
-    box-shadow:0 12px 28px rgba(246,192,70,.22);
+    box-shadow:0 4px 12px rgba(245,158,11,.3);
     font-family:'DM Sans',sans-serif;
   }
-  .btn-primary:hover{
-    transform:translateY(-1px);
-    box-shadow:0 16px 32px rgba(246,192,70,.28);
-    background:#ffd05c;
-  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(245,158,11,.4);background:#FBBF24;}
   .btn-secondary{
     background:transparent;
-    border:1px solid rgba(255,255,255,.20);
+    border:1px solid rgba(255,251,245,.3);
     color:var(--cream);
     box-shadow:none;
-    margin-top:10px;
+    margin-top:8px;
   }
-  .btn-secondary:hover{
-    background:rgba(255,255,255,.06);
-    border-color:rgba(255,255,255,.34);
-  }
+  .btn-secondary:hover{background:rgba(255,251,245,.08);border-color:rgba(255,251,245,.5);}
 
   .collapsible-section{
-    border:1px solid rgba(255,255,255,.12);
-    border-radius:18px;
+    border:1px solid rgba(255,251,245,.15);
+    border-radius:8px;
     margin-top:16px;
     overflow:hidden;
-    background:rgba(255,255,255,.03);
   }
   .collapsible-header{
-    padding:14px 16px;
-    background:rgba(255,255,255,.05);
+    padding:12px 14px;
+    background:rgba(255,251,245,.08);
     cursor:pointer;
     display:flex;
     justify-content:space-between;
     align-items:center;
     user-select:none;
   }
-  .collapsible-header:hover{background:rgba(255,255,255,.07);}
+  .collapsible-header:hover{background:rgba(255,251,245,.12);}
   .collapsible-title{
     font-size:13px;
-    font-weight:800;
+    font-weight:700;
     text-transform:uppercase;
     letter-spacing:.06em;
   }
@@ -231,547 +261,418 @@
 
   .error-alert{
     display:none;
-    background:rgba(239,68,68,.14);
-    border:1px solid rgba(239,68,68,.35);
-    color:#fecaca;
+    background:rgba(239,68,68,.15);
+    border:1px solid rgba(239,68,68,.4);
+    color:#FCA5A5;
     padding:10px 12px;
-    border-radius:14px;
+    border-radius:6px;
     font-size:12px;
     margin-bottom:12px;
-    font-weight:600;
+    font-weight:500;
   }
   .error-alert.visible{display:block;}
 
-  .results-panel{
-    overflow-y:auto;
-    background:
-      radial-gradient(circle at 30% 0%, rgba(26,75,255,.10), transparent 20%),
-      linear-gradient(180deg, #06132f 0%, #071741 100%);
-  }
+  .results-panel{background:var(--cream);overflow-y:auto;position:relative;}
 
-  .top-grid{
-    display:grid;
-    grid-template-columns:320px 1fr;
-    gap:14px;
-    padding:14px 16px 0;
-    align-items:start;
-  }
-
-  .glass-card{
-    border:1px solid rgba(255,255,255,.08);
-    background:
-      linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
-    border-radius:28px;
-    box-shadow:
-      inset 0 0 0 1px rgba(255,255,255,.02),
-      0 18px 40px rgba(0,0,0,.20);
-  }
-
-  .brand-card{
-    padding:16px 16px 18px;
-    min-height:220px;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    gap:12px;
-  }
-
-  .tag-chip{
-    display:inline-flex;
-    align-items:center;
-    width:max-content;
-    background:var(--gold);
-    color:#091b4d;
-    border-radius:999px;
-    padding:10px 16px;
-    font-size:12px;
-    font-weight:900;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    box-shadow:0 10px 24px rgba(246,192,70,.18);
-  }
-
-  .brand-copy-top{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-  }
-
-  .brand-strap{
-    font-size:12px;
-    color:rgba(255,255,255,.70);
-    font-weight:800;
-    letter-spacing:.03em;
-  }
-
-  .brand-logo{
-    display:block;
-    width:210px;
-    max-width:100%;
-    height:auto;
-    object-fit:contain;
-    filter:drop-shadow(0 6px 18px rgba(255,255,255,.08));
-  }
-
-  .brand-subline{
-    font-size:13px;
-    line-height:1.4;
-    color:rgba(255,255,255,.60);
-    max-width:260px;
-    margin-top:2px;
-  }
-
-  .wa-card{
-    margin-top:10px;
-    background:linear-gradient(135deg, rgba(18,140,126,.34), rgba(14,86,120,.26));
-    border:1px solid rgba(16,185,129,.34);
-    border-radius:22px;
-    padding:16px 16px 18px;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);
-  }
-  .wa-label{
-    font-size:12px;
-    color:#d1fae5;
-    font-weight:900;
-    margin-bottom:6px;
-  }
-  .wa-number{
-    font-size:28px;
-    line-height:1;
-    font-weight:900;
-    color:#fff;
-    margin-bottom:8px;
-  }
-  .wa-desc{
-    font-size:13px;
-    line-height:1.35;
-    color:rgba(255,255,255,.74);
-  }
-
-  .hero-copy-card{
-    padding:18px 24px 20px;
+  .hero-section{
+    background:linear-gradient(135deg, var(--navy) 0%, var(--electric) 100%);
+    padding:34px 40px 26px;
     position:relative;
-    min-height:220px;
     overflow:hidden;
   }
-  .hero-copy-card::before{
+  .hero-section::before{
     content:'';
-    position:absolute;
-    inset:0;
-    background:
-      radial-gradient(circle at 70% 15%, rgba(26,75,255,.16), transparent 24%),
-      radial-gradient(circle at 18% 60%, rgba(246,192,70,.07), transparent 18%);
+    position:absolute;top:0;right:0;width:400px;height:400px;
+    background:radial-gradient(circle, rgba(245,158,11,.15) 0%, transparent 70%);
     pointer-events:none;
   }
-
   .hero-actions{
-    position:absolute;
-    top:14px;
-    right:14px;
-    display:flex;
-    gap:10px;
-    z-index:3;
+    position:absolute;top:18px;right:22px;display:flex;gap:10px;z-index:5;
   }
-
   .btn-action{
-    padding:12px 16px;
-    background:rgba(255,255,255,.05);
+    padding:10px 18px;
+    background:rgba(255,251,245,.15);
     backdrop-filter:blur(10px);
-    border:1px solid rgba(255,255,255,.12);
-    color:#fff;
-    border-radius:16px;
-    font-weight:900;
-    font-size:13px;
+    border:1px solid rgba(255,251,245,.25);
+    color:var(--cream);
+    border-radius:6px;
+    font-weight:700;
+    font-size:12px;
     cursor:pointer;
     transition:.2s;
     text-transform:uppercase;
     letter-spacing:.05em;
   }
-  .btn-action:hover{
-    background:rgba(255,255,255,.08);
-    transform:translateY(-1px);
+  .btn-action:hover{background:rgba(255,251,245,.25);transform:translateY(-1px);}
+  .btn-action.accent{background:var(--gold);color:var(--navy);border-color:var(--gold);}
+  .btn-action.accent:hover{background:#FBBF24;}
+
+  .hero-top{
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:18px;
+    align-items:stretch;
+    position:relative;
+    z-index:2;
   }
-  .btn-action.accent{
-    background:var(--gold);
-    color:#091b4d;
-    border-color:var(--gold);
+
+  .hero-copy{
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    min-height:190px;
+    padding-top:30px;
   }
-  .btn-action.accent:hover{background:#ffd05c;}
 
   .hero-kicker{
-    position:relative;
-    z-index:2;
-    font-size:14px;
+    font-size:11px;
     text-transform:uppercase;
     letter-spacing:.12em;
-    color:rgba(255,255,255,.58);
-    font-weight:900;
-    margin-top:2px;
-    margin-bottom:10px;
-  }
-
-  .hero-title{
-    position:relative;
-    z-index:2;
-    max-width:760px;
-    font-size:62px;
-    line-height:1.00;
-    letter-spacing:-.05em;
-    font-weight:900;
-    color:#f8fafc;
-    margin-bottom:14px;
-  }
-
-  .hero-subtitle{
-    position:relative;
-    z-index:2;
-    max-width:760px;
-    font-size:22px;
-    line-height:1.34;
-    color:rgba(255,255,255,.70);
-    margin-bottom:18px;
-  }
-
-  .hero-pills{
-    position:relative;
-    z-index:2;
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-  }
-
-  .hero-pill{
-    padding:12px 16px;
-    border-radius:999px;
-    border:1px solid rgba(255,255,255,.14);
-    background:rgba(255,255,255,.04);
-    color:#fff;
-    font-size:13px;
-    font-weight:800;
-  }
-
-  .hero-grid{
-    display:grid;
-    grid-template-columns:1.45fr .90fr;
-    gap:16px;
-    padding:16px;
-  }
-
-  .hero-main-card,
-  .hero-side-card{
-    border-radius:28px;
-    border:1px solid rgba(255,255,255,.08);
-    background:
-      radial-gradient(circle at 25% 10%, rgba(26,75,255,.12), transparent 22%),
-      linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
-    box-shadow:
-      inset 0 0 0 1px rgba(255,255,255,.02),
-      0 18px 40px rgba(0,0,0,.18);
-  }
-
-  .hero-main-card{padding:22px 22px 18px;}
-  .hero-side-card{padding:22px 22px 18px;}
-
-  .hero-label{
-    font-size:13px;
-    text-transform:uppercase;
-    letter-spacing:.13em;
-    color:rgba(255,255,255,.56);
+    color:rgba(255,251,245,.72);
     margin-bottom:8px;
-    font-weight:900;
-  }
-
-  .hero-value{
-    font-weight:900;
-    line-height:.95;
-    letter-spacing:-.045em;
-    color:#fff;
-    text-wrap:balance;
-    font-variant-numeric:tabular-nums lining-nums;
-  }
-  .hero-value.highlight{
-    color:var(--gold);
-    font-size:86px;
-  }
-  .hero-value.normal{
-    font-size:72px;
-  }
-
-  .hero-caption{
-    font-size:16px;
-    color:rgba(255,255,255,.74);
-    margin-top:10px;
     font-weight:700;
   }
-
-  .hero-stat-row{
-    margin-top:18px;
-    padding-top:18px;
-    border-top:1px solid rgba(255,255,255,.08);
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:16px;
+  .hero-headline{
+    font-family:'Playfair Display',serif;
+    font-size:34px;
+    line-height:1.06;
+    font-weight:900;
+    color:var(--cream);
+    letter-spacing:-.02em;
+    max-width:560px;
   }
-  .mini-stat{
+  .hero-subcopy{
+    margin-top:10px;
+    max-width:520px;
+    font-size:13px;
+    line-height:1.5;
+    color:rgba(255,251,245,.78);
+  }
+
+  .hero-brand-card{
+    background:rgba(255,251,245,.10);
+    border:1px solid rgba(255,251,245,.18);
+    backdrop-filter:blur(12px);
+    border-radius:16px;
+    padding:16px 18px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    min-height:190px;
+    box-shadow:0 10px 28px rgba(0,0,0,.10);
+  }
+
+  .hero-brand-top{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .hero-brand-logo{
+    height:46px;
+    width:auto;
+    object-fit:contain;
+    display:block;
+  }
+  .hero-brand-text{
     min-width:0;
   }
-  .mini-stat .mini-label{
+  .hero-brand-title{
+    font-size:14px;
+    font-weight:800;
+    color:var(--cream);
+    letter-spacing:-.01em;
+  }
+  .hero-brand-subtitle{
+    font-size:11px;
+    color:rgba(255,251,245,.72);
+    margin-top:2px;
+  }
+
+  .hero-brand-cta{
+    margin-top:14px;
+    background:rgba(37,211,102,.14);
+    border:1px solid rgba(37,211,102,.35);
+    color:#D1FAE5;
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:12px;
+    line-height:1.45;
+  }
+  .hero-brand-cta strong{color:#fff;}
+  .hero-brand-phone{
+    margin-top:10px;
+    font-family:'DM Mono',monospace;
+    font-size:14px;
+    font-weight:700;
+    color:#fff;
+  }
+
+  .hero-card-grid{
+    margin-top:18px;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:14px;
+    position:relative;
+    z-index:2;
+  }
+
+  .hero-data-card{
+    background:rgba(255,251,245,.10);
+    border:1px solid rgba(255,251,245,.18);
+    border-radius:16px;
+    padding:15px 16px 14px;
+    backdrop-filter:blur(10px);
+    min-height:170px;
+    box-shadow:0 10px 28px rgba(0,0,0,.10);
+  }
+
+  .hero-data-title{
     font-size:12px;
     text-transform:uppercase;
     letter-spacing:.10em;
-    color:rgba(255,255,255,.50);
-    margin-bottom:8px;
-    font-weight:900;
+    color:rgba(255,251,245,.74);
+    font-weight:800;
+    margin-bottom:10px;
   }
-  .mini-stat .mini-value{
+
+  .hero-mini-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px 12px;
+  }
+
+  .hero-metric{
+    min-width:0;
+  }
+  .hero-label{
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.09em;
+    color:rgba(255,251,245,.64);
+    margin-bottom:4px;
+    font-weight:700;
+  }
+  .hero-value{
+    font-family:'Playfair Display',serif;
     font-size:28px;
-    line-height:1;
-    letter-spacing:-.04em;
     font-weight:900;
-    color:#fff;
-    font-variant-numeric:tabular-nums lining-nums;
-  }
-
-  .stats-container{padding:0 16px 28px;}
-
-  .comparison-wrap{
-    margin-top:6px;
-    padding:16px;
-    border-radius:28px;
-    border:1px solid rgba(255,255,255,.08);
-    background:linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.018));
-  }
-
-  .stats-title{
-    font-size:28px;
-    font-weight:900;
-    color:#fff;
-    margin-bottom:18px;
+    color:var(--cream);
+    line-height:1.03;
     letter-spacing:-.02em;
+    word-break:break-word;
+  }
+  .hero-value.small{
+    font-size:22px;
+  }
+  .hero-value.gold{color:var(--gold);}
+  .hero-caption{
+    font-size:10px;
+    color:rgba(255,251,245,.60);
+    margin-top:4px;
+    line-height:1.35;
+  }
+
+  .stats-container{padding:32px 48px;}
+  .stats-title{
+    font-family:'Playfair Display',serif;
+    font-size:24px;
+    font-weight:700;
+    color:var(--navy);
+    margin-bottom:20px;
+    letter-spacing:-.01em;
   }
 
   .comparison-strip{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
     gap:12px;
-    margin-bottom:14px;
+    margin-bottom:24px;
   }
   .comp-box{
-    padding:18px 14px;
-    border-radius:22px;
-    font-size:12px;
-    font-weight:700;
+    padding:16px 12px;
+    border-radius:8px;
+    font-size:11px;
+    font-weight:600;
     text-align:center;
     transition:.2s;
-    border:1px solid rgba(255,255,255,.08);
-    background:rgba(255,255,255,.03);
+    border:2px solid;
   }
   .comp-box:hover{transform:translateY(-2px);}
   .comp-box.mattress{
-    background:linear-gradient(135deg, rgba(127,29,29,.14), rgba(239,68,68,.08));
-    color:#fecaca;
-    border-color:rgba(239,68,68,.20);
+    background:linear-gradient(135deg, #FEE2E2, #FECACA);
+    color:#991B1B;
+    border-color:var(--red);
   }
   .comp-box.bank{
-    background:linear-gradient(135deg, rgba(154,52,18,.14), rgba(249,115,22,.08));
-    color:#fed7aa;
-    border-color:rgba(249,115,22,.20);
-  }
-  .comp-box.afore{
-    background:linear-gradient(135deg, rgba(146,64,14,.16), rgba(245,158,11,.08));
-    color:#fde68a;
-    border-color:rgba(245,158,11,.20);
+    background:linear-gradient(135deg, #FED7AA, #FDBA74);
+    color:#9A3412;
+    border-color:var(--orange);
   }
   .comp-box.plan{
-    background:linear-gradient(135deg, rgba(6,95,70,.20), rgba(34,197,94,.10));
-    color:#d1fae5;
-    border-color:rgba(34,197,94,.24);
-    box-shadow:0 10px 24px rgba(34,197,94,.10);
+    background:linear-gradient(135deg, #D1FAE5, #A7F3D0);
+    color:#065F46;
+    border-color:var(--success);
+    box-shadow:0 4px 12px rgba(16,185,129,.25);
   }
   .comp-label{
-    font-size:11px;
+    font-size:9px;
     text-transform:uppercase;
     letter-spacing:.08em;
-    font-weight:900;
-    margin-bottom:8px;
+    font-weight:800;
+    margin-bottom:6px;
   }
   .comp-value{
-    font-size:28px;
-    line-height:1;
-    font-weight:900;
-    margin:8px 0 10px;
-    letter-spacing:-.04em;
-    font-variant-numeric:tabular-nums lining-nums;
+    font-family:'DM Mono',monospace;
+    font-size:16px;
+    font-weight:500;
+    margin:6px 0;
   }
   .comp-loss{
-    font-size:12px;
-    font-weight:800;
-    margin-top:6px;
-    opacity:.92;
+    font-size:10px;
+    font-weight:700;
+    margin-top:4px;
   }
 
-  .bar-track{
-    width:82%;
-    margin:10px auto 0;
-    height:8px;
-    background:rgba(255,255,255,.08);
-    border-radius:999px;
-    overflow:hidden;
+  .chart-section{
+    background:white;
+    padding:32px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+    margin-bottom:24px;
   }
-  .bar-fill{height:100%;border-radius:999px;}
-
-  .comparison-message{
-    text-align:center;
-    font-size:14px;
-    font-weight:900;
-    color:#fff;
-    margin-top:14px;
-    background:rgba(246,192,70,.12);
-    padding:14px 16px;
-    border-radius:18px;
-    border:1px solid rgba(246,192,70,.20);
-  }
-
-  .chart-section,
-  .detail-wrapper{
-    background:rgba(255,255,255,.03);
-    padding:22px 24px;
-    border-radius:24px;
-    border:1px solid rgba(255,255,255,.08);
-    box-shadow:0 14px 30px rgba(0,0,0,.16);
-    margin-top:18px;
-  }
-
   .chart-header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:16px;
+    margin-bottom:20px;
   }
   .chart-title{
-    font-size:22px;
-    font-weight:900;
-    color:#fff;
+    font-family:'Playfair Display',serif;
+    font-size:20px;
+    font-weight:700;
+    color:var(--navy);
   }
   .chart-badge{
-    background:rgba(26,75,255,.18);
-    color:#dbeafe;
-    padding:8px 12px;
-    border-radius:999px;
+    background:linear-gradient(135deg, var(--electric), #3B82F6);
+    color:white;
+    padding:6px 14px;
+    border-radius:20px;
     font-size:11px;
-    font-weight:900;
+    font-weight:700;
     text-transform:uppercase;
     letter-spacing:.05em;
-    border:1px solid rgba(26,75,255,.24);
   }
-
-  #chartCanvas{max-height:300px;}
+  #chartCanvas{max-height:280px;}
 
   .retirement-section{
     display:none;
-    background:linear-gradient(135deg, rgba(6,95,70,.25), rgba(34,197,94,.10));
-    padding:24px 24px;
-    border-radius:24px;
-    border:1px solid rgba(34,197,94,.22);
-    margin-top:18px;
+    background:linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+    padding:28px 32px;
+    border-radius:12px;
+    border:2px solid var(--success);
+    margin-bottom:24px;
   }
   .retirement-section.visible{
     display:block;
-    animation:fadeIn .35s ease-out;
+    animation:fadeIn .4s ease-out;
   }
-  @keyframes fadeIn{
-    from{opacity:0;transform:translateY(10px)}
-    to{opacity:1;transform:translateY(0)}
-  }
-
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
   .retirement-title{
-    font-size:22px;
-    font-weight:900;
-    color:#d1fae5;
+    font-family:'Playfair Display',serif;
+    font-size:20px;
+    font-weight:700;
+    color:#065F46;
     margin-bottom:16px;
   }
   .retirement-grid{
     display:grid;
     grid-template-columns:repeat(2,1fr);
-    gap:14px;
+    gap:16px;
   }
   .retirement-item{
-    background:rgba(255,255,255,.06);
+    background:white;
     padding:16px;
-    border-radius:18px;
-    border:1px solid rgba(255,255,255,.08);
+    border-radius:8px;
+    border-left:4px solid var(--success);
   }
   .retirement-label{
-    font-size:11px;
+    font-size:10px;
     text-transform:uppercase;
     letter-spacing:.08em;
-    color:#bbf7d0;
-    font-weight:900;
+    color:#059669;
+    font-weight:700;
     margin-bottom:6px;
   }
   .retirement-value{
-    font-size:28px;
-    font-weight:900;
-    color:#fff;
-    letter-spacing:-.04em;
-    font-variant-numeric:tabular-nums lining-nums;
+    font-family:'DM Mono',monospace;
+    font-size:22px;
+    font-weight:500;
+    color:#065F46;
   }
 
+  .detail-wrapper{
+    background:white;
+    padding:24px 32px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+    margin-bottom:20px;
+  }
   .detail-toggle{
     display:flex;
     justify-content:space-between;
     align-items:center;
     cursor:pointer;
-    font-weight:900;
-    color:#fff;
-    font-size:15px;
+    font-weight:700;
+    color:var(--navy);
+    font-size:14px;
     user-select:none;
   }
-  .detail-toggle:hover{color:#fff;}
+  .detail-toggle:hover{color:var(--electric);}
   .detail-toggle .icon{transition:transform .2s;}
   .detail-toggle.open .icon{transform:rotate(180deg);}
   .detail-content{
     display:none;
     margin-top:16px;
-    max-height:260px;
+    max-height:240px;
     overflow-y:auto;
   }
-  .detail-content.visible{display:block;}
-
+  .detail-content.visible{
+    display:block;
+    animation:slideDown .3s ease-out;
+  }
+  @keyframes slideDown{from{opacity:0;max-height:0}to{opacity:1;max-height:240px}}
   table{
     width:100%;
     border-collapse:collapse;
-    font-size:13px;
+    font-size:12px;
   }
   th{
-    background:rgba(255,255,255,.06);
-    color:#fff;
+    background:var(--navy);
+    color:white;
     text-align:left;
-    padding:12px;
-    font-weight:900;
+    padding:10px 12px;
+    font-weight:700;
     text-transform:uppercase;
     letter-spacing:.05em;
     font-size:11px;
   }
   td{
-    padding:12px;
-    border-bottom:1px solid rgba(255,255,255,.08);
-    color:rgba(255,255,255,.88);
+    padding:10px 12px;
+    border-bottom:1px solid #E2E8F0;
   }
-  tr:hover{background:rgba(255,255,255,.03);}
+  tr:hover{background:#F8FAFC;}
   tr:last-child td{border-bottom:none;}
 
   .whatsapp-float{
     position:fixed;
-    right:22px;
-    bottom:22px;
+    right:28px;
+    bottom:28px;
     background:#25D366;
     color:white;
     padding:16px 24px;
-    border-radius:999px;
-    font-weight:900;
+    border-radius:50px;
+    font-weight:700;
     font-size:14px;
-    box-shadow:0 16px 40px rgba(37,211,102,.35);
+    box-shadow:0 8px 24px rgba(37,211,102,.35);
     cursor:pointer;
     transition:.3s;
     z-index:100;
@@ -781,70 +682,66 @@
     gap:8px;
   }
   .whatsapp-float:hover{
-    transform:scale(1.04);
-    box-shadow:0 20px 48px rgba(37,211,102,.42);
+    transform:scale(1.05);
+    box-shadow:0 12px 32px rgba(37,211,102,.5);
   }
 
-  ::-webkit-scrollbar{width:10px;height:10px}
-  ::-webkit-scrollbar-track{background:rgba(255,255,255,.03)}
-  ::-webkit-scrollbar-thumb{
-    background:rgba(255,255,255,.12);
-    border-radius:999px
-  }
-  ::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.18)}
+  ::-webkit-scrollbar{width:8px;height:8px}
+  ::-webkit-scrollbar-track{background:rgba(0,0,0,.05)}
+  ::-webkit-scrollbar-thumb{background:var(--electric);border-radius:4px}
+  ::-webkit-scrollbar-thumb:hover{background:var(--navy)}
 
   .report-view{display:none}
 
   @media print{
     body{
-      background:#fff !important;
+      background:white !important;
       color:#000 !important;
       -webkit-print-color-adjust:exact;
       print-color-adjust:exact;
-      overflow:visible;
       font-size:10px;
+      overflow:visible;
     }
     html,body{height:auto;overflow:visible}
-    .app-container,.whatsapp-float{display:none !important}
+    .app-container{display:none !important}
+    .whatsapp-float{display:none !important}
     .report-view{
       display:block !important;
       max-width:800px;
       margin:0 auto;
       padding:10mm;
-      color:#0f172a;
-      background:#fff;
     }
 
     .report-header{
       display:flex;
       align-items:flex-start;
       justify-content:space-between;
-      gap:16px;
       padding-bottom:12px;
       margin-bottom:16px;
-      border-bottom:3px solid #0A1D66;
+      border-bottom:3px solid var(--navy);
     }
     .report-logo-section{
       display:flex;
-      gap:14px;
+      gap:16px;
       align-items:center;
     }
+    .report-logo{display:flex;gap:12px;align-items:center;}
     .report-logo img{
-      height:36px !important;
-      width:auto !important;
-      object-fit:contain !important;
       display:block;
+      filter:none !important;
+      -webkit-filter:none !important;
     }
     .report-branding{
-      border-left:3px solid #F59E0B;
-      padding-left:14px;
+      border-left:3px solid var(--gold);
+      padding-left:16px;
     }
     .report-main-title{
       font-family:'Playfair Display',serif;
       font-size:24px;
       font-weight:900;
-      color:#0A1D66;
+      color:var(--navy);
       margin-bottom:4px;
+      letter-spacing:-.01em;
     }
     .report-subtitle{
       font-size:12px;
@@ -856,61 +753,9 @@
       color:#64748B;
     }
 
-    .report-timeline{
-      background:linear-gradient(135deg,#F0FDF4,#DCFCE7);
-      border:2px solid #22c55e;
-      border-radius:8px;
-      padding:12px;
-      margin-bottom:12px;
-    }
-    .report-timeline-title{
-      font-family:'Playfair Display',serif;
-      font-size:14px;
-      font-weight:700;
-      color:#065F46;
-      margin-bottom:10px;
-      text-align:center;
-    }
-    .timeline-visual{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      margin:10px 0;
-    }
-    .timeline-point{
-      text-align:center;
-      flex:1;
-    }
-    .timeline-age{
-      font-family:'DM Mono',monospace;
-      font-size:16px;
-      font-weight:700;
-      color:#065F46;
-      margin-bottom:3px;
-    }
-    .timeline-label{
-      font-size:8px;
-      color:#059669;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-      font-weight:700;
-    }
-    .timeline-amount{
-      font-family:'DM Mono',monospace;
-      font-size:12px;
-      font-weight:700;
-      color:#065F46;
-      margin-top:3px;
-    }
-    .timeline-arrow{
-      font-size:18px;
-      color:#10B981;
-      margin:0 6px;
-    }
-
     .report-hero{
       background:linear-gradient(135deg, #EFF6FF, #DBEAFE);
-      border:3px solid #1A4BFF;
+      border:3px solid var(--electric);
       border-radius:10px;
       padding:16px;
       margin-bottom:14px;
@@ -919,7 +764,7 @@
       font-family:'Playfair Display',serif;
       font-size:16px;
       font-weight:700;
-      color:#0A1D66;
+      color:var(--navy);
       margin-bottom:12px;
       text-align:center;
     }
@@ -932,12 +777,12 @@
       background:white;
       padding:12px;
       border-radius:6px;
-      border-left:4px solid #F59E0B;
+      border-left:4px solid var(--gold);
     }
     .report-hero-item.featured{
       grid-column:1/-1;
       background:linear-gradient(135deg,#D1FAE5,#A7F3D0);
-      border-left-color:#10B981;
+      border-left-color:var(--success);
     }
     .report-hero-label{
       font-size:10px;
@@ -947,12 +792,14 @@
       font-weight:700;
       margin-bottom:6px;
     }
-    .report-hero-item.featured .report-hero-label{color:#065F46;}
+    .report-hero-item.featured .report-hero-label{
+      color:#065F46;
+    }
     .report-hero-value{
       font-family:'DM Mono',monospace;
       font-size:20px;
       font-weight:700;
-      color:#0A1D66;
+      color:var(--navy);
     }
     .report-hero-item.featured .report-hero-value{
       font-size:26px;
@@ -967,7 +814,7 @@
       font-family:'Playfair Display',serif;
       font-size:14px;
       font-weight:700;
-      color:#0A1D66;
+      color:var(--navy);
       margin-bottom:8px;
       text-align:center;
     }
@@ -1021,11 +868,11 @@
       margin-top:12px;
       font-size:12px;
       font-weight:700;
-      color:#0A1D66;
+      color:var(--navy);
       background:#FEF3C7;
       padding:12px;
       border-radius:8px;
-      border-left:4px solid #F59E0B;
+      border-left:4px solid var(--gold);
     }
 
     .report-section{
@@ -1036,10 +883,10 @@
       font-family:'Playfair Display',serif;
       font-size:14px;
       font-weight:700;
-      color:#0A1D66;
+      color:var(--navy);
       margin-bottom:8px;
       padding-bottom:4px;
-      border-bottom:2px solid #F59E0B;
+      border-bottom:2px solid var(--gold);
     }
     .report-grid{
       display:grid;
@@ -1051,7 +898,12 @@
       background:#F8FAFC;
       padding:12px;
       border-radius:6px;
-      border-left:3px solid #1A4BFF;
+      border-left:3px solid var(--electric);
+    }
+    .report-item.featured{
+      background:linear-gradient(135deg, #FEF3C7, #FDE68A);
+      border-left-color:var(--gold);
+      grid-column:1/-1;
     }
     .report-label{
       font-size:10px;
@@ -1065,7 +917,11 @@
       font-family:'DM Mono',monospace;
       font-size:14px;
       font-weight:500;
-      color:#0A1D66;
+      color:var(--navy);
+    }
+    .report-item.featured .report-value{
+      font-size:18px;
+      font-weight:700;
     }
     .report-text{
       font-size:11px;
@@ -1073,6 +929,7 @@
       color:#334155;
       margin:8px 0;
     }
+
     .report-table{
       width:100%;
       border-collapse:collapse;
@@ -1080,7 +937,7 @@
       font-size:10px;
     }
     .report-table th{
-      background:#0A1D66;
+      background:var(--navy);
       color:white;
       padding:8px 10px;
       text-align:left;
@@ -1091,53 +948,126 @@
     .report-table td{
       padding:8px 10px;
       border-bottom:1px solid #E2E8F0;
-      color:#0f172a;
     }
-    .report-table tr:nth-child(even){background:#F8FAFC;}
+    .report-table tr:nth-child(even){
+      background:#F8FAFC;
+    }
+
     .report-highlight{
       background:linear-gradient(135deg, #EFF6FF, #DBEAFE);
-      border-left:4px solid #1A4BFF;
+      border-left:4px solid var(--electric);
       padding:14px;
       border-radius:6px;
       margin:12px 0;
     }
     .report-highlight strong{
-      color:#0A1D66;
+      color:var(--navy);
       font-weight:700;
     }
+
     .report-footer{
       margin-top:28px;
       padding-top:16px;
       border-top:2px solid #E2E8F0;
       display:flex;
       justify-content:space-between;
-      font-size:10px;
-      color:#64748B;
-      gap:20px;
+      font-size:11px !important;
+      color:#64748B !important;
     }
-    .report-contact{font-weight:600;}
+    .report-contact{
+      font-weight:600;
+    }
     .report-disclaimer{
       text-align:right;
-      max-width:420px;
-      line-height:1.35;
-      font-style:normal;
+      font-style:normal !important;
+      max-width:520px !important;
+      line-height:1.35 !important;
+    }
+
+    .chart-print{
+      max-width:100%;
+      height:auto;
+      margin:12px 0;
+      page-break-inside:avoid;
+    }
+
+    .report-timeline{
+      background:linear-gradient(135deg,#F0FDF4,#DCFCE7);
+      border:2px solid var(--success);
+      border-radius:8px;
+      padding:12px;
+      margin-bottom:12px;
+    }
+    .report-timeline-title{
+      font-family:'Playfair Display',serif;
+      font-size:14px;
+      font-weight:700;
+      color:#065F46;
+      margin-bottom:10px;
+      text-align:center;
+    }
+    .timeline-visual{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin:10px 0;
+    }
+    .timeline-point{
+      text-align:center;
+      flex:1;
+    }
+    .timeline-age{
+      font-family:'DM Mono',monospace;
+      font-size:16px;
+      font-weight:700;
+      color:#065F46;
+      margin-bottom:3px;
+    }
+    .timeline-label{
+      font-size:8px;
+      color:#059669;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      font-weight:700;
+    }
+    .timeline-amount{
+      font-family:'DM Mono',monospace;
+      font-size:12px;
+      font-weight:700;
+      color:#065F46;
+      margin-top:3px;
+    }
+    .timeline-arrow{
+      font-size:18px;
+      color:#10B981;
+      margin:0 6px;
     }
   }
 
-  @media (max-width:1400px){
-    .top-grid{grid-template-columns:300px 1fr;}
-    .hero-title{font-size:54px;max-width:680px;}
-    .hero-subtitle{font-size:20px;max-width:680px;}
-    .hero-value.highlight{font-size:72px;}
-    .hero-value.normal{font-size:58px;}
-    .mini-stat .mini-value{font-size:24px;}
+  .brand-logo{
+    height:54px;
+    width:auto;
+    display:block;
+    object-fit:contain;
   }
 
-  @media (min-width:1500px){
-    .top-grid{grid-template-columns:320px 1fr;}
-    .brand-card,.hero-copy-card{min-height:210px;}
-    .hero-title{font-size:58px;max-width:720px;}
-    .hero-subtitle{font-size:21px;max-width:720px;}
+  .logo-header img{ filter:none !important; -webkit-filter:none !important; }
+
+  @media print{
+    .report-brand-logo{
+      height:40px;
+      width:auto;
+      display:block;
+      object-fit:contain;
+      filter:none !important;
+      -webkit-filter:none !important;
+    }
+  }
+
+  @media (max-width: 1280px){
+    .hero-top{grid-template-columns:1fr;}
+    .hero-copy{min-height:auto}
+    .hero-brand-card{min-height:auto}
   }
 </style>
 </head>
@@ -1147,14 +1077,24 @@
 
   <div class="control-panel">
 
-    <div class="camera-box">
-      ESPACIO PARA CÁMARA
+    <div class="logo-header">
+      <img src="logo-garba.png" alt="Christian GarBa" class="brand-logo"/>
+      <div class="logo-title" style="margin-top:14px;">Christian GarBa</div>
+      <div class="logo-subtitle">Seguros con Estrategia</div>
+      <div style="font-size:11px;opacity:.7;margin-top:8px;letter-spacing:.03em">🌐 sfgarba.com/Blog</div>
+
+      <div class="camera-box">
+        <div>
+          <strong style="display:block;color:#fff;margin-bottom:6px;">Espacio para tu cámara</strong>
+          Tu video permanece fijo aquí durante el live
+        </div>
+      </div>
     </div>
 
     <div class="section-block">
       <div class="section-header">
         <span class="step-indicator">1</span>
-        Tus datos
+        Tus Datos
       </div>
 
       <div class="form-group">
@@ -1179,26 +1119,26 @@
 
       <div class="form-group">
         <label class="form-label">Meta mensual deseada (valor de hoy)</label>
-        <input class="form-input" id="metaHoy" type="number" min="0" step="1000" placeholder="32000" value="32000">
-        <div class="form-hint">¿Cuánto te gustaría recibir cada mes cuando llegue tu retiro?</div>
+        <input class="form-input" id="metaHoy" type="number" min="0" step="1000" placeholder="32,000" value="32000">
+        <div class="form-hint">¿Cuánto te gustaría recibir mensualmente más adelante?</div>
       </div>
     </div>
 
     <div class="section-block">
       <div class="section-header">
         <span class="step-indicator">2</span>
-        Tu aportación
+        Tu Aportación
       </div>
 
       <div class="error-alert" id="errorMsg"></div>
 
       <div class="form-group">
         <label class="form-label">
-          <span class="suggestion-badge" id="suggestedBadge" style="display:none">Sugerido</span>
+          <span class="suggestion-badge" id="suggestedBadge" style="display:none">💡 Sugerido</span>
           Aportación mensual
         </label>
         <input class="form-input" id="pmt" type="number" value="2500" min="0" step="0.01">
-        <div class="form-hint" id="pmtHint">Calcula tu plan para ver la aportación sugerida</div>
+        <div class="form-hint" id="pmtHint">Calcula tu plan para ver una referencia sugerida</div>
       </div>
 
       <div class="form-group">
@@ -1237,7 +1177,7 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label" style="display:flex;align-items:center;gap:8px;opacity:.55">
+        <label class="form-label" style="display:flex;align-items:center;gap:8px;opacity:.5">
           <input id="reinvertISR" type="checkbox" checked style="width:auto;margin:0" disabled>
           Reinvertir devolución fiscal
         </label>
@@ -1245,7 +1185,7 @@
 
       <div class="collapsible-section">
         <div class="collapsible-header" id="advancedToggle">
-          <span class="collapsible-title">Parámetros avanzados</span>
+          <span class="collapsible-title">⚙️ Parámetros Avanzados</span>
           <span class="collapsible-icon">▼</span>
         </div>
         <div class="collapsible-content" id="advancedContent">
@@ -1263,14 +1203,14 @@
         </div>
       </div>
 
-      <button class="btn-primary" id="calcBtn" style="margin-top:16px">Calcular proyección</button>
-      <button class="btn-primary btn-secondary" id="resetBtn">Reiniciar todo</button>
+      <button class="btn-primary" id="calcBtn" style="margin-top:16px">Calcular Proyección</button>
+      <button class="btn-primary btn-secondary" id="resetBtn">Reiniciar Todo</button>
     </div>
 
     <div class="section-block">
       <div class="section-header">
         <span class="step-indicator">3</span>
-        Tu retiro
+        Tu Retiro
       </div>
 
       <input type="hidden" id="pvRet" value="0">
@@ -1284,133 +1224,132 @@
         </select>
       </div>
 
-      <button class="btn-primary" id="calcRet">Calcular mensualidad</button>
+      <button class="btn-primary" id="calcRet">Calcular Mensualidad</button>
     </div>
-
   </div>
 
   <div class="results-panel">
 
-    <div class="top-grid">
-      <div class="glass-card brand-card">
-        <div class="brand-copy-top">
-          <div class="tag-chip">Distribuidor autorizado Allianz</div>
-          <div class="brand-strap">Respaldo y acompañamiento profesional</div>
-          <img src="logo-allianz-white.png" alt="Allianz" class="brand-logo">
-          <div class="brand-subline">
-            Simulación informativa para visualizar escenarios de retiro con mayor claridad.
+    <div class="hero-section">
+      <div class="hero-actions">
+        <button class="btn-action" id="csvBtn">CSV</button>
+        <button class="btn-action accent" id="printBtn">Generar PDF</button>
+      </div>
+
+      <div class="hero-top">
+        <div class="hero-copy">
+          <div class="hero-kicker">Escenario estimado</div>
+          <div class="hero-headline">Visualiza cuánto podrías construir si empiezas antes</div>
+          <div class="hero-subcopy">
+            Explora un escenario estimado con base en tu edad, tu plazo y la aportación que elijas.
           </div>
         </div>
 
-        <div class="wa-card">
-          <div class="wa-label">Escribe RETIRO por WhatsApp</div>
-          <div class="wa-number">662 417 6032</div>
-          <div class="wa-desc">Revisa tu escenario y compáralo con claridad.</div>
+        <div class="hero-brand-card">
+          <div class="hero-brand-top">
+            <img src="logo-garba.png" alt="Christian GarBa" class="hero-brand-logo">
+            <div class="hero-brand-text">
+              <div class="hero-brand-title">Christian GarBa</div>
+              <div class="hero-brand-subtitle">Seguros con Estrategia</div>
+            </div>
+          </div>
+
+          <div class="hero-brand-cta">
+            <strong>¿Quieres revisar tu escenario?</strong><br>
+            Escríbeme por WhatsApp y lo vemos contigo.
+          </div>
+
+          <div class="hero-brand-phone">662 417 6032</div>
         </div>
       </div>
 
-      <div class="glass-card hero-copy-card">
-        <div class="hero-actions">
-          <button class="btn-action" id="csvBtn">CSV</button>
-          <button class="btn-action accent" id="printBtn">PDF</button>
-        </div>
+      <div class="hero-card-grid">
+        <div class="hero-data-card">
+          <div class="hero-data-title">Al finalizar tu plan</div>
+          <div class="hero-mini-grid">
+            <div class="hero-metric">
+              <div class="hero-label">Fondo estimado</div>
+              <div class="hero-value gold" id="fondoPlan">—</div>
+              <div class="hero-caption">A tu edad: <span id="edadFinPlan">—</span></div>
+            </div>
 
-        <div class="hero-kicker">Retiro estratégico</div>
-        <div class="hero-title">Visualiza cuánto podrías construir si empiezas antes.</div>
-        <div class="hero-subtitle">
-          Descubre cuánto podrías acumular, cuánto realmente aportas y qué diferencia existe entre dejar pasar el tiempo o comenzar hoy.
-        </div>
-
-        <div class="hero-pills">
-          <div class="hero-pill">Escenario de referencia</div>
-          <div class="hero-pill">Proyección a los 65 años</div>
-          <div class="hero-pill">WhatsApp directo</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="hero-grid">
-      <div class="hero-main-card">
-        <div class="hero-label">Fondo proyectado a los 65 años</div>
-        <div class="hero-value highlight" id="fondo65">—</div>
-        <div class="hero-caption">Listo para tu retiro</div>
-
-        <div class="hero-stat-row">
-          <div class="mini-stat">
-            <div class="mini-label">Total aportado</div>
-            <div class="mini-value" id="totalAportado">—</div>
-          </div>
-          <div class="mini-stat">
-            <div class="mini-label">Rendimiento generado</div>
-            <div class="mini-value" id="rendimiento">—</div>
-          </div>
-          <div class="mini-stat">
-            <div class="mini-label">Duración del plan</div>
-            <div class="mini-value"><span id="yearsPlan">—</span> años</div>
+            <div class="hero-metric">
+              <div class="hero-label">Total aportado</div>
+              <div class="hero-value small" id="totalAportado">—</div>
+              <div class="hero-caption">Durante <span id="yearsPlan">—</span> años</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="hero-side-card">
-        <div class="hero-label">Fondo al finalizar tu plan</div>
-        <div class="hero-value normal" id="fondoPlan">—</div>
-        <div class="hero-caption">A los <span id="edadFinPlan">—</span> años</div>
+        <div class="hero-data-card">
+          <div class="hero-data-title">Escenario estimado a los 65 años</div>
+          <div class="hero-mini-grid">
+            <div class="hero-metric">
+              <div class="hero-label">Fondo estimado</div>
+              <div class="hero-value" id="fondo65">—</div>
+              <div class="hero-caption">Escenario de referencia para retiro</div>
+            </div>
+
+            <div class="hero-metric">
+              <div class="hero-label">Crecimiento estimado</div>
+              <div class="hero-value small" id="rendimiento">—</div>
+              <div class="hero-caption">Hasta los 65 años</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="stats-container">
 
-      <div class="comparison-wrap">
-        <div class="stats-title"><span id="compTitle">¿Dónde estaría tu dinero en 15 años?</span></div>
-
-        <div class="comparison-strip">
+      <div style="margin-bottom:24px">
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--navy);margin-bottom:16px;text-align:center">
+          <span id="compTitle">¿Cómo podría verse tu dinero en 15 años?</span>
+        </div>
+        <div class="comparison-strip" style="grid-template-columns:repeat(4,1fr);gap:10px">
           <div class="comp-box mattress">
-            <div class="comp-label">💸 Colchón</div>
+            <div class="comp-label">💸 COLCHÓN</div>
             <div class="comp-value" id="compMattress">—</div>
-            <div class="bar-track"><div class="bar-fill" style="width:20%;background:#dc2626"></div></div>
+            <div style="margin:8px 0">
+              <div style="background:#DC2626;height:8px;border-radius:4px;width:20%"></div>
+            </div>
             <div class="comp-loss" id="compMattressLoss">—</div>
           </div>
-
           <div class="comp-box bank">
-            <div class="comp-label">🏦 Banco</div>
+            <div class="comp-label">🏦 BANCO</div>
             <div class="comp-value" id="compBank">—</div>
-            <div class="bar-track"><div class="bar-fill" style="width:24%;background:#ea580c"></div></div>
+            <div style="margin:8px 0">
+              <div style="background:#EA580C;height:8px;border-radius:4px;width:24%"></div>
+            </div>
             <div class="comp-loss" id="compBankLoss">—</div>
           </div>
-
-          <div class="comp-box afore">
+          <div class="comp-box" style="background:linear-gradient(135deg,#FEF3C7,#FDE68A);color:#92400E;border-color:#F59E0B">
             <div class="comp-label">🏛️ AFORE</div>
             <div class="comp-value" id="compAfore">—</div>
-            <div class="bar-track"><div class="bar-fill" style="width:38%;background:#f59e0b"></div></div>
+            <div style="margin:8px 0">
+              <div style="background:#F59E0B;height:8px;border-radius:4px;width:38%"></div>
+            </div>
             <div class="comp-loss" id="compAforeLoss">—</div>
           </div>
-
           <div class="comp-box plan">
-            <div class="comp-label">✨ Tu plan</div>
+            <div class="comp-label">✨ TU PLAN</div>
             <div class="comp-value" id="compPlan">—</div>
-            <div class="bar-track"><div class="bar-fill" style="width:100%;background:#22c55e"></div></div>
-            <div class="comp-loss">✓ Protegido</div>
+            <div style="margin:8px 0">
+              <div style="background:#10B981;height:8px;border-radius:4px;width:100%"></div>
+            </div>
+            <div class="comp-loss" style="color:#065F46">✓ Escenario personalizado</div>
           </div>
         </div>
-
-        <div class="comparison-message">
-          <span id="compMessage">Mismo esfuerzo. Cuatro caminos. Resultados completamente diferentes.</span>
+        <div style="text-align:center;font-size:13px;font-weight:700;color:var(--navy);margin-top:12px;background:#FEF3C7;padding:14px;border-radius:8px;border-left:4px solid var(--gold)">
+          <span id="compMessage">El mismo hábito puede dar resultados muy distintos según el camino elegido.</span>
         </div>
-      </div>
-
-      <div class="chart-section">
-        <div class="chart-header">
-          <div class="chart-title">Crecimiento de tu fondo</div>
-          <div class="chart-badge">Proyección</div>
-        </div>
-        <canvas id="chartCanvas"></canvas>
       </div>
 
       <div class="retirement-section" id="retBox">
-        <div class="retirement-title">Tu ingreso mensual en retiro</div>
+        <div class="retirement-title">Ingreso mensual estimado</div>
         <div class="retirement-grid">
           <div class="retirement-item">
-            <div class="retirement-label">Ingreso mensual</div>
+            <div class="retirement-label">Ingreso mensual estimado a 20 años</div>
             <div class="retirement-value" id="pmtReal">—</div>
           </div>
           <div class="retirement-item">
@@ -1471,6 +1410,7 @@
       </div>
 
     </div>
+
   </div>
 </div>
 
@@ -1483,7 +1423,7 @@
   <div class="report-header">
     <div class="report-logo-section">
       <div class="report-logo">
-        <img src="logo-allianz-white.png" alt="Allianz">
+        <img src="logo-garba.png" alt="GarBa" class="report-brand-logo"/>
       </div>
       <div class="report-branding">
         <div class="report-main-title">Tu Plan de Retiro</div>
@@ -1493,29 +1433,29 @@
     <div class="report-meta">
       <div id="rptFecha"></div>
       <div><strong>Asesor:</strong> Christian GarBa</div>
-      <div>Seguros con Estrategia · Allianz</div>
+      <div>Seguros con Estrategia</div>
       <div>Tel. 662 417 6032</div>
     </div>
   </div>
 
   <div class="report-timeline">
-    <div class="report-timeline-title">📈 Tu línea de tiempo financiera</div>
+    <div class="report-timeline-title">📈 Tu Línea de Tiempo Financiera</div>
     <div class="timeline-visual" id="timelineVisual">
       <div class="timeline-point">
         <div class="timeline-age" id="rptEdadHoy">29</div>
-        <div class="timeline-label">Hoy</div>
+        <div class="timeline-label">HOY</div>
         <div class="timeline-amount">Comienzas</div>
       </div>
       <div class="timeline-arrow" id="timelineArrow1">→</div>
       <div class="timeline-point" id="timelineMidPoint">
         <div class="timeline-age" id="rptEdadFinPlan">44</div>
-        <div class="timeline-label" id="rptLabelFinPlan">Fin aportaciones</div>
+        <div class="timeline-label" id="rptLabelFinPlan">FIN APORTACIONES</div>
         <div class="timeline-amount" id="rptFondoFinPlan">—</div>
       </div>
       <div class="timeline-arrow" id="timelineArrow2">→</div>
       <div class="timeline-point" id="timelineRetPoint">
         <div class="timeline-age">65</div>
-        <div class="timeline-label">Retiro</div>
+        <div class="timeline-label">RETIRO</div>
         <div class="timeline-amount" id="rptFondo65Timeline">—</div>
       </div>
     </div>
@@ -1525,7 +1465,7 @@
   </div>
 
   <div class="report-hero">
-    <div class="report-hero-title">Tu plan en números</div>
+    <div class="report-hero-title">Tu Plan en Números</div>
     <div class="report-hero-grid">
       <div class="report-hero-item">
         <div class="report-hero-label">Ahorras mensualmente</div>
@@ -1544,48 +1484,60 @@
         <div class="report-hero-value" id="rptFondoPlan">—</div>
       </div>
       <div class="report-hero-item featured">
-        <div class="report-hero-label">💰 Fondo a los 65 años</div>
+        <div class="report-hero-label">💰 Fondo estimado a los 65 años</div>
         <div class="report-hero-value" id="rptFondo65">—</div>
       </div>
       <div class="report-hero-item featured" style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border-left-color:#1A4BFF">
-        <div class="report-hero-label" style="color:#1E40AF">📊 Ingreso mensual en retiro (20 años)</div>
+        <div class="report-hero-label" style="color:#1E40AF">📊 Ingreso mensual estimado a 20 años</div>
         <div class="report-hero-value" id="rptIngresoMensual" style="color:#1E40AF">—</div>
       </div>
     </div>
   </div>
 
   <div class="report-comparison">
-    <div class="report-comparison-title" id="rptCompTitle">¿Dónde está tu dinero en 15 años?</div>
+    <div class="report-comparison-title" id="rptCompTitle">¿Cómo podría verse tu dinero en 15 años?</div>
     <div class="report-comparison-grid">
       <div class="report-comp-box mattress">
-        <div class="report-comp-label" style="color:#991B1B">💸 Colchón</div>
+        <div class="report-comp-label" style="color:#991B1B">💸 COLCHÓN</div>
         <div class="report-comp-value" style="color:#991B1B" id="rptCompMattress">—</div>
+        <div style="margin:6px auto;width:80%">
+          <div style="background:#DC2626;height:6px;border-radius:3px;width:20%"></div>
+        </div>
         <div class="report-comp-loss" style="color:#991B1B" id="rptCompMattressLoss">—</div>
       </div>
       <div class="report-comp-box bank">
-        <div class="report-comp-label" style="color:#9A3412">🏦 Banco</div>
+        <div class="report-comp-label" style="color:#9A3412">🏦 BANCO</div>
         <div class="report-comp-value" style="color:#9A3412" id="rptCompBank">—</div>
+        <div style="margin:6px auto;width:80%">
+          <div style="background:#EA580C;height:6px;border-radius:3px;width:24%"></div>
+        </div>
         <div class="report-comp-loss" style="color:#9A3412" id="rptCompBankLoss">—</div>
       </div>
       <div class="report-comp-box afore">
         <div class="report-comp-label" style="color:#92400E">🏛️ AFORE</div>
         <div class="report-comp-value" style="color:#92400E" id="rptCompAfore">—</div>
+        <div style="margin:6px auto;width:80%">
+          <div style="background:#F59E0B;height:6px;border-radius:3px;width:38%"></div>
+        </div>
         <div class="report-comp-loss" style="color:#92400E" id="rptCompAforeLoss">—</div>
       </div>
       <div class="report-comp-box plan">
-        <div class="report-comp-label" style="color:#065F46">✨ Tu plan</div>
+        <div class="report-comp-label" style="color:#065F46">✨ TU PLAN</div>
         <div class="report-comp-value" style="color:#065F46" id="rptCompPlan">—</div>
-        <div class="report-comp-loss" style="color:#065F46">✓ Protegido</div>
+        <div style="margin:6px auto;width:80%">
+          <div style="background:#10B981;height:6px;border-radius:3px;width:100%"></div>
+        </div>
+        <div class="report-comp-loss" style="color:#065F46">✓ Escenario personalizado</div>
       </div>
     </div>
     <div class="report-comp-message">
-      <strong>Mismo esfuerzo. Cuatro caminos. Resultados completamente diferentes.</strong><br>
-      La inflación destruye el ahorro pasivo. El AFORE es limitado. Tu plan personalizado protege y multiplica.
+      <strong>El mismo hábito puede dar resultados muy distintos según el camino elegido.</strong><br>
+      La inflación afecta el ahorro pasivo. Tu escenario personalizado muestra una ruta más estructurada.
     </div>
   </div>
 
   <div class="report-section">
-    <div class="report-section-title">1. Datos del cliente</div>
+    <div class="report-section-title">1. Datos del Cliente</div>
     <div class="report-grid">
       <div class="report-item">
         <div class="report-label">Nombre</div>
@@ -1609,7 +1561,7 @@
   </div>
 
   <div class="report-section">
-    <div class="report-section-title">2. El costo de posponer</div>
+    <div class="report-section-title">2. El Costo de Posponer</div>
     <table class="report-table">
       <thead>
         <tr>
@@ -1648,14 +1600,13 @@
 
   <div class="report-footer">
     <div class="report-contact">
-      <strong>Christian GarBa</strong> · Seguros con Estrategia · Allianz<br>
+      <strong>Christian GarBa</strong> · Seguros con Estrategia<br>
       Tel. 662 417 6032
     </div>
     <div class="report-disclaimer">
       <strong>Nota técnica:</strong> Proyección matemática basada en un supuesto de rendimiento nominal anual del
-      <span id="rptRendimientoNota">10</span>% compuesto y en los parámetros indicados. Los resultados son estimaciones
-      informativas y no constituyen garantía de rendimiento futuro. El escenario AFORE utiliza supuestos conservadores
-      alineados al comportamiento del simulador oficial de CONSAR.
+      <span id="rptRendimientoNota">10</span>% compuesto y en los parámetros indicados.
+      Los resultados son estimaciones informativas y no constituyen garantía de rendimiento futuro.
     </div>
   </div>
 </div>
@@ -1675,6 +1626,17 @@
 
   let myChart = null;
   let userEditedPMT = false;
+
+  const chartHost = document.createElement('div');
+  chartHost.className = 'chart-section';
+  chartHost.innerHTML = `
+    <div class="chart-header">
+      <div class="chart-title">Evolución estimada</div>
+      <div class="chart-badge">Escenario</div>
+    </div>
+    <canvas id="chartCanvas"></canvas>
+  `;
+  document.querySelector('.stats-container').insertBefore(chartHost, document.querySelector('.retirement-section'));
 
   $('regimenFiscal').addEventListener('change',function(){
     const is151 = this.value === '151';
@@ -1701,7 +1663,7 @@
   function linkWhatsApp(){
     const nombre = ($('nombreOpt').value||'').trim();
     const msg = [
-      'Hola Christian, me interesa revisar mi plan de retiro.',
+      'Hola Christian, me interesa revisar mi escenario de retiro.',
       nombre?('Soy '+nombre+'.'):'',
       '*Datos:*',
       `• Edad: ${$('edad').value} años`,
@@ -1768,7 +1730,7 @@
       $('pmt').classList.add('suggested');
     }
     $('suggestedBadge').style.display='inline-block';
-    $('pmtHint').innerHTML=`Referencia estimada: <strong>${money(pmt0)}</strong> para buscar la meta que elegiste.`;
+    $('pmtHint').innerHTML=`💡 Referencia sugerida: <strong>${money(pmt0)}</strong>`;
   }
 
   function calcAccum(){
@@ -1786,7 +1748,7 @@
 
     if([edad,years,pmt0,lump,rate,freq,infl].some(x=>isNaN(x))){
       const e=$('errorMsg');
-      e.textContent='Completa todos los campos correctamente.';
+      e.textContent='❌ Completa todos los campos correctamente.';
       e.classList.add('visible');
       return;
     }else{
@@ -1854,7 +1816,7 @@
     $('fondo65').textContent=money(fondo65);
     $('pvRet').value=String(fondo65);
 
-    $('compTitle').textContent=`¿Dónde estaría tu dinero en ${yrsAport} años?`;
+    $('compTitle').textContent=`¿Cómo podría verse tu dinero en ${yrsAport} años?`;
 
     reportState.edad=edad;
     reportState.planYears=yrsAport;
@@ -1891,18 +1853,17 @@
     }
 
     $('compMattress').textContent=money(colchonNominal);
-    $('compMattressLoss').textContent=`Vale ${money(colchonReal)}`;
+    $('compMattressLoss').textContent=`Valor estimado: ${money(colchonReal)}`;
 
     $('compBank').textContent=money(saldoBanco);
-    $('compBankLoss').textContent=`Vale ${money(bancoReal)}`;
+    $('compBankLoss').textContent=`Valor estimado: ${money(bancoReal)}`;
 
     $('compAfore').textContent=money(saldoAfore);
-    $('compAforeLoss').textContent=`Pensión limitada`;
+    $('compAforeLoss').textContent=`Escenario limitado`;
 
     $('compPlan').textContent=money(fondoPlan);
 
-    const diffTotal=fondoPlan-colchonNominal;
-    $('compMessage').textContent=`Mismo esfuerzo. Cuatro caminos. Diferencia de ${money(diffTotal)} entre el peor y mejor escenario.`;
+    $('compMessage').textContent=`El mismo hábito puede dar resultados muy distintos según el camino elegido.`;
 
     actualizarGrafica(chartLabels,chartData);
     actualizarReporteBase();
@@ -1919,16 +1880,17 @@
       data:{
         labels:labels,
         datasets:[{
-          label:'Fondo acumulado (MXN)',
+          label:'Fondo Acumulado (MXN)',
           data:data,
-          borderColor:'#F6C046',
-          backgroundColor:'rgba(246,192,70,0.08)',
+          borderColor:'#1A4BFF',
+          backgroundColor:'rgba(26,75,255,0.08)',
           borderWidth:3,
           fill:true,
-          tension:0.35,
+          tension:0.4,
           pointRadius:0,
-          pointHoverRadius:5,
-          pointBackgroundColor:'#F6C046'
+          pointHoverRadius:6,
+          pointBackgroundColor:'#0A1D66',
+          pointHoverBackgroundColor:'#F59E0B'
         }]
       },
       options:{
@@ -1937,7 +1899,7 @@
         plugins:{
           legend:{display:false},
           tooltip:{
-            backgroundColor:'rgba(7,19,56,0.96)',
+            backgroundColor:'rgba(10,29,102,0.95)',
             padding:12,
             titleFont:{size:13,weight:'bold'},
             bodyFont:{size:12},
@@ -1952,19 +1914,21 @@
           y:{
             beginAtZero:true,
             ticks:{
-              color:'rgba(255,255,255,.72)',
               callback:function(value){
                 return '$'+(value/1000000).toFixed(1)+'M';
-              }
+              },
+              font:{size:11},
+              color:'#64748B'
             },
-            grid:{color:'rgba(255,255,255,.08)'}
+            grid:{color:'rgba(0,0,0,0.05)'}
           },
           x:{
             ticks:{
-              color:'rgba(255,255,255,.62)',
+              font:{size:10},
+              color:'#64748B',
               maxRotation:0,
               autoSkip:true,
-              maxTicksLimit:10
+              maxTicksLimit:12
             },
             grid:{display:false}
           }
@@ -1978,7 +1942,7 @@
     const yrs=parseInt($('yrsRetSel').value,10);
     const rateRet=7/100;
     const infl=4/100;
-    if(PV<=0){alert('Primero calcula tu ahorro.');return;}
+    if(PV<=0){alert('⚠️ Primero calcula tu ahorro.');return;}
 
     const iNom=rateRet/12;
     const n=yrs*12;
@@ -2040,10 +2004,10 @@
     const rRet=reportState.rRet!=null?reportState.rRet:7;
 
     $('rptSupuestos1').textContent=
-      `Supuestos: inflación ${infl.toFixed(1)}% anual, rendimiento en acumulación ${rAcc.toFixed(1)}% nominal, retiro de ${yrsRet} años con ${rRet.toFixed(1)}% nominal.`;
+      `Supuestos: Inflación ${infl.toFixed(1)}% anual, rendimiento en acumulación ${rAcc.toFixed(1)}% nominal, retiro de ${yrsRet} años con ${rRet.toFixed(1)}% nominal.`;
 
     if(reportState.regimenFiscal==='151'&&reportState.isrPct>0&&reportState.benefFiscal>0){
-      $('rptSupuestosFiscal').textContent=`Tratamiento fiscal: Art. 151 (deducible), devolución ISR aproximada de ${reportState.isrPct.toFixed(0)}% reinvertida en el plan.`;
+      $('rptSupuestosFiscal').textContent=`Tratamiento fiscal: Art. 151 (deducible), devolución ISR ~${reportState.isrPct.toFixed(0)}% reinvertida en el plan.`;
     }else if(reportState.regimenFiscal==='93'){
       $('rptSupuestosFiscal').textContent=`Tratamiento fiscal: Art. 93 (diferido). No se modela devolución anual.`;
     }else{
@@ -2054,21 +2018,21 @@
     $('rptFondoPlan').textContent=reportState.fondoPlan?money(reportState.fondoPlan):'—';
     $('rptFondo65').textContent=reportState.fondo65?money(reportState.fondo65):'—';
     $('rptIngresoMensual').textContent=reportState.ingresoMensual?money(reportState.ingresoMensual):'—';
-    $('rptRendimientoNota').textContent=rAcc.toFixed(0);
+    $('rptRendimientoNota').textContent = rAcc.toFixed(1);
 
     const edadFinPlanCalc = reportState.edadFinPlan || 0;
     const planCruza65 = edadFinPlanCalc >= 65;
 
     if(planCruza65){
       $('rptEdadFinPlan').textContent = '65';
-      $('rptLabelFinPlan').textContent = 'Retiro (65)';
+      $('rptLabelFinPlan').textContent = 'RETIRO (65)';
       $('rptFondoFinPlan').textContent = reportState.fondo65 ? money(reportState.fondo65) : '—';
       $('timelineArrow2').style.display = 'none';
       $('timelineRetPoint').style.display = 'none';
       $('rptYearsGrowth').parentElement.style.display = 'none';
     } else {
       $('rptEdadFinPlan').textContent = edadFinPlanCalc || '—';
-      $('rptLabelFinPlan').textContent = 'Fin aportaciones';
+      $('rptLabelFinPlan').textContent = 'FIN APORTACIONES';
       $('rptFondoFinPlan').textContent = reportState.fondoPlan ? money(reportState.fondoPlan) : '—';
       $('timelineArrow2').style.display = '';
       $('timelineRetPoint').style.display = '';
@@ -2077,7 +2041,7 @@
       $('rptYearsGrowth').textContent = reportState.yearsGrowth ? `${reportState.yearsGrowth} años` : '0 años';
     }
 
-    $('rptCompTitle').textContent=`¿Dónde está tu dinero en ${years} años?`;
+    $('rptCompTitle').textContent=`¿Cómo podría verse tu dinero en ${years} años?`;
 
     if(reportState.totalAportado>0 && years>0){
       const totalMeses=years*12;
@@ -2103,17 +2067,21 @@
       }
 
       $('rptCompMattress').textContent=money(colchonNominal);
-      $('rptCompMattressLoss').textContent=`Vale ${money(colchonReal)}`;
+      $('rptCompMattressLoss').textContent=`Valor estimado ${money(colchonReal)}`;
+
       $('rptCompBank').textContent=money(saldoBanco);
-      $('rptCompBankLoss').textContent=`Vale ${money(bancoReal)}`;
+      $('rptCompBankLoss').textContent=`Valor estimado ${money(bancoReal)}`;
+
       $('rptCompAfore').textContent=money(saldoAfore);
-      $('rptCompAforeLoss').textContent=`Pensión limitada`;
+      $('rptCompAforeLoss').textContent=`Escenario limitado`;
+
       $('rptCompPlan').textContent=money(reportState.fondoPlan);
     }
 
     const esc=reportState.delayScenarios;
     if(esc && reportState.fondo65>0){
       const base=pmtReal;
+
       const inflDec=(reportState.infl!=null?reportState.infl:infl)/100;
       const rAccDec=(reportState.rAcc!=null?reportState.rAcc:parseFloat($('rate').value))/100;
       const freqVal=parseFloat($('frequency').value);
@@ -2167,7 +2135,7 @@
 
       const nombreShow=nombre||'Tu decisión';
       $('rptMensajePosponer').textContent=
-        `${nombreShow} de hoy define tu esfuerzo mañana. Para alcanzar el mismo fondo a los 65 años (${money(targetFondo65)}), posponer 1, 3 o 5 años obliga a aumentar significativamente la aportación mensual. Empezar antes siempre es más económico.`;
+        `${nombreShow} de hoy define tu esfuerzo mañana. Para buscar el mismo fondo a los 65 años (${money(targetFondo65)}), esperar 1, 3 o 5 años puede exigir una aportación mensual mayor.`;
     }
   }
 
