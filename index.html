@@ -5,651 +5,738 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Calculadora de Ahorro & Retiro — Christian GarBa</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700;800&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700;800;900&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <style>
   :root{
-    --navy:#061433;
-    --navy-2:#081c52;
-    --navy-3:#0b2468;
+    --navy:#071338;
+    --navy-2:#091a4a;
+    --navy-3:#0b1f5c;
     --electric:#1A4BFF;
-    --gold:#F6BE43;
-    --gold-soft:#ffd36d;
-    --cream:#FFFBF5;
-    --slate:#cbd5e1;
-    --text:#f8fafc;
-    --muted:#98a2b3;
-    --success:#10B981;
-    --red:#EF4444;
-    --orange:#F97316;
+    --gold:#F6C046;
+    --gold-2:#f0b52f;
+    --cream:#F7F8FC;
+    --text:#EAF0FF;
+    --muted:rgba(234,240,255,.68);
     --line:rgba(255,255,255,.12);
     --panel:rgba(255,255,255,.04);
+    --panel-2:rgba(255,255,255,.06);
+    --success:#22c55e;
+    --red:#EF4444;
+    --orange:#F97316;
   }
 
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;overflow:hidden}
+  html,body{height:100%}
   body{
     font-family:'DM Sans',sans-serif;
-    background:#020817;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(34,82,255,.16), transparent 28%),
+      radial-gradient(circle at 80% 20%, rgba(246,192,70,.10), transparent 24%),
+      linear-gradient(180deg,#06112f 0%, #07173d 100%);
     color:var(--text);
     font-size:14px;
+    overflow:hidden;
   }
 
   .app-container{
     display:grid;
-    grid-template-columns:380px 1fr;
+    grid-template-columns:390px 1fr;
     height:100vh;
-    position:relative;
-    background:
-      radial-gradient(circle at 20% 20%, rgba(26,75,255,.16), transparent 30%),
-      radial-gradient(circle at 80% 10%, rgba(246,190,67,.08), transparent 24%),
-      linear-gradient(180deg, #03102c 0%, #06183f 100%);
   }
 
   .control-panel{
     background:
-      radial-gradient(circle at 20% 10%, rgba(26,75,255,.18), transparent 25%),
-      linear-gradient(180deg, #04122e 0%, #05184a 100%);
+      radial-gradient(circle at 20% 10%, rgba(255,255,255,.06), transparent 22%),
+      linear-gradient(180deg, #05122f 0%, #071744 100%);
     color:var(--cream);
-    padding:18px 18px 30px;
+    padding:18px 18px 28px;
     overflow-y:auto;
-    box-shadow:8px 0 24px rgba(0,0,0,.28);
+    border-right:1px solid rgba(255,255,255,.08);
+    box-shadow:8px 0 24px rgba(0,0,0,.22);
     position:relative;
     z-index:10;
-    border-right:1px solid rgba(255,255,255,.08);
   }
 
   .camera-box{
+    width:100%;
     height:300px;
-    border-radius:28px;
-    border:2px dashed rgba(255,255,255,.18);
+    border-radius:26px;
+    border:2px dashed rgba(255,255,255,.20);
     background:
-      radial-gradient(circle at 25% 20%, rgba(246,190,67,.09), transparent 25%),
-      radial-gradient(circle at 55% 55%, rgba(26,75,255,.20), transparent 35%),
-      linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      radial-gradient(circle at 20% 15%, rgba(255,255,255,.09), transparent 18%),
+      radial-gradient(circle at 50% 50%, rgba(26,75,255,.18), transparent 30%),
+      linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
     display:flex;
     align-items:center;
     justify-content:center;
     text-align:center;
-    color:rgba(255,255,255,.40);
+    color:rgba(255,255,255,.42);
     font-weight:800;
     letter-spacing:.04em;
     text-transform:uppercase;
-    margin-bottom:18px;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);
+    margin-bottom:22px;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);
   }
 
   .step-indicator{
     display:inline-flex;
-    width:34px;
-    height:34px;
+    width:36px;
+    height:36px;
     background:var(--gold);
-    color:#0b1738;
-    border-radius:50%;
+    color:#091b4d;
+    border-radius:999px;
     align-items:center;
     justify-content:center;
     font-weight:900;
-    font-size:16px;
+    font-size:18px;
     margin-right:10px;
-    flex:0 0 auto;
+    box-shadow:0 10px 24px rgba(246,192,70,.25);
   }
 
-  .section-block{margin-bottom:26px}
+  .section-block{margin-bottom:28px;}
   .section-header{
     font-size:18px;
-    font-weight:800;
+    font-weight:900;
     margin-bottom:16px;
     color:var(--gold);
+    letter-spacing:-.01em;
     display:flex;
     align-items:center;
-    letter-spacing:-.02em;
   }
 
-  .form-group{margin-bottom:14px}
+  .form-group{margin-bottom:14px;}
   .form-label{
     display:block;
-    font-size:11px;
+    font-size:12px;
     font-weight:800;
     text-transform:uppercase;
-    letter-spacing:.08em;
+    letter-spacing:.06em;
     margin-bottom:7px;
     opacity:.9;
+    color:rgba(255,255,255,.88);
   }
-
   .form-input{
     width:100%;
     padding:14px 16px;
     background:rgba(255,255,255,.08);
     border:1px solid rgba(255,255,255,.14);
     border-radius:16px;
-    color:var(--cream);
+    color:#fff;
     font-size:16px;
-    font-weight:600;
+    font-weight:700;
     transition:all .2s;
     font-family:'DM Sans',sans-serif;
+    min-height:56px;
   }
   .form-input.suggested{
-    background:rgba(246,190,67,.12);
-    border-color:rgba(246,190,67,.38);
+    background:rgba(246,192,70,.10);
+    border-color:rgba(246,192,70,.42);
   }
   .form-input:focus{
     outline:none;
-    background:rgba(255,255,255,.12);
-    border-color:rgba(246,190,67,.7);
-    box-shadow:0 0 0 3px rgba(246,190,67,.12);
+    background:rgba(255,255,255,.11);
+    border-color:rgba(246,192,70,.85);
+    box-shadow:0 0 0 4px rgba(246,192,70,.12);
   }
-  .form-input::placeholder{color:rgba(255,255,255,.35)}
-  .form-input:disabled{opacity:.55;cursor:not-allowed}
-  .form-hint{font-size:12px;color:rgba(255,255,255,.60);margin-top:6px;line-height:1.4}
+  .form-input::placeholder{color:rgba(255,255,255,.34);}
+  .form-input:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+  }
+  .form-hint{
+    font-size:12px;
+    opacity:.72;
+    margin-top:6px;
+    line-height:1.4;
+    color:rgba(255,255,255,.72);
+  }
 
   .suggestion-badge{
     display:inline-block;
     background:var(--gold);
-    color:#0b1738;
-    padding:4px 10px;
+    color:#091b4d;
+    padding:5px 12px;
     border-radius:999px;
     font-size:11px;
     font-weight:900;
-    margin-right:8px;
+    margin-bottom:8px;
+    letter-spacing:.06em;
   }
 
   .btn-primary{
     width:100%;
-    padding:15px;
+    padding:15px 18px;
     background:var(--gold);
-    color:#0b1738;
+    color:#091b4d;
     border:none;
     border-radius:16px;
-    font-weight:800;
+    font-weight:900;
     font-size:13px;
     text-transform:uppercase;
     letter-spacing:.08em;
     cursor:pointer;
     transition:all .25s;
-    box-shadow:0 8px 24px rgba(246,190,67,.18);
+    box-shadow:0 12px 28px rgba(246,192,70,.22);
     font-family:'DM Sans',sans-serif;
   }
-  .btn-primary:hover{transform:translateY(-1px);background:#ffca57}
+  .btn-primary:hover{
+    transform:translateY(-1px);
+    box-shadow:0 16px 32px rgba(246,192,70,.28);
+    background:#ffd05c;
+  }
   .btn-secondary{
     background:transparent;
-    border:1px solid rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.20);
     color:var(--cream);
     box-shadow:none;
-    margin-top:8px;
+    margin-top:10px;
   }
-  .btn-secondary:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.32)}
+  .btn-secondary:hover{
+    background:rgba(255,255,255,.06);
+    border-color:rgba(255,255,255,.34);
+  }
 
   .collapsible-section{
-    border:1px solid rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.12);
     border-radius:18px;
     margin-top:16px;
     overflow:hidden;
     background:rgba(255,255,255,.03);
   }
   .collapsible-header{
-    padding:13px 16px;
-    background:rgba(255,255,255,.04);
+    padding:14px 16px;
+    background:rgba(255,255,255,.05);
     cursor:pointer;
     display:flex;
     justify-content:space-between;
     align-items:center;
     user-select:none;
   }
-  .collapsible-header:hover{background:rgba(255,255,255,.06)}
+  .collapsible-header:hover{background:rgba(255,255,255,.07);}
   .collapsible-title{
     font-size:13px;
     font-weight:800;
     text-transform:uppercase;
     letter-spacing:.06em;
   }
-  .collapsible-icon{transition:transform .2s}
-  .collapsible-header.open .collapsible-icon{transform:rotate(180deg)}
-  .collapsible-content{display:none;padding:14px}
-  .collapsible-content.visible{display:block}
+  .collapsible-icon{transition:transform .2s;}
+  .collapsible-header.open .collapsible-icon{transform:rotate(180deg);}
+  .collapsible-content{
+    display:none;
+    padding:14px;
+  }
+  .collapsible-content.visible{display:block;}
 
   .error-alert{
     display:none;
     background:rgba(239,68,68,.14);
     border:1px solid rgba(239,68,68,.35);
     color:#fecaca;
-    padding:12px 14px;
+    padding:10px 12px;
     border-radius:14px;
     font-size:12px;
     margin-bottom:12px;
     font-weight:600;
   }
-  .error-alert.visible{display:block}
+  .error-alert.visible{display:block;}
 
   .results-panel{
     overflow-y:auto;
-    position:relative;
     background:
-      radial-gradient(circle at 65% 0%, rgba(26,75,255,.14), transparent 28%),
-      linear-gradient(180deg, #041331 0%, #071c49 100%);
+      radial-gradient(circle at 30% 0%, rgba(26,75,255,.10), transparent 20%),
+      linear-gradient(180deg, #06132f 0%, #071741 100%);
   }
 
   .top-grid{
     display:grid;
-    grid-template-columns:420px 1fr;
-    gap:16px;
+    grid-template-columns:320px 1fr;
+    gap:14px;
     padding:14px 16px 0;
+    align-items:start;
   }
 
-  .brand-card,
-  .hero-copy-card,
-  .summary-card,
-  .summary-side-card,
-  .detail-wrapper{
-    background:
-      linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02)),
-      rgba(4,16,45,.82);
+  .glass-card{
     border:1px solid rgba(255,255,255,.08);
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
     border-radius:28px;
     box-shadow:
-      0 20px 50px rgba(0,0,0,.18),
-      inset 0 0 0 1px rgba(255,255,255,.02);
+      inset 0 0 0 1px rgba(255,255,255,.02),
+      0 18px 40px rgba(0,0,0,.20);
   }
 
   .brand-card{
-    padding:18px;
-    min-height:280px;
+    padding:16px 16px 18px;
+    min-height:220px;
     display:flex;
     flex-direction:column;
-    justify-content:flex-start;
-    gap:16px;
+    justify-content:space-between;
+    gap:12px;
   }
 
-  .auth-badge{
+  .tag-chip{
     display:inline-flex;
     align-items:center;
-    align-self:flex-start;
+    width:max-content;
     background:var(--gold);
-    color:#0b1738;
+    color:#091b4d;
     border-radius:999px;
     padding:10px 16px;
     font-size:12px;
     font-weight:900;
     letter-spacing:.08em;
     text-transform:uppercase;
+    box-shadow:0 10px 24px rgba(246,192,70,.18);
   }
 
-  .brand-visual{
-    padding:4px 6px 0;
-  }
-
-  .brand-kicker{
-    font-size:13px;
-    font-weight:800;
-    color:rgba(255,255,255,.72);
-    margin-bottom:10px;
-    letter-spacing:.01em;
-  }
-
-  .brand-logo-wrap{
+  .brand-copy-top{
     display:flex;
-    align-items:center;
-    gap:14px;
-    margin-bottom:10px;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .brand-strap{
+    font-size:12px;
+    color:rgba(255,255,255,.70);
+    font-weight:800;
+    letter-spacing:.03em;
   }
 
   .brand-logo{
     display:block;
-    width:260px;
+    width:210px;
     max-width:100%;
     height:auto;
     object-fit:contain;
-    filter:drop-shadow(0 8px 24px rgba(255,255,255,.10));
-    opacity:1;
+    filter:drop-shadow(0 6px 18px rgba(255,255,255,.08));
   }
 
   .brand-subline{
-    font-size:14px;
-    line-height:1.45;
-    color:rgba(255,255,255,.66);
-    max-width:290px;
-    margin-top:4px;
+    font-size:13px;
+    line-height:1.4;
+    color:rgba(255,255,255,.60);
+    max-width:260px;
+    margin-top:2px;
   }
 
   .wa-card{
-    margin-top:auto;
-    background:
-      linear-gradient(135deg, rgba(18,140,126,.36), rgba(14,86,120,.28));
-    border:1px solid rgba(16,185,129,.40);
+    margin-top:10px;
+    background:linear-gradient(135deg, rgba(18,140,126,.34), rgba(14,86,120,.26));
+    border:1px solid rgba(16,185,129,.34);
     border-radius:22px;
-    padding:18px 18px 20px;
+    padding:16px 16px 18px;
     box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);
   }
-  .wa-card-title{
-    font-size:16px;
-    font-weight:800;
-    color:#d8fff0;
-    margin-bottom:8px;
-  }
-  .wa-card-phone{
-    font-size:28px;
+  .wa-label{
+    font-size:12px;
+    color:#d1fae5;
     font-weight:900;
-    letter-spacing:-.03em;
-    color:#ffffff;
+    margin-bottom:6px;
+  }
+  .wa-number{
+    font-size:28px;
+    line-height:1;
+    font-weight:900;
+    color:#fff;
     margin-bottom:8px;
   }
-  .wa-card-copy{
+  .wa-desc{
     font-size:13px;
-    line-height:1.45;
-    color:rgba(255,255,255,.75);
+    line-height:1.35;
+    color:rgba(255,255,255,.74);
   }
 
   .hero-copy-card{
-    padding:20px 28px 26px;
+    padding:18px 24px 20px;
     position:relative;
-    min-height:280px;
+    min-height:220px;
     overflow:hidden;
   }
   .hero-copy-card::before{
     content:'';
     position:absolute;
-    inset:auto auto -80px -40px;
-    width:220px;height:220px;
-    background:radial-gradient(circle, rgba(246,190,67,.12), transparent 70%);
+    inset:0;
+    background:
+      radial-gradient(circle at 70% 15%, rgba(26,75,255,.16), transparent 24%),
+      radial-gradient(circle at 18% 60%, rgba(246,192,70,.07), transparent 18%);
     pointer-events:none;
   }
+
   .hero-actions{
     position:absolute;
-    top:18px;
-    right:18px;
+    top:14px;
+    right:14px;
     display:flex;
-    gap:12px;
+    gap:10px;
     z-index:3;
   }
+
   .btn-action{
-    padding:14px 20px;
+    padding:12px 16px;
     background:rgba(255,255,255,.05);
     backdrop-filter:blur(10px);
     border:1px solid rgba(255,255,255,.12);
     color:#fff;
     border-radius:16px;
     font-weight:900;
-    font-size:14px;
+    font-size:13px;
     cursor:pointer;
     transition:.2s;
     text-transform:uppercase;
     letter-spacing:.05em;
   }
-  .btn-action:hover{background:rgba(255,255,255,.09)}
+  .btn-action:hover{
+    background:rgba(255,255,255,.08);
+    transform:translateY(-1px);
+  }
   .btn-action.accent{
     background:var(--gold);
-    color:#0b1738;
+    color:#091b4d;
     border-color:var(--gold);
   }
+  .btn-action.accent:hover{background:#ffd05c;}
 
   .hero-kicker{
-    font-size:15px;
+    position:relative;
+    z-index:2;
+    font-size:14px;
     text-transform:uppercase;
     letter-spacing:.12em;
-    color:rgba(255,255,255,.62);
-    font-weight:800;
-    margin-top:6px;
-    margin-bottom:12px;
+    color:rgba(255,255,255,.58);
+    font-weight:900;
+    margin-top:2px;
+    margin-bottom:10px;
   }
 
   .hero-title{
-    max-width:920px;
-    font-size:78px;
-    line-height:.98;
-    letter-spacing:-.055em;
+    position:relative;
+    z-index:2;
+    max-width:760px;
+    font-size:62px;
+    line-height:1.00;
+    letter-spacing:-.05em;
     font-weight:900;
     color:#f8fafc;
-    margin-bottom:20px;
+    margin-bottom:14px;
   }
 
   .hero-subtitle{
-    max-width:900px;
-    font-size:28px;
-    line-height:1.33;
-    color:rgba(255,255,255,.72);
-    margin-bottom:24px;
+    position:relative;
+    z-index:2;
+    max-width:760px;
+    font-size:22px;
+    line-height:1.34;
+    color:rgba(255,255,255,.70);
+    margin-bottom:18px;
   }
 
   .hero-pills{
+    position:relative;
+    z-index:2;
     display:flex;
     flex-wrap:wrap;
-    gap:14px;
+    gap:10px;
   }
 
   .hero-pill{
-    padding:15px 20px;
+    padding:12px 16px;
     border-radius:999px;
     border:1px solid rgba(255,255,255,.14);
     background:rgba(255,255,255,.04);
     color:#fff;
-    font-size:14px;
+    font-size:13px;
     font-weight:800;
   }
 
-  .summary-grid{
+  .hero-grid{
     display:grid;
-    grid-template-columns:1.7fr 1fr;
+    grid-template-columns:1.45fr .90fr;
     gap:16px;
     padding:16px;
   }
 
-  .summary-card{padding:22px 26px 22px}
-  .summary-side-card{
-    padding:22px 24px;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
+  .hero-main-card,
+  .hero-side-card{
+    border-radius:28px;
+    border:1px solid rgba(255,255,255,.08);
+    background:
+      radial-gradient(circle at 25% 10%, rgba(26,75,255,.12), transparent 22%),
+      linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,.02),
+      0 18px 40px rgba(0,0,0,.18);
   }
 
-  .summary-label{
-    font-size:14px;
+  .hero-main-card{padding:22px 22px 18px;}
+  .hero-side-card{padding:22px 22px 18px;}
+
+  .hero-label{
+    font-size:13px;
     text-transform:uppercase;
-    letter-spacing:.12em;
-    color:rgba(255,255,255,.48);
-    font-weight:800;
+    letter-spacing:.13em;
+    color:rgba(255,255,255,.56);
     margin-bottom:8px;
+    font-weight:900;
   }
 
   .hero-value{
-    font-size:86px;
+    font-weight:900;
     line-height:.95;
-    font-weight:900;
-    letter-spacing:-.06em;
+    letter-spacing:-.045em;
     color:#fff;
+    text-wrap:balance;
+    font-variant-numeric:tabular-nums lining-nums;
   }
-  .hero-value.highlight{color:var(--gold)}
-  .hero-caption{
-    margin-top:10px;
-    font-size:18px;
-    color:rgba(255,255,255,.74);
-    font-weight:700;
+  .hero-value.highlight{
+    color:var(--gold);
+    font-size:86px;
   }
-
-  .summary-divider{
-    height:1px;
-    background:rgba(255,255,255,.10);
-    margin:20px 0 18px;
-  }
-
-  .mini-stats{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:18px;
-  }
-
-  .mini-stat .mini-label{
-    font-size:13px;
-    text-transform:uppercase;
-    letter-spacing:.12em;
-    color:rgba(255,255,255,.46);
-    font-weight:800;
-    margin-bottom:8px;
-  }
-
-  .mini-stat .mini-value{
-    font-size:50px;
-    line-height:1;
-    font-weight:900;
-    letter-spacing:-.05em;
-    color:#fff;
-  }
-
-  .summary-side-card .hero-value{
+  .hero-value.normal{
     font-size:72px;
   }
 
-  .inline-wa{
-    align-self:flex-end;
-    margin-top:14px;
-    border:none;
-    background:linear-gradient(135deg,#22c55e,#16a34a);
-    color:#fff;
-    padding:16px 24px;
-    border-radius:999px;
+  .hero-caption{
     font-size:16px;
-    font-weight:900;
-    cursor:pointer;
-    box-shadow:0 18px 30px rgba(34,197,94,.18);
+    color:rgba(255,255,255,.74);
+    margin-top:10px;
+    font-weight:700;
   }
 
-  .stats-container{padding:0 16px 24px}
+  .hero-stat-row{
+    margin-top:18px;
+    padding-top:18px;
+    border-top:1px solid rgba(255,255,255,.08);
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+  }
+  .mini-stat{
+    min-width:0;
+  }
+  .mini-stat .mini-label{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.10em;
+    color:rgba(255,255,255,.50);
+    margin-bottom:8px;
+    font-weight:900;
+  }
+  .mini-stat .mini-value{
+    font-size:28px;
+    line-height:1;
+    letter-spacing:-.04em;
+    font-weight:900;
+    color:#fff;
+    font-variant-numeric:tabular-nums lining-nums;
+  }
+
+  .stats-container{padding:0 16px 28px;}
+
+  .comparison-wrap{
+    margin-top:6px;
+    padding:16px;
+    border-radius:28px;
+    border:1px solid rgba(255,255,255,.08);
+    background:linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.018));
+  }
+
+  .stats-title{
+    font-size:28px;
+    font-weight:900;
+    color:#fff;
+    margin-bottom:18px;
+    letter-spacing:-.02em;
+  }
 
   .comparison-strip{
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:12px;
-    margin-bottom:24px;
+    margin-bottom:14px;
   }
-
-  .comparison-title{
-    font-family:'Playfair Display',serif;
-    font-size:34px;
-    font-weight:700;
-    color:#fff;
-    margin:8px 0 18px;
-    text-align:left;
-    letter-spacing:-.02em;
-  }
-
   .comp-box{
-    padding:20px 16px;
-    border-radius:24px;
+    padding:18px 14px;
+    border-radius:22px;
     font-size:12px;
     font-weight:700;
+    text-align:center;
     transition:.2s;
     border:1px solid rgba(255,255,255,.08);
     background:rgba(255,255,255,.03);
   }
+  .comp-box:hover{transform:translateY(-2px);}
   .comp-box.mattress{
-    background:linear-gradient(180deg, rgba(239,68,68,.10), rgba(239,68,68,.05));
+    background:linear-gradient(135deg, rgba(127,29,29,.14), rgba(239,68,68,.08));
     color:#fecaca;
+    border-color:rgba(239,68,68,.20);
   }
   .comp-box.bank{
-    background:linear-gradient(180deg, rgba(249,115,22,.10), rgba(249,115,22,.05));
+    background:linear-gradient(135deg, rgba(154,52,18,.14), rgba(249,115,22,.08));
     color:#fed7aa;
+    border-color:rgba(249,115,22,.20);
   }
   .comp-box.afore{
-    background:linear-gradient(180deg, rgba(245,158,11,.10), rgba(245,158,11,.05));
+    background:linear-gradient(135deg, rgba(146,64,14,.16), rgba(245,158,11,.08));
     color:#fde68a;
+    border-color:rgba(245,158,11,.20);
   }
   .comp-box.plan{
-    background:linear-gradient(180deg, rgba(16,185,129,.14), rgba(16,185,129,.06));
+    background:linear-gradient(135deg, rgba(6,95,70,.20), rgba(34,197,94,.10));
     color:#d1fae5;
+    border-color:rgba(34,197,94,.24);
+    box-shadow:0 10px 24px rgba(34,197,94,.10);
   }
-
   .comp-label{
-    font-size:12px;
+    font-size:11px;
     text-transform:uppercase;
-    letter-spacing:.10em;
+    letter-spacing:.08em;
     font-weight:900;
     margin-bottom:8px;
   }
   .comp-value{
-    font-size:42px;
-    line-height:.98;
+    font-size:28px;
+    line-height:1;
     font-weight:900;
-    letter-spacing:-.04em;
     margin:8px 0 10px;
+    letter-spacing:-.04em;
+    font-variant-numeric:tabular-nums lining-nums;
   }
   .comp-loss{
-    font-size:13px;
-    font-weight:700;
-    margin-top:8px;
-    color:rgba(255,255,255,.72);
+    font-size:12px;
+    font-weight:800;
+    margin-top:6px;
+    opacity:.92;
   }
 
-  .message-bar{
+  .bar-track{
+    width:82%;
+    margin:10px auto 0;
+    height:8px;
+    background:rgba(255,255,255,.08);
+    border-radius:999px;
+    overflow:hidden;
+  }
+  .bar-fill{height:100%;border-radius:999px;}
+
+  .comparison-message{
     text-align:center;
-    font-size:15px;
-    font-weight:800;
+    font-size:14px;
+    font-weight:900;
     color:#fff;
     margin-top:14px;
-    background:rgba(246,190,67,.10);
-    padding:16px 18px;
-    border-radius:20px;
-    border:1px solid rgba(246,190,67,.28);
+    background:rgba(246,192,70,.12);
+    padding:14px 16px;
+    border-radius:18px;
+    border:1px solid rgba(246,192,70,.20);
   }
+
+  .chart-section,
+  .detail-wrapper{
+    background:rgba(255,255,255,.03);
+    padding:22px 24px;
+    border-radius:24px;
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 14px 30px rgba(0,0,0,.16);
+    margin-top:18px;
+  }
+
+  .chart-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+  }
+  .chart-title{
+    font-size:22px;
+    font-weight:900;
+    color:#fff;
+  }
+  .chart-badge{
+    background:rgba(26,75,255,.18);
+    color:#dbeafe;
+    padding:8px 12px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    border:1px solid rgba(26,75,255,.24);
+  }
+
+  #chartCanvas{max-height:300px;}
 
   .retirement-section{
     display:none;
-    background:linear-gradient(135deg, rgba(16,185,129,.13), rgba(16,185,129,.05));
-    padding:26px 28px;
+    background:linear-gradient(135deg, rgba(6,95,70,.25), rgba(34,197,94,.10));
+    padding:24px 24px;
     border-radius:24px;
-    border:1px solid rgba(16,185,129,.30);
-    margin-bottom:24px;
+    border:1px solid rgba(34,197,94,.22);
+    margin-top:18px;
   }
-  .retirement-section.visible{display:block}
+  .retirement-section.visible{
+    display:block;
+    animation:fadeIn .35s ease-out;
+  }
+  @keyframes fadeIn{
+    from{opacity:0;transform:translateY(10px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+
   .retirement-title{
-    font-size:28px;
+    font-size:22px;
     font-weight:900;
     color:#d1fae5;
-    margin-bottom:18px;
+    margin-bottom:16px;
   }
   .retirement-grid{
     display:grid;
     grid-template-columns:repeat(2,1fr);
-    gap:16px;
+    gap:14px;
   }
   .retirement-item{
-    background:rgba(255,255,255,.05);
-    padding:18px;
+    background:rgba(255,255,255,.06);
+    padding:16px;
     border-radius:18px;
-    border:1px solid rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.08);
   }
   .retirement-label{
-    font-size:12px;
+    font-size:11px;
     text-transform:uppercase;
-    letter-spacing:.10em;
-    color:rgba(255,255,255,.62);
-    font-weight:800;
-    margin-bottom:8px;
+    letter-spacing:.08em;
+    color:#bbf7d0;
+    font-weight:900;
+    margin-bottom:6px;
   }
   .retirement-value{
-    font-size:34px;
-    line-height:1;
+    font-size:28px;
     font-weight:900;
-    letter-spacing:-.04em;
     color:#fff;
+    letter-spacing:-.04em;
+    font-variant-numeric:tabular-nums lining-nums;
   }
 
-  .detail-wrapper{
-    padding:22px 24px;
-    margin-bottom:20px;
-  }
   .detail-toggle{
     display:flex;
     justify-content:space-between;
     align-items:center;
     cursor:pointer;
-    font-weight:800;
+    font-weight:900;
     color:#fff;
-    font-size:16px;
+    font-size:15px;
     user-select:none;
   }
-  .detail-toggle .icon{transition:transform .2s}
-  .detail-toggle.open .icon{transform:rotate(180deg)}
-  .detail-content{display:none;margin-top:16px;max-height:260px;overflow-y:auto}
-  .detail-content.visible{display:block}
+  .detail-toggle:hover{color:#fff;}
+  .detail-toggle .icon{transition:transform .2s;}
+  .detail-toggle.open .icon{transform:rotate(180deg);}
+  .detail-content{
+    display:none;
+    margin-top:16px;
+    max-height:260px;
+    overflow-y:auto;
+  }
+  .detail-content.visible{display:block;}
 
   table{
     width:100%;
@@ -660,29 +747,31 @@
     background:rgba(255,255,255,.06);
     color:#fff;
     text-align:left;
-    padding:12px 14px;
-    font-weight:800;
+    padding:12px;
+    font-weight:900;
     text-transform:uppercase;
     letter-spacing:.05em;
     font-size:11px;
   }
   td{
-    padding:12px 14px;
+    padding:12px;
     border-bottom:1px solid rgba(255,255,255,.08);
-    color:rgba(255,255,255,.80);
+    color:rgba(255,255,255,.88);
   }
+  tr:hover{background:rgba(255,255,255,.03);}
+  tr:last-child td{border-bottom:none;}
 
   .whatsapp-float{
     position:fixed;
-    right:28px;
-    bottom:28px;
+    right:22px;
+    bottom:22px;
     background:#25D366;
     color:white;
     padding:16px 24px;
-    border-radius:50px;
-    font-weight:800;
+    border-radius:999px;
+    font-weight:900;
     font-size:14px;
-    box-shadow:0 14px 32px rgba(37,211,102,.35);
+    box-shadow:0 16px 40px rgba(37,211,102,.35);
     cursor:pointer;
     transition:.3s;
     z-index:100;
@@ -691,11 +780,18 @@
     align-items:center;
     gap:8px;
   }
-  .whatsapp-float:hover{transform:scale(1.03)}
+  .whatsapp-float:hover{
+    transform:scale(1.04);
+    box-shadow:0 20px 48px rgba(37,211,102,.42);
+  }
 
-  ::-webkit-scrollbar{width:8px;height:8px}
+  ::-webkit-scrollbar{width:10px;height:10px}
   ::-webkit-scrollbar-track{background:rgba(255,255,255,.03)}
-  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:4px}
+  ::-webkit-scrollbar-thumb{
+    background:rgba(255,255,255,.12);
+    border-radius:999px
+  }
+  ::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.18)}
 
   .report-view{display:none}
 
@@ -705,8 +801,8 @@
       color:#000 !important;
       -webkit-print-color-adjust:exact;
       print-color-adjust:exact;
-      font-size:10px;
       overflow:visible;
+      font-size:10px;
     }
     html,body{height:auto;overflow:visible}
     .app-container,.whatsapp-float{display:none !important}
@@ -715,7 +811,7 @@
       max-width:800px;
       margin:0 auto;
       padding:10mm;
-      color:#111827;
+      color:#0f172a;
       background:#fff;
     }
 
@@ -723,26 +819,25 @@
       display:flex;
       align-items:flex-start;
       justify-content:space-between;
+      gap:16px;
       padding-bottom:12px;
       margin-bottom:16px;
       border-bottom:3px solid #0A1D66;
     }
     .report-logo-section{
       display:flex;
-      gap:16px;
+      gap:14px;
       align-items:center;
     }
     .report-logo img{
-      display:block;
       height:36px !important;
       width:auto !important;
       object-fit:contain !important;
-      filter:none !important;
-      -webkit-filter:none !important;
+      display:block;
     }
     .report-branding{
-      border-left:3px solid #F6BE43;
-      padding-left:16px;
+      border-left:3px solid #F59E0B;
+      padding-left:14px;
     }
     .report-main-title{
       font-family:'Playfair Display',serif;
@@ -750,7 +845,6 @@
       font-weight:900;
       color:#0A1D66;
       margin-bottom:4px;
-      letter-spacing:-.01em;
     }
     .report-subtitle{
       font-size:12px;
@@ -764,10 +858,10 @@
 
     .report-timeline{
       background:linear-gradient(135deg,#F0FDF4,#DCFCE7);
-      border:2px solid #10B981;
-      border-radius:10px;
+      border:2px solid #22c55e;
+      border-radius:8px;
       padding:12px;
-      margin-bottom:14px;
+      margin-bottom:12px;
     }
     .report-timeline-title{
       font-family:'Playfair Display',serif;
@@ -783,7 +877,10 @@
       justify-content:space-between;
       margin:10px 0;
     }
-    .timeline-point{text-align:center;flex:1}
+    .timeline-point{
+      text-align:center;
+      flex:1;
+    }
     .timeline-age{
       font-family:'DM Mono',monospace;
       font-size:16px;
@@ -813,7 +910,7 @@
 
     .report-hero{
       background:linear-gradient(135deg, #EFF6FF, #DBEAFE);
-      border:2px solid #1A4BFF;
+      border:3px solid #1A4BFF;
       border-radius:10px;
       padding:16px;
       margin-bottom:14px;
@@ -832,10 +929,10 @@
       gap:10px;
     }
     .report-hero-item{
-      background:#fff;
+      background:white;
       padding:12px;
-      border-radius:8px;
-      border-left:4px solid #F6BE43;
+      border-radius:6px;
+      border-left:4px solid #F59E0B;
     }
     .report-hero-item.featured{
       grid-column:1/-1;
@@ -850,14 +947,22 @@
       font-weight:700;
       margin-bottom:6px;
     }
+    .report-hero-item.featured .report-hero-label{color:#065F46;}
     .report-hero-value{
       font-family:'DM Mono',monospace;
       font-size:20px;
       font-weight:700;
       color:#0A1D66;
     }
+    .report-hero-item.featured .report-hero-value{
+      font-size:26px;
+      color:#065F46;
+    }
 
-    .report-comparison{margin-bottom:14px;page-break-inside:avoid}
+    .report-comparison{
+      margin-bottom:14px;
+      page-break-inside:avoid;
+    }
     .report-comparison-title{
       font-family:'Playfair Display',serif;
       font-size:14px;
@@ -873,14 +978,26 @@
     }
     .report-comp-box{
       padding:12px;
-      border-radius:8px;
+      border-radius:6px;
       text-align:center;
-      border:1px solid #e5e7eb;
+      border:2px solid;
     }
-    .report-comp-box.mattress{background:#fee2e2}
-    .report-comp-box.bank{background:#ffedd5}
-    .report-comp-box.afore{background:#fef3c7}
-    .report-comp-box.plan{background:#d1fae5}
+    .report-comp-box.mattress{
+      background:linear-gradient(135deg, #FEE2E2, #FECACA);
+      border-color:#DC2626;
+    }
+    .report-comp-box.bank{
+      background:linear-gradient(135deg, #FED7AA, #FDBA74);
+      border-color:#EA580C;
+    }
+    .report-comp-box.afore{
+      background:linear-gradient(135deg,#FEF3C7,#FDE68A);
+      border-color:#F59E0B;
+    }
+    .report-comp-box.plan{
+      background:linear-gradient(135deg, #D1FAE5, #A7F3D0);
+      border-color:#10B981;
+    }
     .report-comp-label{
       font-size:10px;
       text-transform:uppercase;
@@ -908,7 +1025,7 @@
       background:#FEF3C7;
       padding:12px;
       border-radius:8px;
-      border-left:4px solid #F6BE43;
+      border-left:4px solid #F59E0B;
     }
 
     .report-section{
@@ -922,7 +1039,7 @@
       color:#0A1D66;
       margin-bottom:8px;
       padding-bottom:4px;
-      border-bottom:2px solid #F6BE43;
+      border-bottom:2px solid #F59E0B;
     }
     .report-grid{
       display:grid;
@@ -933,7 +1050,7 @@
     .report-item{
       background:#F8FAFC;
       padding:12px;
-      border-radius:8px;
+      border-radius:6px;
       border-left:3px solid #1A4BFF;
     }
     .report-label{
@@ -947,7 +1064,7 @@
     .report-value{
       font-family:'DM Mono',monospace;
       font-size:14px;
-      font-weight:600;
+      font-weight:500;
       color:#0A1D66;
     }
     .report-text{
@@ -974,36 +1091,53 @@
     .report-table td{
       padding:8px 10px;
       border-bottom:1px solid #E2E8F0;
-      color:#111827;
+      color:#0f172a;
     }
+    .report-table tr:nth-child(even){background:#F8FAFC;}
     .report-highlight{
       background:linear-gradient(135deg, #EFF6FF, #DBEAFE);
       border-left:4px solid #1A4BFF;
       padding:14px;
-      border-radius:8px;
+      border-radius:6px;
       margin:12px 0;
     }
-
+    .report-highlight strong{
+      color:#0A1D66;
+      font-weight:700;
+    }
     .report-footer{
       margin-top:28px;
       padding-top:16px;
       border-top:2px solid #E2E8F0;
       display:flex;
       justify-content:space-between;
-      font-size:11px;
+      font-size:10px;
       color:#64748B;
+      gap:20px;
     }
-    .report-contact{font-weight:600}
-    .report-disclaimer{max-width:520px;line-height:1.35}
+    .report-contact{font-weight:600;}
+    .report-disclaimer{
+      text-align:right;
+      max-width:420px;
+      line-height:1.35;
+      font-style:normal;
+    }
   }
 
   @media (max-width:1400px){
-    .hero-title{font-size:64px}
-    .hero-subtitle{font-size:23px}
-    .hero-value{font-size:72px}
-    .summary-side-card .hero-value{font-size:60px}
-    .mini-stat .mini-value{font-size:40px}
-    .comp-value{font-size:34px}
+    .top-grid{grid-template-columns:300px 1fr;}
+    .hero-title{font-size:54px;max-width:680px;}
+    .hero-subtitle{font-size:20px;max-width:680px;}
+    .hero-value.highlight{font-size:72px;}
+    .hero-value.normal{font-size:58px;}
+    .mini-stat .mini-value{font-size:24px;}
+  }
+
+  @media (min-width:1500px){
+    .top-grid{grid-template-columns:320px 1fr;}
+    .brand-card,.hero-copy-card{min-height:210px;}
+    .hero-title{font-size:58px;max-width:720px;}
+    .hero-subtitle{font-size:21px;max-width:720px;}
   }
 </style>
 </head>
@@ -1013,7 +1147,9 @@
 
   <div class="control-panel">
 
-    <div class="camera-box">Espacio para cámara</div>
+    <div class="camera-box">
+      ESPACIO PARA CÁMARA
+    </div>
 
     <div class="section-block">
       <div class="section-header">
@@ -1043,7 +1179,7 @@
 
       <div class="form-group">
         <label class="form-label">Meta mensual deseada (valor de hoy)</label>
-        <input class="form-input" id="metaHoy" type="number" min="0" step="1000" value="32000">
+        <input class="form-input" id="metaHoy" type="number" min="0" step="1000" placeholder="32000" value="32000">
         <div class="form-hint">¿Cuánto te gustaría recibir cada mes cuando llegue tu retiro?</div>
       </div>
     </div>
@@ -1101,7 +1237,7 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label" style="display:flex;align-items:center;gap:8px;opacity:.5">
+        <label class="form-label" style="display:flex;align-items:center;gap:8px;opacity:.55">
           <input id="reinvertISR" type="checkbox" checked style="width:auto;margin:0" disabled>
           Reinvertir devolución fiscal
         </label>
@@ -1109,10 +1245,11 @@
 
       <div class="collapsible-section">
         <div class="collapsible-header" id="advancedToggle">
-          <span class="collapsible-title">⚙️ Parámetros avanzados</span>
+          <span class="collapsible-title">Parámetros avanzados</span>
           <span class="collapsible-icon">▼</span>
         </div>
         <div class="collapsible-content" id="advancedContent">
+
           <div class="form-group">
             <label class="form-label">Rendimiento esperado (%)</label>
             <input class="form-input" id="rate" type="number" value="10" min="0" max="100" step="0.01">
@@ -1122,6 +1259,7 @@
             <label class="form-label">Inflación promedio (%)</label>
             <input class="form-input" id="inflation" type="number" value="4" min="0" max="100" step="0.01">
           </div>
+
         </div>
       </div>
 
@@ -1148,32 +1286,30 @@
 
       <button class="btn-primary" id="calcRet">Calcular mensualidad</button>
     </div>
+
   </div>
 
   <div class="results-panel">
 
     <div class="top-grid">
-      <div class="brand-card">
-        <div class="auth-badge">Distribuidor autorizado Allianz</div>
-
-        <div class="brand-visual">
-          <div class="brand-kicker">Respaldo y acompañamiento profesional</div>
-          <div class="brand-logo-wrap">
-            <img src="logo-allianz-white.png" alt="Allianz" class="brand-logo">
-          </div>
+      <div class="glass-card brand-card">
+        <div class="brand-copy-top">
+          <div class="tag-chip">Distribuidor autorizado Allianz</div>
+          <div class="brand-strap">Respaldo y acompañamiento profesional</div>
+          <img src="logo-allianz-white.png" alt="Allianz" class="brand-logo">
           <div class="brand-subline">
             Simulación informativa para visualizar escenarios de retiro con mayor claridad.
           </div>
         </div>
 
         <div class="wa-card">
-          <div class="wa-card-title">Escribe RETIRO por WhatsApp</div>
-          <div class="wa-card-phone">662 417 6032</div>
-          <div class="wa-card-copy">Revisa tu escenario y compáralo con claridad.</div>
+          <div class="wa-label">Escribe RETIRO por WhatsApp</div>
+          <div class="wa-number">662 417 6032</div>
+          <div class="wa-desc">Revisa tu escenario y compáralo con claridad.</div>
         </div>
       </div>
 
-      <div class="hero-copy-card">
+      <div class="glass-card hero-copy-card">
         <div class="hero-actions">
           <button class="btn-action" id="csvBtn">CSV</button>
           <button class="btn-action accent" id="printBtn">PDF</button>
@@ -1193,15 +1329,13 @@
       </div>
     </div>
 
-    <div class="summary-grid">
-      <div class="summary-card">
-        <div class="summary-label">Fondo proyectado a los 65 años</div>
+    <div class="hero-grid">
+      <div class="hero-main-card">
+        <div class="hero-label">Fondo proyectado a los 65 años</div>
         <div class="hero-value highlight" id="fondo65">—</div>
         <div class="hero-caption">Listo para tu retiro</div>
 
-        <div class="summary-divider"></div>
-
-        <div class="mini-stats">
+        <div class="hero-stat-row">
           <div class="mini-stat">
             <div class="mini-label">Total aportado</div>
             <div class="mini-value" id="totalAportado">—</div>
@@ -1212,65 +1346,64 @@
           </div>
           <div class="mini-stat">
             <div class="mini-label">Duración del plan</div>
-            <div class="mini-value"><span id="yearsPlan">—</span></div>
+            <div class="mini-value"><span id="yearsPlan">—</span> años</div>
           </div>
         </div>
       </div>
 
-      <div class="summary-side-card">
-        <div>
-          <div class="summary-label">Fondo al finalizar tu plan</div>
-          <div class="hero-value" id="fondoPlan">—</div>
-          <div class="hero-caption">A los <span id="edadFinPlan">—</span> años</div>
-        </div>
-        <button class="inline-wa" id="inlineWaBtn">💬 WhatsApp</button>
+      <div class="hero-side-card">
+        <div class="hero-label">Fondo al finalizar tu plan</div>
+        <div class="hero-value normal" id="fondoPlan">—</div>
+        <div class="hero-caption">A los <span id="edadFinPlan">—</span> años</div>
       </div>
     </div>
 
     <div class="stats-container">
 
-      <div class="comparison-title" id="compTitle">¿Dónde estaría tu dinero en 15 años?</div>
+      <div class="comparison-wrap">
+        <div class="stats-title"><span id="compTitle">¿Dónde estaría tu dinero en 15 años?</span></div>
 
-      <div class="comparison-strip">
-        <div class="comp-box mattress">
-          <div class="comp-label">💸 Colchón</div>
-          <div class="comp-value" id="compMattress">—</div>
-          <div style="margin:10px 0">
-            <div style="background:#DC2626;height:8px;border-radius:999px;width:20%"></div>
+        <div class="comparison-strip">
+          <div class="comp-box mattress">
+            <div class="comp-label">💸 Colchón</div>
+            <div class="comp-value" id="compMattress">—</div>
+            <div class="bar-track"><div class="bar-fill" style="width:20%;background:#dc2626"></div></div>
+            <div class="comp-loss" id="compMattressLoss">—</div>
           </div>
-          <div class="comp-loss" id="compMattressLoss">—</div>
+
+          <div class="comp-box bank">
+            <div class="comp-label">🏦 Banco</div>
+            <div class="comp-value" id="compBank">—</div>
+            <div class="bar-track"><div class="bar-fill" style="width:24%;background:#ea580c"></div></div>
+            <div class="comp-loss" id="compBankLoss">—</div>
+          </div>
+
+          <div class="comp-box afore">
+            <div class="comp-label">🏛️ AFORE</div>
+            <div class="comp-value" id="compAfore">—</div>
+            <div class="bar-track"><div class="bar-fill" style="width:38%;background:#f59e0b"></div></div>
+            <div class="comp-loss" id="compAforeLoss">—</div>
+          </div>
+
+          <div class="comp-box plan">
+            <div class="comp-label">✨ Tu plan</div>
+            <div class="comp-value" id="compPlan">—</div>
+            <div class="bar-track"><div class="bar-fill" style="width:100%;background:#22c55e"></div></div>
+            <div class="comp-loss">✓ Protegido</div>
+          </div>
         </div>
 
-        <div class="comp-box bank">
-          <div class="comp-label">🏦 Banco</div>
-          <div class="comp-value" id="compBank">—</div>
-          <div style="margin:10px 0">
-            <div style="background:#EA580C;height:8px;border-radius:999px;width:24%"></div>
-          </div>
-          <div class="comp-loss" id="compBankLoss">—</div>
-        </div>
-
-        <div class="comp-box afore">
-          <div class="comp-label">🏛️ AFORE</div>
-          <div class="comp-value" id="compAfore">—</div>
-          <div style="margin:10px 0">
-            <div style="background:#F59E0B;height:8px;border-radius:999px;width:38%"></div>
-          </div>
-          <div class="comp-loss" id="compAforeLoss">—</div>
-        </div>
-
-        <div class="comp-box plan">
-          <div class="comp-label">✨ Tu plan</div>
-          <div class="comp-value" id="compPlan">—</div>
-          <div style="margin:10px 0">
-            <div style="background:#10B981;height:8px;border-radius:999px;width:100%"></div>
-          </div>
-          <div class="comp-loss">✓ Protegido</div>
+        <div class="comparison-message">
+          <span id="compMessage">Mismo esfuerzo. Cuatro caminos. Resultados completamente diferentes.</span>
         </div>
       </div>
 
-      <div class="message-bar">
-        <span id="compMessage">Mismo esfuerzo. Cuatro caminos. Resultados completamente diferentes.</span>
+      <div class="chart-section">
+        <div class="chart-header">
+          <div class="chart-title">Crecimiento de tu fondo</div>
+          <div class="chart-badge">Proyección</div>
+        </div>
+        <canvas id="chartCanvas"></canvas>
       </div>
 
       <div class="retirement-section" id="retBox">
@@ -1360,7 +1493,7 @@
     <div class="report-meta">
       <div id="rptFecha"></div>
       <div><strong>Asesor:</strong> Christian GarBa</div>
-      <div>Distribuidor autorizado Allianz</div>
+      <div>Seguros con Estrategia · Allianz</div>
       <div>Tel. 662 417 6032</div>
     </div>
   </div>
@@ -1415,7 +1548,7 @@
         <div class="report-hero-value" id="rptFondo65">—</div>
       </div>
       <div class="report-hero-item featured" style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border-left-color:#1A4BFF">
-        <div class="report-hero-label" style="color:#1E40AF">📊 Ingreso mensual en retiro</div>
+        <div class="report-hero-label" style="color:#1E40AF">📊 Ingreso mensual en retiro (20 años)</div>
         <div class="report-hero-value" id="rptIngresoMensual" style="color:#1E40AF">—</div>
       </div>
     </div>
@@ -1447,7 +1580,7 @@
     </div>
     <div class="report-comp-message">
       <strong>Mismo esfuerzo. Cuatro caminos. Resultados completamente diferentes.</strong><br>
-      La inflación destruye el ahorro pasivo. Tu estrategia cambia el resultado.
+      La inflación destruye el ahorro pasivo. El AFORE es limitado. Tu plan personalizado protege y multiplica.
     </div>
   </div>
 
@@ -1515,14 +1648,14 @@
 
   <div class="report-footer">
     <div class="report-contact">
-      <strong>Christian GarBa</strong><br>
-      Distribuidor autorizado Allianz<br>
+      <strong>Christian GarBa</strong> · Seguros con Estrategia · Allianz<br>
       Tel. 662 417 6032
     </div>
     <div class="report-disclaimer">
       <strong>Nota técnica:</strong> Proyección matemática basada en un supuesto de rendimiento nominal anual del
-      <span id="rptRendimientoNota">10</span>% compuesto y en los parámetros indicados.
-      Los resultados son estimaciones informativas y no constituyen garantía de rendimiento futuro.
+      <span id="rptRendimientoNota">10</span>% compuesto y en los parámetros indicados. Los resultados son estimaciones
+      informativas y no constituyen garantía de rendimiento futuro. El escenario AFORE utiliza supuestos conservadores
+      alineados al comportamiento del simulador oficial de CONSAR.
     </div>
   </div>
 </div>
@@ -1540,6 +1673,7 @@
     delayScenarios:null,chartData:null,edadFinPlan:0,yearsGrowth:0
   };
 
+  let myChart = null;
   let userEditedPMT = false;
 
   $('regimenFiscal').addEventListener('change',function(){
@@ -1574,10 +1708,7 @@
       `• Años de aportación: ${$('years').value}`,
       `• Aportación ${freqMap[$('frequency').value]}: $${$('pmt').value}`
     ].filter(Boolean).join('\n');
-
-    const href = 'https://wa.me/5216624176032?text='+encodeURIComponent(msg);
-    $('waBtn').href = href;
-    $('inlineWaBtn').onclick = () => window.open(href, '_blank');
+    $('waBtn').href = 'https://wa.me/5216624176032?text='+encodeURIComponent(msg);
   }
 
   function calcularPMTRequerido(edadInicio, planY, metaHoy, infl, rAcc, rRet, yrsRet, freq){
@@ -1655,7 +1786,7 @@
 
     if([edad,years,pmt0,lump,rate,freq,infl].some(x=>isNaN(x))){
       const e=$('errorMsg');
-      e.textContent='❌ Completa todos los campos correctamente.';
+      e.textContent='Completa todos los campos correctamente.';
       e.classList.add('visible');
       return;
     }else{
@@ -1671,6 +1802,7 @@
     const tbody=$('tbody');
     tbody.innerHTML='';
     const totalYearsSim=yrsAport+yrsExtra;
+    const chartLabels=[],chartData=[];
 
     for(let yr=1;yr<=totalYearsSim;yr++){
       edadAct++;
@@ -1695,8 +1827,11 @@
 
       if(yr===yrsAport)fondoPlan=saldo;
 
+      chartLabels.push(`Año ${yr}`);
+      chartData.push(saldo);
+
       const tr=document.createElement('tr');
-      if(yr>yrsAport)tr.style.background='rgba(255,255,255,.03)';
+      if(yr>yrsAport)tr.style.background='rgba(148,163,184,.08)';
       tr.innerHTML=`
         <td>${yr}</td>
         <td>${Math.round(edadAct)}</td>
@@ -1717,8 +1852,8 @@
     $('totalAportado').textContent=money(totalAportado);
     $('rendimiento').textContent=money(rendimiento);
     $('fondo65').textContent=money(fondo65);
-
     $('pvRet').value=String(fondo65);
+
     $('compTitle').textContent=`¿Dónde estaría tu dinero en ${yrsAport} años?`;
 
     reportState.edad=edad;
@@ -1730,11 +1865,13 @@
     reportState.benefFiscal=benefFiscal;
     reportState.regimenFiscal=regimen;
     reportState.isrPct=isrPct*100;
+    reportState.chartData={labels:chartLabels,data:chartData};
     reportState.edadFinPlan=edadFinPlan;
     reportState.yearsGrowth=yrsExtra;
 
     const totalMeses=years*12;
     const aportMensual=pmt0;
+
     const colchonNominal=totalMeses*aportMensual;
     const colchonReal=colchonNominal/Math.pow(1+infl,years);
 
@@ -1755,17 +1892,85 @@
 
     $('compMattress').textContent=money(colchonNominal);
     $('compMattressLoss').textContent=`Vale ${money(colchonReal)}`;
+
     $('compBank').textContent=money(saldoBanco);
     $('compBankLoss').textContent=`Vale ${money(bancoReal)}`;
+
     $('compAfore').textContent=money(saldoAfore);
     $('compAforeLoss').textContent=`Pensión limitada`;
+
     $('compPlan').textContent=money(fondoPlan);
 
     const diffTotal=fondoPlan-colchonNominal;
-    $('compMessage').textContent=`Mismo esfuerzo. Cuatro caminos. Diferencia de ${money(diffTotal)} entre dejar pasar el tiempo o construir una estrategia.`;
+    $('compMessage').textContent=`Mismo esfuerzo. Cuatro caminos. Diferencia de ${money(diffTotal)} entre el peor y mejor escenario.`;
 
+    actualizarGrafica(chartLabels,chartData);
     actualizarReporteBase();
     linkWhatsApp();
+  }
+
+  function actualizarGrafica(labels,data){
+    const ctx=$('chartCanvas');
+    if(!ctx) return;
+    const context = ctx.getContext('2d');
+    if(myChart)myChart.destroy();
+    myChart=new Chart(context,{
+      type:'line',
+      data:{
+        labels:labels,
+        datasets:[{
+          label:'Fondo acumulado (MXN)',
+          data:data,
+          borderColor:'#F6C046',
+          backgroundColor:'rgba(246,192,70,0.08)',
+          borderWidth:3,
+          fill:true,
+          tension:0.35,
+          pointRadius:0,
+          pointHoverRadius:5,
+          pointBackgroundColor:'#F6C046'
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:true,
+        plugins:{
+          legend:{display:false},
+          tooltip:{
+            backgroundColor:'rgba(7,19,56,0.96)',
+            padding:12,
+            titleFont:{size:13,weight:'bold'},
+            bodyFont:{size:12},
+            callbacks:{
+              label:function(context){
+                return 'Fondo: '+money(context.parsed.y);
+              }
+            }
+          }
+        },
+        scales:{
+          y:{
+            beginAtZero:true,
+            ticks:{
+              color:'rgba(255,255,255,.72)',
+              callback:function(value){
+                return '$'+(value/1000000).toFixed(1)+'M';
+              }
+            },
+            grid:{color:'rgba(255,255,255,.08)'}
+          },
+          x:{
+            ticks:{
+              color:'rgba(255,255,255,.62)',
+              maxRotation:0,
+              autoSkip:true,
+              maxTicksLimit:10
+            },
+            grid:{display:false}
+          }
+        }
+      }
+    });
   }
 
   function calcRet(){
@@ -1773,7 +1978,7 @@
     const yrs=parseInt($('yrsRetSel').value,10);
     const rateRet=7/100;
     const infl=4/100;
-    if(PV<=0){alert('⚠️ Primero calcula tu ahorro.');return;}
+    if(PV<=0){alert('Primero calcula tu ahorro.');return;}
 
     const iNom=rateRet/12;
     const n=yrs*12;
@@ -1835,10 +2040,10 @@
     const rRet=reportState.rRet!=null?reportState.rRet:7;
 
     $('rptSupuestos1').textContent=
-      `Supuestos: inflación ${infl.toFixed(1)}% anual, rendimiento en acumulación ${rAcc.toFixed(1)}% nominal y retiro de ${yrsRet} años con ${rRet.toFixed(1)}% nominal.`;
+      `Supuestos: inflación ${infl.toFixed(1)}% anual, rendimiento en acumulación ${rAcc.toFixed(1)}% nominal, retiro de ${yrsRet} años con ${rRet.toFixed(1)}% nominal.`;
 
     if(reportState.regimenFiscal==='151'&&reportState.isrPct>0&&reportState.benefFiscal>0){
-      $('rptSupuestosFiscal').textContent=`Tratamiento fiscal: Art. 151 (deducible), devolución ISR aproximada del ${reportState.isrPct.toFixed(0)}% reinvertida en el plan.`;
+      $('rptSupuestosFiscal').textContent=`Tratamiento fiscal: Art. 151 (deducible), devolución ISR aproximada de ${reportState.isrPct.toFixed(0)}% reinvertida en el plan.`;
     }else if(reportState.regimenFiscal==='93'){
       $('rptSupuestosFiscal').textContent=`Tratamiento fiscal: Art. 93 (diferido). No se modela devolución anual.`;
     }else{
@@ -1849,7 +2054,7 @@
     $('rptFondoPlan').textContent=reportState.fondoPlan?money(reportState.fondoPlan):'—';
     $('rptFondo65').textContent=reportState.fondo65?money(reportState.fondo65):'—';
     $('rptIngresoMensual').textContent=reportState.ingresoMensual?money(reportState.ingresoMensual):'—';
-    $('rptRendimientoNota').textContent = rAcc.toFixed(1);
+    $('rptRendimientoNota').textContent=rAcc.toFixed(0);
 
     const edadFinPlanCalc = reportState.edadFinPlan || 0;
     const planCruza65 = edadFinPlanCalc >= 65;
@@ -1909,7 +2114,6 @@
     const esc=reportState.delayScenarios;
     if(esc && reportState.fondo65>0){
       const base=pmtReal;
-
       const inflDec=(reportState.infl!=null?reportState.infl:infl)/100;
       const rAccDec=(reportState.rAcc!=null?reportState.rAcc:parseFloat($('rate').value))/100;
       const freqVal=parseFloat($('frequency').value);
@@ -1963,7 +2167,7 @@
 
       const nombreShow=nombre||'Tu decisión';
       $('rptMensajePosponer').textContent=
-        `${nombreShow} de hoy define tu esfuerzo mañana. Para alcanzar el mismo fondo a los 65 años (${money(targetFondo65)}), posponer obliga a aumentar la aportación mensual. Empezar antes siempre cuesta menos.`;
+        `${nombreShow} de hoy define tu esfuerzo mañana. Para alcanzar el mismo fondo a los 65 años (${money(targetFondo65)}), posponer 1, 3 o 5 años obliga a aumentar significativamente la aportación mensual. Empezar antes siempre es más económico.`;
     }
   }
 
@@ -2023,27 +2227,34 @@
   $('printBtn').addEventListener('click',prepararPDF);
 
   $('advancedToggle').addEventListener('click',function(){
-    $('advancedContent').classList.toggle('visible');
+    const content=$('advancedContent');
+    content.classList.toggle('visible');
     this.classList.toggle('open');
   });
 
   $('toggleTable').addEventListener('click',function(){
-    $('details').classList.toggle('visible');
+    const d=$('details');
+    d.classList.toggle('visible');
     this.classList.toggle('open');
   });
 
   $('toggleTableRet').addEventListener('click',function(){
-    $('detailsRet').classList.toggle('visible');
+    const d=$('detailsRet');
+    d.classList.toggle('visible');
     this.classList.toggle('open');
   });
 
   ['edad','years','metaHoy','rate','inflation','yrsRetSel'].forEach(id=>{
-    $(id).addEventListener('change',()=>{ updateSuggestion(); });
+    $(id).addEventListener('change',()=>{
+      updateSuggestion();
+    });
   });
 
   ['frequency','lumpSum','regimenFiscal','isrPct','reinvertISR'].forEach(id=>{
     $(id).addEventListener('change',()=>{
-      if(reportState.planYears){ calcAccum(); }
+      if(reportState.planYears){
+        calcAccum();
+      }
     });
   });
 
