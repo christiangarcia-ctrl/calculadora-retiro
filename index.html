@@ -1,554 +1,2264 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Simulador de Retiro — Allianz</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calculadora de Ahorro & Retiro — Christian GarBa</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@500;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-<style>
-:root {
-  --bg:#0B0F1A;
-  --surface:#111827;
-  --surface2:#1A2236;
-  --border:rgba(255,255,255,.08);
-  --gold:#F5B731;
-  --gold-dim:rgba(245,183,49,.15);
-  --gold-glow:rgba(245,183,49,.3);
-  --blue:#3B7EFF;
-  --blue-dim:rgba(59,126,255,.12);
-  --green:#22C55E;
-  --green-dim:rgba(34,197,94,.12);
-  --red:#EF4444;
-  --orange:#F97316;
-  --text:#F0F4FF;
-  --muted:rgba(240,244,255,.5);
-  --muted2:rgba(240,244,255,.25);
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;overflow:hidden}
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+  <style>
+    :root{
+      --bg:#071228;
+      --panel:#0B1630;
+      --panel-2:#0D1C3F;
+      --line:rgba(255,255,255,.08);
+      --line-soft:rgba(255,255,255,.12);
+      --text:#F7F8FB;
+      --muted:rgba(247,248,251,.72);
+      --muted-2:rgba(247,248,251,.55);
+      --gold:#F5B63D;
+      --gold-2:#FFCA63;
+      --green:#13C18D;
+      --green-2:#0F8E69;
+      --red:#E96C6C;
+      --orange:#F29B52;
+      --blue:#7AA2FF;
+      --white:#ffffff;
+      --shadow:0 18px 48px rgba(0,0,0,.28);
+      --radius:18px;
+      --radius-sm:12px;
+    }
 
-.app{display:grid;grid-template-columns:360px 1fr;height:100vh}
-.sidebar{background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
-.sidebar-header{padding:18px 18px 14px;border-bottom:1px solid var(--border)}
-.sidebar-logo-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.sidebar-logo-row img{display:block;max-height:34px;width:auto;object-fit:contain}
-.logo-divider{width:1px;height:28px;background:var(--border)}
-.badge-autorizado{display:inline-flex;align-items:center;gap:6px;background:var(--gold-dim);border:1px solid rgba(245,183,49,.3);border-radius:4px;padding:4px 10px;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.04em;text-transform:uppercase;margin-bottom:12px}
-.cta-whatsapp{background:linear-gradient(135deg,#128C7E 0%,#075E54 100%);border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;transition:opacity .2s}
-.cta-whatsapp:hover{opacity:.9}
-.cta-whatsapp .cta-icon{font-size:20px;flex-shrink:0}
-.cta-whatsapp .cta-text{font-size:11px;line-height:1.4;color:#fff}
-.cta-whatsapp .cta-main{font-weight:700;font-size:12px;display:block}
-.cta-whatsapp .cta-phone{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:rgba(255,255,255,.85)}
-.form-section{padding:16px 18px;border-bottom:1px solid var(--border)}
-.section-label{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.section-num{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:var(--gold);color:var(--bg);border-radius:50%;font-size:10px;font-weight:800;font-family:'DM Mono',monospace;flex-shrink:0}
-.form-group{margin-bottom:12px}.form-group:last-child{margin-bottom:0}
-.form-label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:5px}
-.form-input{width:100%;padding:9px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;transition:border-color .15s, box-shadow .15s;-webkit-appearance:none}
-.form-input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-dim)}
-.form-input::placeholder{color:var(--muted2)}
-.form-input option{background:var(--surface)}
-.form-input:disabled{opacity:.4;cursor:not-allowed}
-.form-hint{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.4}
-.suggested-badge{display:none;background:var(--gold);color:var(--bg);font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;letter-spacing:.06em;text-transform:uppercase;margin-left:6px;vertical-align:middle}
-.error-msg{display:none;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#FCA5A5;padding:8px 12px;border-radius:6px;font-size:11px;margin-bottom:12px}.error-msg.visible{display:block}
-.btn-calc,.btn-calc-ret{width:100%;padding:12px;border:none;border-radius:7px;font-weight:700;cursor:pointer;transition:all .2s}.btn-calc{background:var(--gold);color:var(--bg);font-family:'Syne',sans-serif;font-size:13px;letter-spacing:.04em;text-transform:uppercase;box-shadow:0 4px 16px var(--gold-glow)}.btn-calc:hover{transform:translateY(-1px);box-shadow:0 6px 24px var(--gold-glow)}
-.btn-reset{width:100%;padding:9px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:7px;font-size:12px;cursor:pointer;margin-top:8px;transition:all .2s}.btn-reset:hover{border-color:var(--muted);color:var(--text)}
-.btn-calc-ret{background:var(--green-dim);border:1px solid rgba(34,197,94,.3);color:var(--green);font-size:12px;letter-spacing:.03em}.btn-calc-ret:hover{background:rgba(34,197,94,.2)}
-.collapsible-head{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:10px 0 0;color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;user-select:none;transition:color .2s}.collapsible-head:hover{color:var(--text)}.collapsible-head .chevron{transition:transform .2s}.collapsible-head.open .chevron{transform:rotate(180deg)}
-.collapsible-body{display:none;padding-top:12px}.collapsible-body.visible{display:block}
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:'DM Sans',sans-serif;
+      background:linear-gradient(180deg,#040b1b 0%, #09142b 100%);
+      color:var(--text);
+      overflow:hidden;
+      font-size:14px;
+    }
 
-.results{overflow-y:auto;background:var(--bg);display:flex;flex-direction:column}
-.top-stage{display:grid;grid-template-columns:340px 1fr;gap:16px;padding:18px 22px 14px;border-bottom:1px solid var(--border);align-items:stretch}
-.camera-slot{background:linear-gradient(160deg,#0f172a 0%,#111827 100%);border:1px dashed rgba(255,255,255,.18);border-radius:16px;min-height:150px;display:flex;align-items:center;justify-content:center;padding:14px;text-align:center;color:rgba(240,244,255,.42);font-size:13px;font-weight:600;letter-spacing:.04em}
-.top-info-card{background:linear-gradient(160deg,#0B1629 0%,#0B0F1A 70%);border:1px solid var(--border);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
-.top-info-card::before{content:'';position:absolute;top:-80px;right:-80px;width:220px;height:220px;background:radial-gradient(circle, rgba(245,183,49,.07) 0%, transparent 70%);pointer-events:none}
-.top-info-kicker{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px;position:relative;z-index:1}
-.top-info-title{font-family:'Syne',sans-serif;font-size:26px;line-height:1.08;color:var(--text);margin-bottom:10px;position:relative;z-index:1}
-.top-info-text{font-size:13px;line-height:1.55;color:rgba(240,244,255,.72);max-width:540px;position:relative;z-index:1}
-.top-info-mini{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;position:relative;z-index:1}
-.top-pill{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);font-size:11px;color:var(--text)}
+    .num-font,
+    .hero-value,
+    .comp-value,
+    .retirement-value,
+    .report-hero-value,
+    .report-value,
+    .timeline-age,
+    .timeline-amount{
+      font-family:'Space Grotesk',sans-serif !important;
+      font-variant-numeric: tabular-nums lining-nums;
+      letter-spacing:-0.03em;
+    }
 
-.hero{background:linear-gradient(160deg,#0B1629 0%,#0B0F1A 60%);padding:24px 24px 22px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;flex-shrink:0}
-.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:280px;height:280px;background:radial-gradient(circle, rgba(245,183,49,.08) 0%, transparent 70%);pointer-events:none}
-.hero-top-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px;gap:14px}
-.hero-label-sub{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
-.hero-value-main{font-family:'Syne',sans-serif;font-size:46px;font-weight:800;color:var(--gold);line-height:1;letter-spacing:-.02em}.hero-value-main.hero-white{color:var(--text);font-size:32px}
-.hero-caption{font-size:11px;color:var(--muted);margin-top:5px}
-.hero-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
-.hero-metric{padding:14px 16px;border-right:1px solid var(--border);border-top:1px solid var(--border)}.hero-metric:last-child{border-right:none}
-.hero-metric-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:6px}
-.hero-metric-val{font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:var(--text)}
-.action-btns{display:flex;gap:8px;flex-shrink:0}.btn-action{padding:8px 16px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;letter-spacing:.04em;text-transform:uppercase;transition:all .2s}.btn-action:hover{color:var(--text);border-color:var(--muted2)}.btn-action.gold{background:var(--gold);color:var(--bg);border-color:var(--gold);font-weight:700}.btn-action.gold:hover{opacity:.9}
-.section-block{padding:22px 24px;border-bottom:1px solid var(--border)}.section-block:last-child{border-bottom:none}
-.block-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px}
-.comp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
-.comp-card{border-radius:8px;padding:14px 12px;text-align:center;border:1px solid;position:relative;overflow:hidden}.comp-card.mattress{background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.25)}.comp-card.bank{background:rgba(249,115,22,.06);border-color:rgba(249,115,22,.25)}.comp-card.afore{background:rgba(234,179,8,.06);border-color:rgba(234,179,8,.25)}.comp-card.plan{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.35);box-shadow:0 0 20px rgba(34,197,94,.08)}
-.comp-card-icon{font-size:18px;margin-bottom:6px;display:block}.comp-card-tag{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;margin-bottom:8px}.comp-card.mattress .comp-card-tag{color:#EF4444}.comp-card.bank .comp-card-tag{color:#F97316}.comp-card.afore .comp-card-tag{color:#EAB308}.comp-card.plan .comp-card-tag{color:var(--green)}
-.comp-card-val{font-family:'DM Mono',monospace;font-size:15px;font-weight:500;color:var(--text);margin:6px 0 4px;display:block}.comp-card-sub{font-size:9px;color:var(--muted)}
-.comp-bar{height:3px;border-radius:2px;margin:8px 0 0}.mattress .comp-bar{background:#EF4444;width:18%}.bank .comp-bar{background:#F97316;width:24%}.afore .comp-bar{background:#EAB308;width:38%}.plan .comp-bar{background:var(--green);width:100%}
-.comp-note{background:rgba(245,183,49,.07);border:1px solid rgba(245,183,49,.2);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--muted);text-align:center;font-weight:500}.comp-note strong{color:var(--gold)}
-.retirement-box{display:none;background:var(--green-dim);border:1px solid rgba(34,197,94,.25);border-radius:10px;padding:20px;margin-bottom:0}.retirement-box.visible{display:block;animation:fadeUp .35s ease-out}@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.ret-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
-.ret-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ret-item{background:rgba(0,0,0,.25);border-radius:7px;padding:12px;border:1px solid rgba(34,197,94,.15)}.ret-label{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--green);font-weight:700;margin-bottom:5px;opacity:.8}.ret-value{font-family:'DM Mono',monospace;font-size:20px;color:var(--text)}
-.chart-wrap{background:var(--surface);border-radius:10px;padding:20px 20px 12px;border:1px solid var(--border)}.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.chart-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.06em}.chart-badge{background:var(--blue-dim);border:1px solid rgba(59,126,255,.25);color:var(--blue);padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}#chartCanvas{max-height:220px}
-.detail-toggle{display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;user-select:none;transition:color .2s}.detail-toggle:hover{color:var(--text)}.detail-toggle .dt-icon{transition:transform .2s;font-size:12px}.detail-toggle.open .dt-icon{transform:rotate(180deg)}
-.detail-content{display:none;margin-top:14px;max-height:220px;overflow-y:auto}.detail-content.visible{display:block}
-table{width:100%;border-collapse:collapse;font-size:11px}th{background:var(--surface2);color:var(--muted);text-align:left;padding:8px 10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:9px;border-bottom:1px solid var(--border);position:sticky;top:0}td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.04);font-family:'DM Mono',monospace;color:var(--text)}tr:hover td{background:rgba(255,255,255,.02)}tr:last-child td{border-bottom:none}
-.tiktok-banner{background:linear-gradient(135deg,#075E54 0%,#128C7E 100%);padding:12px 24px;display:flex;align-items:center;justify-content:center;gap:12px;flex-shrink:0}.tiktok-banner-icon{font-size:18px}.tiktok-banner-text{font-size:12px;font-weight:600;color:#fff;letter-spacing:.02em}.tiktok-banner-text strong{font-family:'DM Mono',monospace;font-size:13px;color:#A7F3D0}
+    .app-container{
+      display:grid;
+      grid-template-columns:380px 1fr;
+      height:100vh;
+      position:relative;
+    }
 
-.report-view{display:none}
-@media print{
-  @page{size:A4;margin:10mm}
-  body{background:white!important;color:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:10px;overflow:visible!important}
-  html,body{height:auto!important;overflow:visible!important}
-  .app,.tiktok-banner{display:none!important}
-  .report-view{display:block!important;max-width:800px;margin:0 auto;padding:0}
-  .report-header{display:flex;align-items:flex-start;justify-content:space-between;padding-bottom:12px;margin-bottom:16px;border-bottom:3px solid #0A1D66}
-  .report-logo-section{display:flex;gap:16px;align-items:center}
-  .report-logo{display:flex;gap:12px;align-items:center}
-  .report-logo img{display:block;filter:none!important}
-  .report-branding{border-left:3px solid #F5B731;padding-left:16px}
-  .report-main-title{font-family:'Syne',serif;font-size:24px;font-weight:900;color:#0A1D66;margin-bottom:4px}
-  .report-subtitle{font-size:12px;color:#64748B}
-  .report-meta{text-align:right;font-size:10px;color:#64748B}
-  .report-hero{background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border:3px solid #1A4BFF;border-radius:10px;padding:16px;margin-bottom:14px}
-  .report-hero-title{font-family:'Syne',serif;font-size:16px;font-weight:700;color:#0A1D66;margin-bottom:12px;text-align:center}
-  .report-hero-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-  .report-hero-item{background:white;padding:12px;border-radius:6px;border-left:4px solid #F5B731}
-  .report-hero-item.featured{grid-column:1/-1;background:linear-gradient(135deg,#D1FAE5,#A7F3D0);border-left-color:#10B981}
-  .report-hero-label{font-size:10px;color:#64748B;text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:6px}
-  .report-hero-item.featured .report-hero-label{color:#065F46}
-  .report-hero-value{font-family:'DM Mono',monospace;font-size:20px;font-weight:700;color:#0A1D66}
-  .report-hero-item.featured .report-hero-value{font-size:26px;color:#065F46}
-  .report-comparison{margin-bottom:14px;page-break-inside:avoid}
-  .report-comparison-title{font-family:'Syne',serif;font-size:14px;font-weight:700;color:#0A1D66;margin-bottom:8px;text-align:center}
-  .report-comparison-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-  .report-comp-box{padding:12px;border-radius:6px;text-align:center;border:2px solid}
-  .report-comp-box.mattress{background:linear-gradient(135deg,#FEE2E2,#FECACA);border-color:#DC2626}
-  .report-comp-box.bank{background:linear-gradient(135deg,#FED7AA,#FDBA74);border-color:#EA580C}
-  .report-comp-box.afore{background:linear-gradient(135deg,#FEF3C7,#FDE68A);border-color:#F59E0B}
-  .report-comp-box.plan{background:linear-gradient(135deg,#D1FAE5,#A7F3D0);border-color:#10B981}
-  .report-comp-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;margin-bottom:8px}
-  .report-comp-value{font-family:'DM Mono',monospace;font-size:16px;font-weight:700;margin:6px 0}
-  .report-comp-loss{font-size:10px;font-weight:700;margin-top:4px}
-  .report-comp-message{text-align:center;margin-top:12px;font-size:12px;font-weight:700;color:#0A1D66;background:#FEF3C7;padding:12px;border-radius:8px;border-left:4px solid #F5B731}
-  .report-section{margin-bottom:14px;page-break-inside:avoid}
-  .report-section-title{font-family:'Syne',serif;font-size:14px;font-weight:700;color:#0A1D66;margin-bottom:8px;padding-bottom:4px;border-bottom:2px solid #F5B731}
-  .report-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
-  .report-item{background:#F8FAFC;padding:12px;border-radius:6px;border-left:3px solid #1A4BFF}
-  .report-item.featured{background:linear-gradient(135deg,#FEF3C7,#FDE68A);border-left-color:#F5B731;grid-column:1/-1}
-  .report-label{font-size:10px;color:#64748B;font-weight:700;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
-  .report-value{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;color:#0A1D66}
-  .report-item.featured .report-value{font-size:18px;font-weight:700}
-  .report-text{font-size:11px;line-height:1.6;color:#334155;margin:8px 0}
-  .report-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:10px}
-  .report-table th{background:#0A1D66;color:white;padding:8px 10px;text-align:left;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
-  .report-table td{padding:8px 10px;border-bottom:1px solid #E2E8F0;color:#0A1D66}
-  .report-table tr:nth-child(even){background:#F8FAFC}
-  .report-highlight{background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border-left:4px solid #1A4BFF;padding:14px;border-radius:6px;margin:12px 0}
-  .report-highlight strong{color:#0A1D66;font-weight:700}
-  .report-footer{margin-top:28px;padding-top:16px;border-top:2px solid #E2E8F0;display:flex;justify-content:space-between;font-size:9px;color:#64748B}
-  .report-contact{font-weight:600}
-  .report-disclaimer{text-align:right;max-width:400px;line-height:1.35}
-  .report-timeline{background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border:2px solid #10B981;border-radius:8px;padding:12px;margin-bottom:12px}
-  .report-timeline-title{font-family:'Syne',serif;font-size:14px;font-weight:700;color:#065F46;margin-bottom:10px;text-align:center}
-  .timeline-visual{display:flex;align-items:center;justify-content:space-between;margin:10px 0}
-  .timeline-point{text-align:center;flex:1}
-  .timeline-age{font-family:'DM Mono',monospace;font-size:16px;font-weight:700;color:#065F46;margin-bottom:3px}
-  .timeline-label{font-size:8px;color:#059669;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
-  .timeline-amount{font-family:'DM Mono',monospace;font-size:12px;font-weight:700;color:#065F46;margin-top:3px}
-  .timeline-arrow{font-size:18px;color:#10B981;margin:0 6px}
-  .report-brand-logo{height:34px;width:auto;display:block;object-fit:contain;filter:none!important}
-}
+    /* ================= LEFT PANEL ================= */
+    .control-panel{
+      background:linear-gradient(180deg, #07132B 0%, #0A1734 100%);
+      color:var(--text);
+      padding:18px 18px 28px;
+      overflow-y:auto;
+      border-right:1px solid var(--line);
+      position:relative;
+      z-index:10;
+    }
 
-@media (max-width: 1100px){
-  .top-stage{grid-template-columns:1fr}
-  .app{grid-template-columns:320px 1fr}
-}
-</style>
+    .camera-box{
+      height:220px;
+      border:1.5px dashed rgba(255,255,255,.16);
+      border-radius:22px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(245,182,61,.08), transparent 35%),
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:rgba(255,255,255,.34);
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      margin-bottom:18px;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);
+    }
+
+    .section-block{margin-bottom:26px}
+
+    .section-header{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:16px;
+      font-weight:800;
+      color:var(--gold);
+      margin-bottom:16px;
+      letter-spacing:.01em;
+    }
+
+    .step-indicator{
+      width:24px;
+      height:24px;
+      border-radius:999px;
+      background:var(--gold);
+      color:#0a1734;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      font-weight:900;
+    }
+
+    .form-group{margin-bottom:14px}
+
+    .form-label{
+      display:block;
+      margin-bottom:6px;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.78);
+    }
+
+    .form-input{
+      width:100%;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      border-radius:10px;
+      padding:12px 14px;
+      font-size:15px;
+      font-weight:600;
+      outline:none;
+      transition:.2s ease;
+    }
+
+    .form-input:focus{
+      border-color:rgba(245,182,61,.65);
+      box-shadow:0 0 0 3px rgba(245,182,61,.12);
+      background:rgba(255,255,255,.07);
+    }
+
+    .form-input::placeholder{color:rgba(255,255,255,.3)}
+    .form-input:disabled{opacity:.55;cursor:not-allowed}
+
+    .form-hint{
+      font-size:11px;
+      color:rgba(255,255,255,.52);
+      margin-top:5px;
+      line-height:1.45;
+    }
+
+    .suggestion-badge{
+      display:inline-block;
+      background:var(--gold);
+      color:#07132B;
+      border-radius:999px;
+      font-size:10px;
+      font-weight:900;
+      padding:4px 10px;
+      margin-bottom:6px;
+    }
+
+    .error-alert{
+      display:none;
+      margin-bottom:12px;
+      background:rgba(233,108,108,.12);
+      border:1px solid rgba(233,108,108,.35);
+      color:#ffb6b6;
+      padding:10px 12px;
+      border-radius:10px;
+      font-size:12px;
+      font-weight:600;
+    }
+    .error-alert.visible{display:block}
+
+    .btn-primary,
+    .btn-secondary{
+      width:100%;
+      border:none;
+      border-radius:12px;
+      padding:14px 16px;
+      font-size:13px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .btn-primary{
+      background:linear-gradient(180deg, var(--gold-2), var(--gold));
+      color:#07132B;
+      box-shadow:0 10px 24px rgba(245,182,61,.22);
+    }
+
+    .btn-primary:hover{transform:translateY(-1px)}
+
+    .btn-secondary{
+      margin-top:8px;
+      background:transparent;
+      color:var(--text);
+      border:1px solid rgba(255,255,255,.16);
+    }
+
+    .collapsible-section{
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:12px;
+      overflow:hidden;
+      margin-top:16px;
+      background:rgba(255,255,255,.03);
+    }
+
+    .collapsible-header{
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      cursor:pointer;
+      user-select:none;
+    }
+
+    .collapsible-title{
+      font-size:12px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .collapsible-icon{transition:transform .2s}
+    .collapsible-header.open .collapsible-icon{transform:rotate(180deg)}
+
+    .collapsible-content{
+      display:none;
+      padding:14px;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+    .collapsible-content.visible{display:block}
+
+    /* ================= RIGHT PANEL ================= */
+    .results-panel{
+      overflow-y:auto;
+      background:
+        radial-gradient(circle at top right, rgba(245,182,61,.08), transparent 24%),
+        linear-gradient(180deg, #061126 0%, #08172f 100%);
+    }
+
+    .hero-wrap{
+      padding:18px 18px 0;
+    }
+
+    .hero-top{
+      display:grid;
+      grid-template-columns:330px 1fr;
+      gap:16px;
+      margin-bottom:16px;
+    }
+
+    .hero-brand{
+      background:linear-gradient(180deg, rgba(10,23,52,.92), rgba(7,18,40,.96));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:24px;
+      padding:18px;
+      min-height:220px;
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .brand-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      width:max-content;
+      font-size:11px;
+      font-weight:800;
+      color:#07132B;
+      background:linear-gradient(180deg, var(--gold-2), var(--gold));
+      border-radius:999px;
+      padding:6px 12px;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+
+    .hero-logo{
+      width:170px;
+      height:auto;
+      object-fit:contain;
+      display:block;
+      margin-top:12px;
+    }
+
+    .hero-cta{
+      margin-top:18px;
+      background:linear-gradient(180deg, rgba(19,193,141,.18), rgba(19,193,141,.11));
+      border:1px solid rgba(19,193,141,.38);
+      border-radius:16px;
+      padding:16px;
+    }
+
+    .hero-cta-label{
+      font-size:12px;
+      color:#b8f4df;
+      font-weight:700;
+      margin-bottom:6px;
+      letter-spacing:.02em;
+    }
+
+    .hero-cta-main{
+      font-size:28px;
+      font-weight:800;
+      line-height:1;
+      color:#ffffff;
+      font-family:'Space Grotesk',sans-serif;
+      font-variant-numeric: tabular-nums lining-nums;
+    }
+
+    .hero-cta-sub{
+      font-size:13px;
+      color:rgba(255,255,255,.7);
+      margin-top:6px;
+    }
+
+    .hero-copy{
+      background:linear-gradient(180deg, rgba(10,23,52,.92), rgba(7,18,40,.96));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:24px;
+      padding:26px 28px;
+      min-height:220px;
+      position:relative;
+      box-shadow:var(--shadow);
+    }
+
+    .hero-actions{
+      position:absolute;
+      top:18px;
+      right:18px;
+      display:flex;
+      gap:10px;
+      z-index:5;
+    }
+
+    .btn-action{
+      padding:10px 16px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.15);
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      font-size:12px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      cursor:pointer;
+    }
+
+    .btn-action.accent{
+      background:linear-gradient(180deg, var(--gold-2), var(--gold));
+      border-color:transparent;
+      color:#07132B;
+    }
+
+    .hero-mini{
+      font-size:12px;
+      color:rgba(255,255,255,.58);
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-weight:800;
+      margin-bottom:10px;
+    }
+
+    .hero-title{
+      font-size:clamp(34px, 4vw, 58px);
+      line-height:.96;
+      letter-spacing:-.04em;
+      font-weight:900;
+      max-width:900px;
+    }
+
+    .hero-text{
+      margin-top:14px;
+      max-width:760px;
+      font-size:19px;
+      line-height:1.45;
+      color:rgba(255,255,255,.76);
+    }
+
+    .hero-pills{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    .hero-pill{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      border-radius:999px;
+      padding:10px 14px;
+      font-size:13px;
+      font-weight:700;
+      color:#fff;
+    }
+
+    /* KPI ROW */
+    .hero-kpis{
+      background:linear-gradient(180deg, rgba(8,22,47,.96), rgba(6,17,38,.98));
+      border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid rgba(255,255,255,.06);
+      padding:26px 22px 24px;
+      display:grid;
+      grid-template-columns:1.55fr 1fr;
+      gap:16px;
+    }
+
+    .hero-kpi-main,
+    .hero-kpi-side{
+      background:rgba(255,255,255,.02);
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:22px;
+      padding:22px 22px 18px;
+    }
+
+    .hero-kpi-label{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      color:rgba(255,255,255,.58);
+      font-weight:800;
+      margin-bottom:10px;
+    }
+
+    .hero-value{
+      font-size:74px;
+      font-weight:800;
+      line-height:.92;
+      color:var(--gold);
+      text-shadow:0 8px 24px rgba(245,182,61,.14);
+    }
+
+    .hero-value.side{
+      font-size:56px;
+      color:#fff;
+      text-shadow:none;
+    }
+
+    .hero-caption{
+      font-size:17px;
+      color:rgba(255,255,255,.74);
+      margin-top:8px;
+      font-weight:600;
+    }
+
+    .hero-stats-row{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:0;
+      margin-top:20px;
+      border-top:1px solid rgba(255,255,255,.08);
+      padding-top:18px;
+    }
+
+    .hero-stat{
+      padding-right:14px;
+    }
+
+    .hero-stat:not(:last-child){
+      border-right:1px solid rgba(255,255,255,.07);
+      padding-right:18px;
+      margin-right:18px;
+    }
+
+    .hero-stat .hero-kpi-label{margin-bottom:8px}
+    .hero-stat .stat-value{
+      font-size:36px;
+      font-weight:800;
+      line-height:1;
+      font-family:'Space Grotesk',sans-serif;
+    }
+
+    /* CONTENT */
+    .stats-container{
+      padding:22px 18px 28px;
+    }
+
+    .comparison-title{
+      font-family:'Playfair Display',serif;
+      font-size:30px;
+      font-weight:900;
+      margin-bottom:16px;
+      letter-spacing:-.02em;
+    }
+
+    .comparison-strip{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:12px;
+    }
+
+    .comp-box{
+      border-radius:18px;
+      padding:18px 16px 16px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+      box-shadow:var(--shadow);
+    }
+
+    .comp-box.mattress{
+      background:linear-gradient(180deg, rgba(115,25,36,.16), rgba(115,25,36,.08));
+      border-color:rgba(233,108,108,.2);
+    }
+    .comp-box.bank{
+      background:linear-gradient(180deg, rgba(122,58,16,.17), rgba(122,58,16,.08));
+      border-color:rgba(242,155,82,.22);
+    }
+    .comp-box.afore{
+      background:linear-gradient(180deg, rgba(120,96,12,.18), rgba(120,96,12,.08));
+      border-color:rgba(245,182,61,.22);
+    }
+    .comp-box.plan{
+      background:linear-gradient(180deg, rgba(16,117,85,.2), rgba(16,117,85,.08));
+      border-color:rgba(19,193,141,.25);
+    }
+
+    .comp-label{
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:900;
+      margin-bottom:10px;
+      color:rgba(255,255,255,.9);
+    }
+
+    .comp-value{
+      font-size:38px;
+      font-weight:800;
+      line-height:1;
+      margin-bottom:12px;
+    }
+
+    .comp-bar{
+      width:100%;
+      height:8px;
+      background:rgba(255,255,255,.08);
+      border-radius:999px;
+      overflow:hidden;
+      margin-bottom:10px;
+    }
+
+    .comp-bar > span{
+      display:block;
+      height:100%;
+      border-radius:999px;
+    }
+
+    .comp-loss{
+      font-size:12px;
+      font-weight:700;
+      color:rgba(255,255,255,.72);
+    }
+
+    .comparison-message{
+      margin-top:14px;
+      background:rgba(245,182,61,.12);
+      border:1px solid rgba(245,182,61,.22);
+      border-left:4px solid var(--gold);
+      color:#fff;
+      border-radius:14px;
+      padding:14px 16px;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .chart-section,
+    .detail-wrapper,
+    .retirement-section{
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;
+      box-shadow:var(--shadow);
+    }
+
+    .chart-section{
+      margin-top:20px;
+      padding:22px;
+    }
+
+    .chart-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:16px;
+    }
+
+    .chart-title{
+      font-family:'Playfair Display',serif;
+      font-size:24px;
+      font-weight:900;
+    }
+
+    .chart-badge{
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(122,162,255,.14);
+      color:#b9cbff;
+      border:1px solid rgba(122,162,255,.24);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.07em;
+      text-transform:uppercase;
+    }
+
+    #chartCanvas{max-height:310px}
+
+    .retirement-section{
+      display:none;
+      margin-top:20px;
+      padding:20px;
+      background:linear-gradient(180deg, rgba(19,193,141,.14), rgba(19,193,141,.06));
+      border-color:rgba(19,193,141,.24);
+    }
+    .retirement-section.visible{display:block}
+
+    .retirement-title{
+      font-family:'Playfair Display',serif;
+      font-size:24px;
+      font-weight:900;
+      margin-bottom:16px;
+    }
+
+    .retirement-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
+    }
+
+    .retirement-item{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:16px;
+    }
+
+    .retirement-label{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:rgba(255,255,255,.65);
+      font-weight:800;
+      margin-bottom:8px;
+    }
+
+    .retirement-value{
+      font-size:34px;
+      font-weight:800;
+      line-height:1;
+      color:#fff;
+    }
+
+    .detail-wrapper{
+      margin-top:20px;
+      padding:18px 18px 14px;
+    }
+
+    .detail-toggle{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      cursor:pointer;
+      user-select:none;
+      font-size:15px;
+      font-weight:800;
+    }
+
+    .detail-toggle .icon{transition:transform .2s}
+    .detail-toggle.open .icon{transform:rotate(180deg)}
+
+    .detail-content{
+      display:none;
+      margin-top:16px;
+      max-height:260px;
+      overflow:auto;
+    }
+    .detail-content.visible{display:block}
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:12px;
+    }
+
+    th{
+      text-align:left;
+      padding:12px 10px;
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      font-size:11px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-weight:900;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      position:sticky;
+      top:0;
+      z-index:1;
+    }
+
+    td{
+      padding:11px 10px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      color:rgba(255,255,255,.82);
+    }
+
+    .whatsapp-float{
+      position:fixed;
+      right:24px;
+      bottom:24px;
+      z-index:100;
+      text-decoration:none;
+      background:linear-gradient(180deg,#25D366,#1bb85a);
+      color:#fff;
+      padding:16px 22px;
+      border-radius:999px;
+      font-size:15px;
+      font-weight:800;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      box-shadow:0 18px 34px rgba(37,211,102,.28);
+    }
+
+    /* ================= PDF ================= */
+    .report-view{display:none}
+
+    @media print{
+      html,body{
+        height:auto !important;
+        overflow:visible !important;
+        background:#ffffff !important;
+        color:#111827 !important;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact;
+      }
+
+      .app-container,
+      .whatsapp-float{
+        display:none !important;
+      }
+
+      .report-view{
+        display:block !important;
+        max-width:800px;
+        margin:0 auto;
+        padding:10mm;
+      }
+
+      .report-header{
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        gap:20px;
+        border-bottom:3px solid #0A1D66;
+        padding-bottom:14px;
+        margin-bottom:16px;
+      }
+
+      .report-logo-section{
+        display:flex;
+        align-items:center;
+        gap:16px;
+      }
+
+      .report-logo{
+        display:flex;
+        align-items:center;
+        gap:12px;
+      }
+
+      .report-logo img{
+        height:38px !important;
+        width:auto !important;
+        object-fit:contain;
+        filter:none !important;
+      }
+
+      .report-branding{
+        border-left:3px solid #F5B63D;
+        padding-left:14px;
+      }
+
+      .report-main-title{
+        font-family:'Playfair Display',serif;
+        font-size:24px;
+        font-weight:900;
+        color:#0A1D66;
+        line-height:1;
+      }
+
+      .report-subtitle{
+        margin-top:4px;
+        color:#64748B;
+        font-size:12px;
+      }
+
+      .report-meta{
+        text-align:right;
+        font-size:10px;
+        color:#64748B;
+      }
+
+      .report-timeline{
+        background:linear-gradient(135deg,#F0FDF4,#DCFCE7);
+        border:2px solid #10B981;
+        border-radius:10px;
+        padding:14px;
+        margin-bottom:14px;
+        page-break-inside:avoid;
+      }
+
+      .report-timeline-title{
+        font-family:'Playfair Display',serif;
+        font-size:15px;
+        font-weight:900;
+        color:#065F46;
+        text-align:center;
+        margin-bottom:10px;
+      }
+
+      .timeline-visual{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:8px;
+      }
+
+      .timeline-point{
+        flex:1;
+        text-align:center;
+      }
+
+      .timeline-age{
+        font-size:18px;
+        font-weight:800;
+        color:#065F46;
+      }
+
+      .timeline-label{
+        font-size:9px;
+        text-transform:uppercase;
+        letter-spacing:.08em;
+        color:#059669;
+        font-weight:800;
+        margin-top:4px;
+      }
+
+      .timeline-amount{
+        font-size:12px;
+        font-weight:800;
+        color:#065F46;
+        margin-top:4px;
+      }
+
+      .timeline-arrow{
+        font-size:18px;
+        color:#10B981;
+      }
+
+      .report-hero{
+        background:linear-gradient(135deg,#EFF6FF,#DBEAFE);
+        border:2px solid #1A4BFF;
+        border-radius:10px;
+        padding:14px;
+        margin-bottom:14px;
+        page-break-inside:avoid;
+      }
+
+      .report-hero-title{
+        font-family:'Playfair Display',serif;
+        font-size:16px;
+        font-weight:900;
+        color:#0A1D66;
+        text-align:center;
+        margin-bottom:10px;
+      }
+
+      .report-hero-grid{
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+      }
+
+      .report-hero-item{
+        background:#fff;
+        border-left:4px solid #F5B63D;
+        border-radius:8px;
+        padding:12px;
+      }
+
+      .report-hero-item.featured{
+        grid-column:1/-1;
+        background:linear-gradient(135deg,#D1FAE5,#A7F3D0);
+        border-left-color:#10B981;
+      }
+
+      .report-hero-label{
+        font-size:10px;
+        font-weight:800;
+        letter-spacing:.07em;
+        text-transform:uppercase;
+        color:#64748B;
+        margin-bottom:6px;
+      }
+
+      .report-hero-value{
+        font-size:22px;
+        font-weight:800;
+        color:#0A1D66;
+      }
+
+      .report-section{
+        margin-bottom:14px;
+        page-break-inside:avoid;
+      }
+
+      .report-section-title{
+        font-family:'Playfair Display',serif;
+        font-size:14px;
+        font-weight:900;
+        color:#0A1D66;
+        border-bottom:2px solid #F5B63D;
+        padding-bottom:4px;
+        margin-bottom:10px;
+      }
+
+      .report-grid{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+        margin-bottom:10px;
+      }
+
+      .report-item{
+        background:#F8FAFC;
+        border-left:3px solid #1A4BFF;
+        border-radius:8px;
+        padding:12px;
+      }
+
+      .report-label{
+        font-size:10px;
+        color:#64748B;
+        font-weight:800;
+        text-transform:uppercase;
+        letter-spacing:.05em;
+        margin-bottom:4px;
+      }
+
+      .report-value{
+        font-size:15px;
+        font-weight:700;
+        color:#0A1D66;
+      }
+
+      .report-table{
+        width:100%;
+        border-collapse:collapse;
+        font-size:10px;
+      }
+
+      .report-table th{
+        background:#0A1D66;
+        color:#fff;
+        padding:8px;
+        text-align:left;
+        font-size:10px;
+      }
+
+      .report-table td{
+        padding:8px;
+        border-bottom:1px solid #E2E8F0;
+        color:#334155;
+      }
+
+      .report-highlight{
+        margin-top:10px;
+        border-left:4px solid #F5B63D;
+        background:#FEF3C7;
+        border-radius:8px;
+        padding:12px;
+        color:#1F2937;
+        font-size:11px;
+      }
+
+      .report-comparison{
+        margin-bottom:14px;
+        page-break-inside:avoid;
+      }
+
+      .report-comparison-title{
+        font-family:'Playfair Display',serif;
+        font-size:14px;
+        font-weight:900;
+        color:#0A1D66;
+        text-align:center;
+        margin-bottom:8px;
+      }
+
+      .report-comparison-grid{
+        display:grid;
+        grid-template-columns:repeat(4,1fr);
+        gap:8px;
+      }
+
+      .report-comp-box{
+        border-radius:8px;
+        padding:10px;
+        text-align:center;
+        border:1px solid #e5e7eb;
+      }
+
+      .report-comp-box.mattress{background:#FEE2E2}
+      .report-comp-box.bank{background:#FED7AA}
+      .report-comp-box.afore{background:#FEF3C7}
+      .report-comp-box.plan{background:#D1FAE5}
+
+      .report-comp-label{
+        font-size:9px;
+        font-weight:900;
+        letter-spacing:.08em;
+        text-transform:uppercase;
+        margin-bottom:6px;
+      }
+
+      .report-comp-value{
+        font-size:16px;
+        font-weight:800;
+      }
+
+      .report-comp-loss{
+        font-size:9px;
+        margin-top:6px;
+        font-weight:700;
+      }
+
+      .report-comp-message{
+        margin-top:10px;
+        background:#FEF3C7;
+        border-left:4px solid #F5B63D;
+        border-radius:8px;
+        padding:10px 12px;
+        font-size:11px;
+        color:#1F2937;
+      }
+
+      .report-text{
+        font-size:11px;
+        line-height:1.55;
+        color:#334155;
+        margin-top:6px;
+      }
+
+      .report-footer{
+        margin-top:20px;
+        padding-top:12px;
+        border-top:2px solid #E2E8F0;
+        display:flex;
+        justify-content:space-between;
+        gap:16px;
+        font-size:10px;
+        color:#64748B;
+      }
+
+      .report-contact{font-weight:700}
+      .report-disclaimer{
+        max-width:420px;
+        line-height:1.4;
+      }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width:1200px){
+      .hero-top{grid-template-columns:1fr}
+      .hero-kpis{grid-template-columns:1fr}
+      .comparison-strip{grid-template-columns:repeat(2,1fr)}
+    }
+
+    @media (max-width:980px){
+      body{overflow:auto}
+      html,body,.app-container{height:auto}
+      .app-container{grid-template-columns:1fr}
+      .control-panel,.results-panel{overflow:visible}
+      .whatsapp-float{right:14px;bottom:14px}
+    }
+
+    @media (max-width:680px){
+      .comparison-strip,
+      .retirement-grid{
+        grid-template-columns:1fr;
+      }
+      .hero-value{font-size:52px}
+      .hero-value.side{font-size:44px}
+      .hero-stats-row{grid-template-columns:1fr}
+      .hero-stat:not(:last-child){
+        border-right:none;
+        margin-right:0;
+        padding-right:0;
+        border-bottom:1px solid rgba(255,255,255,.07);
+        padding-bottom:12px;
+        margin-bottom:12px;
+      }
+    }
+
+    ::-webkit-scrollbar{width:10px;height:10px}
+    ::-webkit-scrollbar-track{background:rgba(255,255,255,.04)}
+    ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:999px}
+  </style>
 </head>
 <body>
-<div class="app">
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <div class="sidebar-logo-row">
-        <img src="allianz-distribuidor-autorizado.png" alt="Allianz Distribuidor Autorizado" onerror="this.style.display='none'">
+
+  <div class="app-container">
+
+    <!-- PANEL IZQUIERDO -->
+    <div class="control-panel">
+
+      <div class="camera-box">
+        Espacio para cámara
       </div>
-      <div class="badge-autorizado">✦ Distribuidor Autorizado Allianz</div>
-      <a id="waBtn" class="cta-whatsapp" target="_blank" rel="noopener">
-        <span class="cta-icon">💬</span>
-        <div class="cta-text">
-          <span class="cta-main">Escribe RETIRO por WhatsApp</span>
-          <span class="cta-phone">662 417 6032</span>
-          <span style="font-size:10px;opacity:.75">Simulación sin costo hoy</span>
+
+      <div class="section-block">
+        <div class="section-header">
+          <span class="step-indicator">1</span>
+          Tus datos
         </div>
-      </a>
-    </div>
 
-    <div class="form-section">
-      <div class="section-label"><span class="section-num">1</span>Tus datos</div>
-      <div class="form-group"><label class="form-label">Nombre (opcional)</label><input class="form-input" id="nombreOpt" type="text" placeholder="Ej. Fernanda"></div>
-      <div class="form-group"><label class="form-label">Edad actual</label><input class="form-input" id="edad" type="number" min="18" max="100" value="29"></div>
-      <div class="form-group"><label class="form-label">Años que aportarás</label><select class="form-input" id="years"><option value="10">10 años</option><option value="15" selected>15 años</option><option value="20">20 años</option><option value="25">25 años</option></select></div>
-      <div class="form-group"><label class="form-label">Meta mensual deseada (hoy)</label><input class="form-input" id="metaHoy" type="number" min="0" step="1000" value="32000"><div class="form-hint">¿Cuánto quieres recibir al mes en tu retiro?</div></div>
-    </div>
+        <div class="form-group">
+          <label class="form-label">Tu nombre (opcional)</label>
+          <input class="form-input" id="nombreOpt" type="text" placeholder="Ej. Fernanda">
+        </div>
 
-    <div class="form-section">
-      <div class="section-label"><span class="section-num">2</span>Tu aportación <span class="suggested-badge" id="suggestedBadge">💡 Ejemplo</span></div>
-      <div class="error-msg" id="errorMsg"></div>
-      <div class="form-group"><label class="form-label">Aportación mensual</label><input class="form-input" id="pmt" type="number" value="2500" min="0" step="0.01"><div class="form-hint" id="pmtHint">Usa esta cifra como referencia inicial. Tú decides cuánto aportar.</div></div>
-      <div class="form-group"><label class="form-label">Frecuencia</label><select class="form-input" id="frequency"><option value="12" selected>Mensual</option><option value="4">Trimestral</option><option value="2">Semestral</option><option value="1">Anual</option></select></div>
-      <div class="form-group"><label class="form-label">Aportación única inicial</label><input class="form-input" id="lumpSum" type="number" value="0" min="0" step="0.01"></div>
-      <div class="form-group"><label class="form-label">Régimen fiscal</label><select class="form-input" id="regimenFiscal"><option value="ninguno">Sin beneficio fiscal</option><option value="93">Art. 93 (diferido)</option><option value="151">Art. 151 (deducible)</option></select></div>
-      <div class="form-group"><label class="form-label">Devolución ISR (%)</label><select class="form-input" id="isrPct" disabled><option value="0">0%</option><option value="10">10%</option><option value="20" selected>20%</option><option value="30">30%</option><option value="35">35%</option></select></div>
-      <div class="form-group"><label class="form-label" style="display:flex;align-items:center;gap:8px;opacity:.5"><input id="reinvertISR" type="checkbox" checked style="width:auto;margin:0" disabled>Reinvertir devolución fiscal</label></div>
-      <div class="collapsible-head" id="advancedToggle"><span>⚙ Parámetros avanzados</span><span class="chevron">▼</span></div>
-      <div class="collapsible-body" id="advancedContent">
-        <div class="form-group" style="padding-top:12px"><label class="form-label">Rendimiento esperado (%)</label><input class="form-input" id="rate" type="number" value="10" min="0" max="100" step="0.01"></div>
-        <div class="form-group"><label class="form-label">Inflación promedio (%)</label><input class="form-input" id="inflation" type="number" value="4" min="0" max="100" step="0.01"></div>
-      </div>
-      <button class="btn-calc" id="calcBtn" style="margin-top:16px">Calcular proyección</button>
-      <button class="btn-reset" id="resetBtn">Reiniciar todo</button>
-    </div>
+        <div class="form-group">
+          <label class="form-label">Edad actual</label>
+          <input class="form-input" id="edad" type="number" min="18" max="100" value="29">
+        </div>
 
-    <div class="form-section">
-      <div class="section-label"><span class="section-num">3</span>Ingreso en retiro</div>
-      <input type="hidden" id="pvRet" value="0">
-      <div class="form-group"><label class="form-label">Años de retiro</label><select class="form-input" id="yrsRetSel"><option value="15">15 años</option><option value="20" selected>20 años</option><option value="25">25 años</option></select></div>
-      <button class="btn-calc-ret" id="calcRet">Calcular mensualidad</button>
-    </div>
-  </aside>
+        <div class="form-group">
+          <label class="form-label">Años que aportarás</label>
+          <select class="form-input" id="years">
+            <option value="10">10 años</option>
+            <option value="15" selected>15 años</option>
+            <option value="20">20 años</option>
+            <option value="25">25 años</option>
+          </select>
+        </div>
 
-  <main class="results">
-    <div class="top-stage">
-      <div class="camera-slot">ESPACIO PARA CÁMARA</div>
-      <div class="top-info-card">
-        <div class="top-info-kicker">Retiro estratégico</div>
-        <div class="top-info-title">Visualiza cuánto podrías construir y cómo cambia el resultado si empiezas antes.</div>
-        <div class="top-info-text">Haz una simulación clara con tu edad, tu plazo y la aportación que tú elijas. Sin saturar la pantalla y con lectura simple para live.</div>
-        <div class="top-info-mini">
-          <span class="top-pill">💡 Escenario de referencia</span>
-          <span class="top-pill">📈 Proyección a 65 años</span>
-          <span class="top-pill">💬 WhatsApp directo</span>
+        <div class="form-group">
+          <label class="form-label">Meta mensual deseada (valor de hoy)</label>
+          <input class="form-input" id="metaHoy" type="number" min="0" step="1000" placeholder="32000" value="32000">
+          <div class="form-hint">¿Cuánto te gustaría recibir cada mes cuando llegue tu retiro?</div>
         </div>
       </div>
+
+      <div class="section-block">
+        <div class="section-header">
+          <span class="step-indicator">2</span>
+          Tu aportación
+        </div>
+
+        <div class="error-alert" id="errorMsg"></div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <span class="suggestion-badge" id="suggestedBadge" style="display:none">Sugerido</span>
+            Aportación mensual
+          </label>
+          <input class="form-input" id="pmt" type="number" value="2500" min="0" step="0.01">
+          <div class="form-hint" id="pmtHint">Calcula tu proyección para ver una referencia.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Frecuencia</label>
+          <select class="form-input" id="frequency">
+            <option value="12" selected>Mensual</option>
+            <option value="4">Trimestral</option>
+            <option value="2">Semestral</option>
+            <option value="1">Anual</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Aportación única inicial</label>
+          <input class="form-input" id="lumpSum" type="number" value="0" min="0" step="0.01">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Régimen fiscal</label>
+          <select class="form-input" id="regimenFiscal">
+            <option value="ninguno">Sin beneficio fiscal</option>
+            <option value="93">Art. 93 (diferido)</option>
+            <option value="151">Art. 151 (deducible)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Devolución ISR (%)</label>
+          <select class="form-input" id="isrPct" disabled>
+            <option value="0">0%</option>
+            <option value="10">10%</option>
+            <option value="20" selected>20%</option>
+            <option value="30">30%</option>
+            <option value="35">35%</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" style="display:flex;align-items:center;gap:8px;opacity:.55">
+            <input id="reinvertISR" type="checkbox" checked style="width:auto;margin:0" disabled>
+            Reinvertir devolución fiscal
+          </label>
+        </div>
+
+        <div class="collapsible-section">
+          <div class="collapsible-header" id="advancedToggle">
+            <span class="collapsible-title">Parámetros avanzados</span>
+            <span class="collapsible-icon">▼</span>
+          </div>
+          <div class="collapsible-content" id="advancedContent">
+            <div class="form-group">
+              <label class="form-label">Rendimiento esperado (%)</label>
+              <input class="form-input" id="rate" type="number" value="10" min="0" max="100" step="0.01">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Inflación promedio (%)</label>
+              <input class="form-input" id="inflation" type="number" value="4" min="0" max="100" step="0.01">
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="calcBtn" style="margin-top:16px">Calcular proyección</button>
+        <button class="btn-secondary" id="resetBtn">Reiniciar</button>
+      </div>
+
+      <div class="section-block">
+        <div class="section-header">
+          <span class="step-indicator">3</span>
+          Tu retiro
+        </div>
+
+        <input type="hidden" id="pvRet" value="0">
+
+        <div class="form-group">
+          <label class="form-label">Años de retiro</label>
+          <select class="form-input" id="yrsRetSel">
+            <option value="15">15 años</option>
+            <option value="20" selected>20 años</option>
+            <option value="25">25 años</option>
+          </select>
+        </div>
+
+        <button class="btn-primary" id="calcRet">Calcular ingreso mensual</button>
+      </div>
+
     </div>
 
-    <div class="hero">
-      <div class="hero-top-row">
-        <div>
-          <div class="hero-label-sub">Fondo proyectado a los 65 años</div>
-          <div class="hero-value-main" id="fondo65">—</div>
+    <!-- PANEL DERECHO -->
+    <div class="results-panel">
+
+      <div class="hero-wrap">
+
+        <div class="hero-top">
+          <!-- AQUI VA LOGO + CTA -->
+          <div class="hero-brand">
+            <div>
+              <div class="brand-badge">Distribuidor autorizado Allianz</div>
+              <img src="logo-allianz-white.png" alt="Allianz" class="hero-logo">
+            </div>
+
+            <div class="hero-cta">
+              <div class="hero-cta-label">Escribe RETIRO por WhatsApp</div>
+              <div class="hero-cta-main">662 417 6032</div>
+              <div class="hero-cta-sub">Revisa tu escenario y compáralo con claridad.</div>
+            </div>
+          </div>
+
+          <!-- AQUI VA COPY PRINCIPAL -->
+          <div class="hero-copy">
+            <div class="hero-actions">
+              <button class="btn-action" id="csvBtn">CSV</button>
+              <button class="btn-action accent" id="printBtn">PDF</button>
+            </div>
+
+            <div class="hero-mini">Retiro estratégico</div>
+            <div class="hero-title">Visualiza cuánto podrías construir y cómo cambia el resultado si empiezas antes.</div>
+            <div class="hero-text">
+              Descubre cuánto podrías acumular, cuánto realmente aportas y qué diferencia existe entre dejar pasar el tiempo o comenzar hoy.
+            </div>
+
+            <div class="hero-pills">
+              <div class="hero-pill">Escenario de referencia</div>
+              <div class="hero-pill">Proyección a los 65 años</div>
+              <div class="hero-pill">WhatsApp directo</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="hero-kpis">
+        <div class="hero-kpi-main">
+          <div class="hero-kpi-label">Fondo proyectado a los 65 años</div>
+          <div class="hero-value" id="fondo65">—</div>
           <div class="hero-caption">Listo para tu retiro</div>
+
+          <div class="hero-stats-row">
+            <div class="hero-stat">
+              <div class="hero-kpi-label">Total aportado</div>
+              <div class="stat-value" id="totalAportado">—</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-kpi-label">Rendimiento generado</div>
+              <div class="stat-value" id="rendimiento">—</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-kpi-label">Duración del plan</div>
+              <div class="stat-value"><span id="yearsPlan">—</span> años</div>
+            </div>
+          </div>
         </div>
-        <div style="text-align:right">
-          <div class="hero-label-sub">Fondo al finalizar plan</div>
-          <div class="hero-value-main hero-white" id="fondoPlan">—</div>
+
+        <div class="hero-kpi-side">
+          <div class="hero-kpi-label">Fondo al finalizar tu plan</div>
+          <div class="hero-value side" id="fondoPlan">—</div>
           <div class="hero-caption">A los <span id="edadFinPlan">—</span> años</div>
         </div>
-        <div class="action-btns">
-          <button class="btn-action" id="csvBtn">CSV</button>
-          <button class="btn-action gold" id="printBtn">PDF</button>
+      </div>
+
+      <div class="stats-container">
+
+        <div>
+          <div class="comparison-title"><span id="compTitle">¿Dónde estaría tu dinero en 15 años?</span></div>
+
+          <div class="comparison-strip">
+            <div class="comp-box mattress">
+              <div class="comp-label">💸 Colchón</div>
+              <div class="comp-value" id="compMattress">—</div>
+              <div class="comp-bar"><span style="width:20%;background:#E96C6C"></span></div>
+              <div class="comp-loss" id="compMattressLoss">—</div>
+            </div>
+
+            <div class="comp-box bank">
+              <div class="comp-label">🏦 Banco</div>
+              <div class="comp-value" id="compBank">—</div>
+              <div class="comp-bar"><span style="width:24%;background:#F29B52"></span></div>
+              <div class="comp-loss" id="compBankLoss">—</div>
+            </div>
+
+            <div class="comp-box afore">
+              <div class="comp-label">🏛️ AFORE</div>
+              <div class="comp-value" id="compAfore">—</div>
+              <div class="comp-bar"><span style="width:38%;background:#F5B63D"></span></div>
+              <div class="comp-loss" id="compAforeLoss">—</div>
+            </div>
+
+            <div class="comp-box plan">
+              <div class="comp-label">✨ Tu plan</div>
+              <div class="comp-value" id="compPlan">—</div>
+              <div class="comp-bar"><span style="width:100%;background:#13C18D"></span></div>
+              <div class="comp-loss" style="color:#b8f4df">✓ Protegido</div>
+            </div>
+          </div>
+
+          <div class="comparison-message" id="compMessage">
+            Mismo esfuerzo. Cuatro caminos. Resultados completamente diferentes.
+          </div>
+        </div>
+
+        <div class="chart-section">
+          <div class="chart-header">
+            <div class="chart-title">Crecimiento estimado de tu fondo</div>
+            <div class="chart-badge">Proyección</div>
+          </div>
+          <canvas id="chartCanvas"></canvas>
+        </div>
+
+        <div class="retirement-section" id="retBox">
+          <div class="retirement-title">Tu ingreso mensual estimado en retiro</div>
+          <div class="retirement-grid">
+            <div class="retirement-item">
+              <div class="retirement-label">Ingreso mensual</div>
+              <div class="retirement-value" id="pmtReal">—</div>
+            </div>
+            <div class="retirement-item">
+              <div class="retirement-label">Meses de retiro</div>
+              <div class="retirement-value" id="nMeses">—</div>
+            </div>
+            <div class="retirement-item">
+              <div class="retirement-label">Tasa real mensual</div>
+              <div class="retirement-value" id="iRealMes">—</div>
+            </div>
+            <div class="retirement-item">
+              <div class="retirement-label">Regla 4% anual</div>
+              <div class="retirement-value" id="rule4">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-wrapper">
+          <div class="detail-toggle" id="toggleTable">
+            <span>Detalle año por año</span>
+            <span class="icon">▼</span>
+          </div>
+          <div class="detail-content" id="details">
+            <table>
+              <thead>
+                <tr>
+                  <th>Año</th>
+                  <th>Edad</th>
+                  <th>Aportado</th>
+                  <th>Beneficio fiscal</th>
+                  <th>Saldo</th>
+                </tr>
+              </thead>
+              <tbody id="tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="detail-wrapper">
+          <div class="detail-toggle" id="toggleTableRet">
+            <span>Detalle mensual del retiro</span>
+            <span class="icon">▼</span>
+          </div>
+          <div class="detail-content" id="detailsRet">
+            <table>
+              <thead>
+                <tr>
+                  <th>Mes</th>
+                  <th>Edad</th>
+                  <th>Retiro</th>
+                  <th>Interés</th>
+                  <th>Saldo</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyRet"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <a id="waBtn" class="whatsapp-float" target="_blank" rel="noopener">
+    <span>💬</span> WhatsApp
+  </a>
+
+  <!-- ================= PDF ================= -->
+  <div class="report-view">
+
+    <div class="report-header">
+      <div class="report-logo-section">
+        <div class="report-logo">
+          <img src="logo-allianz-white.png" alt="Allianz">
+        </div>
+        <div class="report-branding">
+          <div class="report-main-title">Tu plan de retiro</div>
+          <div class="report-subtitle">Proyección financiera personalizada</div>
         </div>
       </div>
-      <div class="hero-grid">
-        <div class="hero-metric"><div class="hero-metric-label">Total aportado</div><div class="hero-metric-val" id="totalAportado">—</div></div>
-        <div class="hero-metric"><div class="hero-metric-label">Rendimiento generado</div><div class="hero-metric-val" id="rendimiento">—</div></div>
-        <div class="hero-metric"><div class="hero-metric-label">Duración del plan</div><div class="hero-metric-val" id="yearsPlan">—</div></div>
+
+      <div class="report-meta">
+        <div id="rptFecha"></div>
+        <div><strong>Asesor:</strong> Christian GarBa</div>
+        <div>Seguros con Estrategia · Allianz</div>
+        <div>Tel. 662 417 6032</div>
       </div>
     </div>
 
-    <div class="section-block">
-      <div class="retirement-box" id="retBox">
-        <div class="ret-title">💰 Ingreso mensual estimado en retiro</div>
-        <div class="ret-grid">
-          <div class="ret-item"><div class="ret-label">Ingreso mensual</div><div class="ret-value" id="pmtReal">—</div></div>
-          <div class="ret-item"><div class="ret-label">Meses de retiro</div><div class="ret-value" id="nMeses">—</div></div>
-          <div class="ret-item"><div class="ret-label">Tasa real mensual</div><div class="ret-value" id="iRealMes">—</div></div>
-          <div class="ret-item"><div class="ret-label">Regla 4% anual</div><div class="ret-value" id="rule4">—</div></div>
+    <div class="report-timeline">
+      <div class="report-timeline-title">Tu línea de tiempo financiera</div>
+      <div class="timeline-visual" id="timelineVisual">
+        <div class="timeline-point">
+          <div class="timeline-age" id="rptEdadHoy">29</div>
+          <div class="timeline-label">Hoy</div>
+          <div class="timeline-amount">Comienzas</div>
+        </div>
+
+        <div class="timeline-arrow" id="timelineArrow1">→</div>
+
+        <div class="timeline-point" id="timelineMidPoint">
+          <div class="timeline-age" id="rptEdadFinPlan">44</div>
+          <div class="timeline-label" id="rptLabelFinPlan">Fin de aportaciones</div>
+          <div class="timeline-amount" id="rptFondoFinPlan">—</div>
+        </div>
+
+        <div class="timeline-arrow" id="timelineArrow2">→</div>
+
+        <div class="timeline-point" id="timelineRetPoint">
+          <div class="timeline-age">65</div>
+          <div class="timeline-label">Retiro</div>
+          <div class="timeline-amount" id="rptFondo65Timeline">—</div>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:10px;font-size:11px;color:#065F46;font-weight:700">
+        <span id="rptYearsGrowth">21 años</span> de crecimiento adicional sin aportar
+      </div>
+    </div>
+
+    <div class="report-hero">
+      <div class="report-hero-title">Tu plan en números</div>
+      <div class="report-hero-grid">
+        <div class="report-hero-item">
+          <div class="report-hero-label">Aportación mensual</div>
+          <div class="report-hero-value" id="rptAportMensual">—</div>
+        </div>
+        <div class="report-hero-item">
+          <div class="report-hero-label">Plazo</div>
+          <div class="report-hero-value" id="rptPlazo">—</div>
+        </div>
+        <div class="report-hero-item">
+          <div class="report-hero-label">Total invertido</div>
+          <div class="report-hero-value" id="rptTotalAportado">—</div>
+        </div>
+        <div class="report-hero-item">
+          <div class="report-hero-label">Fondo al finalizar plan</div>
+          <div class="report-hero-value" id="rptFondoPlan">—</div>
+        </div>
+        <div class="report-hero-item featured">
+          <div class="report-hero-label">Fondo a los 65 años</div>
+          <div class="report-hero-value" id="rptFondo65">—</div>
+        </div>
+        <div class="report-hero-item featured" style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border-left-color:#1A4BFF">
+          <div class="report-hero-label" style="color:#1E40AF">Ingreso mensual estimado</div>
+          <div class="report-hero-value" id="rptIngresoMensual" style="color:#1E40AF">—</div>
         </div>
       </div>
     </div>
 
-    <div class="section-block">
-      <div class="block-title" id="compTitle">¿Dónde estaría tu dinero en 15 años?</div>
-      <div class="comp-grid">
-        <div class="comp-card mattress"><span class="comp-card-icon">💸</span><div class="comp-card-tag">Colchón</div><span class="comp-card-val" id="compMattress">—</span><div class="comp-card-sub" id="compMattressLoss">—</div><div class="comp-bar"></div></div>
-        <div class="comp-card bank"><span class="comp-card-icon">🏦</span><div class="comp-card-tag">Banco</div><span class="comp-card-val" id="compBank">—</span><div class="comp-card-sub" id="compBankLoss">—</div><div class="comp-bar"></div></div>
-        <div class="comp-card afore"><span class="comp-card-icon">🏛</span><div class="comp-card-tag">Afore</div><span class="comp-card-val" id="compAfore">—</span><div class="comp-card-sub" id="compAforeLoss">—</div><div class="comp-bar"></div></div>
-        <div class="comp-card plan"><span class="comp-card-icon">✨</span><div class="comp-card-tag">Tu plan</div><span class="comp-card-val" id="compPlan">—</span><div class="comp-card-sub" style="color:var(--green)">✓ Protegido</div><div class="comp-bar"></div></div>
+    <div class="report-comparison">
+      <div class="report-comparison-title" id="rptCompTitle">¿Dónde estaría tu dinero en 15 años?</div>
+      <div class="report-comparison-grid">
+        <div class="report-comp-box mattress">
+          <div class="report-comp-label" style="color:#991B1B">💸 Colchón</div>
+          <div class="report-comp-value" style="color:#991B1B" id="rptCompMattress">—</div>
+          <div class="report-comp-loss" style="color:#991B1B" id="rptCompMattressLoss">—</div>
+        </div>
+        <div class="report-comp-box bank">
+          <div class="report-comp-label" style="color:#9A3412">🏦 Banco</div>
+          <div class="report-comp-value" style="color:#9A3412" id="rptCompBank">—</div>
+          <div class="report-comp-loss" style="color:#9A3412" id="rptCompBankLoss">—</div>
+        </div>
+        <div class="report-comp-box afore">
+          <div class="report-comp-label" style="color:#92400E">🏛️ AFORE</div>
+          <div class="report-comp-value" style="color:#92400E" id="rptCompAfore">—</div>
+          <div class="report-comp-loss" style="color:#92400E" id="rptCompAforeLoss">—</div>
+        </div>
+        <div class="report-comp-box plan">
+          <div class="report-comp-label" style="color:#065F46">✨ Tu plan</div>
+          <div class="report-comp-value" style="color:#065F46" id="rptCompPlan">—</div>
+          <div class="report-comp-loss" style="color:#065F46">Protegido</div>
+        </div>
       </div>
-      <div class="comp-note"><strong id="compMessage">Mismo esfuerzo. Cuatro caminos. Resultados completamente diferentes.</strong></div>
-    </div>
-
-    <div class="section-block">
-      <div class="chart-wrap">
-        <div class="chart-header"><div class="chart-title">Crecimiento del fondo</div><div class="chart-badge">Proyección año a año</div></div>
-        <canvas id="chartCanvas"></canvas>
-      </div>
-    </div>
-
-    <div class="section-block">
-      <div class="detail-toggle" id="toggleTable"><span>📊 Detalle año por año</span><span class="dt-icon">▼</span></div>
-      <div class="detail-content" id="details"><table><thead><tr><th>Año</th><th>Edad</th><th>Aportado</th><th>Ben. fiscal</th><th>Saldo</th></tr></thead><tbody id="tbody"></tbody></table></div>
-    </div>
-
-    <div class="section-block">
-      <div class="detail-toggle" id="toggleTableRet"><span>📋 Detalle mensual del retiro</span><span class="dt-icon">▼</span></div>
-      <div class="detail-content" id="detailsRet"><table><thead><tr><th>Mes</th><th>Edad</th><th>Retiro</th><th>Interés</th><th>Saldo</th></tr></thead><tbody id="tbodyRet"></tbody></table></div>
-    </div>
-
-    <div class="tiktok-banner"><span class="tiktok-banner-icon">💬</span><div class="tiktok-banner-text">Escribe <strong>RETIRO</strong> por WhatsApp &nbsp;•&nbsp; <strong>662 417 6032</strong> &nbsp;•&nbsp; Simulación sin costo hoy</div></div>
-  </main>
-</div>
-
-<div class="report-view">
-  <div class="report-header">
-    <div class="report-logo-section">
-      <div class="report-logo">
-        <img src="allianz-distribuidor-autorizado.png" alt="Allianz Distribuidor Autorizado" class="report-brand-logo" onerror="this.style.display='none'">
-      </div>
-      <div class="report-branding">
-        <div class="report-main-title">Tu Plan de Retiro</div>
-        <div class="report-subtitle">Proyección financiera personalizada — Allianz</div>
+      <div class="report-comp-message">
+        <strong>Mismo esfuerzo. Cuatro caminos. Resultados completamente diferentes.</strong><br>
+        Lo que cambia no es solo el dinero: cambia el tiempo que dejas trabajar a tu favor.
       </div>
     </div>
-    <div class="report-meta">
-      <div id="rptFecha"></div>
-      <div><strong>Asesor:</strong> Christian GarBa</div>
-      <div>Distribuidor Autorizado Allianz</div>
-      <div>Tel. 662 417 6032</div>
+
+    <div class="report-section">
+      <div class="report-section-title">1. Tus datos</div>
+      <div class="report-grid">
+        <div class="report-item">
+          <div class="report-label">Nombre</div>
+          <div class="report-value" id="rptNombre">—</div>
+        </div>
+        <div class="report-item">
+          <div class="report-label">Edad actual</div>
+          <div class="report-value" id="rptEdad">—</div>
+        </div>
+        <div class="report-item">
+          <div class="report-label">Plazo de aportaciones</div>
+          <div class="report-value" id="rptPlazoDetalle">—</div>
+        </div>
+        <div class="report-item">
+          <div class="report-label">Aportación mensual</div>
+          <div class="report-value" id="rptAportReal">—</div>
+        </div>
+      </div>
+      <div class="report-text" id="rptSupuestos1"></div>
+      <div class="report-text" id="rptSupuestosFiscal"></div>
     </div>
-  </div>
 
-  <div class="report-timeline">
-    <div class="report-timeline-title">Tu Línea de Tiempo Financiera</div>
-    <div class="timeline-visual" id="timelineVisual">
-      <div class="timeline-point"><div class="timeline-age" id="rptEdadHoy">29</div><div class="timeline-label">HOY</div><div class="timeline-amount">Comienzas</div></div>
-      <div class="timeline-arrow" id="timelineArrow1">→</div>
-      <div class="timeline-point" id="timelineMidPoint"><div class="timeline-age" id="rptEdadFinPlan">44</div><div class="timeline-label" id="rptLabelFinPlan">FIN APORTACIONES</div><div class="timeline-amount" id="rptFondoFinPlan">—</div></div>
-      <div class="timeline-arrow" id="timelineArrow2">→</div>
-      <div class="timeline-point" id="timelineRetPoint"><div class="timeline-age">65</div><div class="timeline-label">RETIRO</div><div class="timeline-amount" id="rptFondo65Timeline">—</div></div>
+    <div class="report-section">
+      <div class="report-section-title">2. El costo de posponer</div>
+      <table class="report-table">
+        <thead>
+          <tr>
+            <th>Momento de inicio</th>
+            <th>Aportación mensual para mismo fondo</th>
+            <th>Costo adicional vs hoy</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Empiezas hoy</strong></td>
+            <td id="rptHoyMonto">—</td>
+            <td id="rptHoyDelta">—</td>
+          </tr>
+          <tr>
+            <td>Dentro de 1 año</td>
+            <td id="rpt1Monto">—</td>
+            <td id="rpt1Delta">—</td>
+          </tr>
+          <tr>
+            <td>Dentro de 3 años</td>
+            <td id="rpt3Monto">—</td>
+            <td id="rpt3Delta">—</td>
+          </tr>
+          <tr>
+            <td>Dentro de 5 años</td>
+            <td id="rpt5Monto">—</td>
+            <td id="rpt5Delta">—</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="report-highlight">
+        <strong>Conclusión:</strong> <span id="rptMensajePosponer"></span>
+      </div>
     </div>
-    <div style="text-align:center;margin-top:12px;font-size:11px;color:#065F46;font-weight:600"><span id="rptYearsGrowth">21 años</span> de crecimiento adicional sin aportar</div>
-  </div>
 
-  <div class="report-hero">
-    <div class="report-hero-title">Tu Plan en Números</div>
-    <div class="report-hero-grid">
-      <div class="report-hero-item"><div class="report-hero-label">Aportación elegida</div><div class="report-hero-value" id="rptAportMensual">—</div></div>
-      <div class="report-hero-item"><div class="report-hero-label">Durante</div><div class="report-hero-value" id="rptPlazo">—</div></div>
-      <div class="report-hero-item"><div class="report-hero-label">Total invertido</div><div class="report-hero-value" id="rptTotalAportado">—</div></div>
-      <div class="report-hero-item"><div class="report-hero-label">Acumulas al fin del plan</div><div class="report-hero-value" id="rptFondoPlan">—</div></div>
-      <div class="report-hero-item featured"><div class="report-hero-label">💰 Fondo a los 65 años</div><div class="report-hero-value" id="rptFondo65">—</div></div>
-      <div class="report-hero-item featured" style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border-left-color:#1A4BFF"><div class="report-hero-label" style="color:#1E40AF">📊 Ingreso mensual en retiro</div><div class="report-hero-value" id="rptIngresoMensual" style="color:#1E40AF">—</div></div>
+    <div class="report-footer">
+      <div class="report-contact">
+        <strong>Christian GarBa</strong> · Seguros con Estrategia · Allianz<br>
+        Tel. 662 417 6032
+      </div>
+      <div class="report-disclaimer">
+        <strong>Nota técnica:</strong> Proyección matemática basada en un supuesto de rendimiento nominal anual del
+        <span id="rptRendimientoNota">10</span>% compuesto y en los parámetros indicados. Los resultados son estimaciones informativas y no constituyen garantía de rendimiento futuro.
+      </div>
     </div>
+
   </div>
 
-  <div class="report-comparison">
-    <div class="report-comparison-title" id="rptCompTitle">¿Dónde está tu dinero en 15 años?</div>
-    <div class="report-comparison-grid">
-      <div class="report-comp-box mattress"><div class="report-comp-label" style="color:#991B1B">💸 COLCHÓN</div><div class="report-comp-value" style="color:#991B1B" id="rptCompMattress">—</div><div style="margin:6px auto;width:80%"><div style="background:#DC2626;height:6px;border-radius:3px;width:20%"></div></div><div class="report-comp-loss" style="color:#991B1B" id="rptCompMattressLoss">—</div></div>
-      <div class="report-comp-box bank"><div class="report-comp-label" style="color:#9A3412">🏦 BANCO</div><div class="report-comp-value" style="color:#9A3412" id="rptCompBank">—</div><div style="margin:6px auto;width:80%"><div style="background:#EA580C;height:6px;border-radius:3px;width:24%"></div></div><div class="report-comp-loss" style="color:#9A3412" id="rptCompBankLoss">—</div></div>
-      <div class="report-comp-box afore"><div class="report-comp-label" style="color:#92400E">🏛️ AFORE</div><div class="report-comp-value" style="color:#92400E" id="rptCompAfore">—</div><div style="margin:6px auto;width:80%"><div style="background:#F59E0B;height:6px;border-radius:3px;width:38%"></div></div><div class="report-comp-loss" style="color:#92400E" id="rptCompAforeLoss">—</div></div>
-      <div class="report-comp-box plan"><div class="report-comp-label" style="color:#065F46">✨ TU PLAN</div><div class="report-comp-value" style="color:#065F46" id="rptCompPlan">—</div><div style="margin:6px auto;width:80%"><div style="background:#10B981;height:6px;border-radius:3px;width:100%"></div></div><div class="report-comp-loss" style="color:#065F46">✓ Protegido</div></div>
-    </div>
-    <div class="report-comp-message"><strong>Mismo esfuerzo. Cuatro caminos. Resultados completamente diferentes.</strong></div>
-  </div>
+  <script>
+    const $ = id => document.getElementById(id);
+    const money = v => new Intl.NumberFormat('es-MX',{
+      style:'currency',
+      currency:'MXN',
+      minimumFractionDigits:0,
+      maximumFractionDigits:0
+    }).format(Number(v)||0);
 
-  <div class="report-section">
-    <div class="report-section-title">1. Datos del Cliente</div>
-    <div class="report-grid">
-      <div class="report-item"><div class="report-label">Nombre</div><div class="report-value" id="rptNombre">—</div></div>
-      <div class="report-item"><div class="report-label">Edad actual</div><div class="report-value" id="rptEdad">—</div></div>
-      <div class="report-item"><div class="report-label">Plazo de aportaciones</div><div class="report-value" id="rptPlazoDetalle">—</div></div>
-      <div class="report-item"><div class="report-label">Aportación elegida</div><div class="report-value" id="rptAportReal">—</div></div>
-    </div>
-    <div class="report-text" id="rptSupuestos1"></div>
-    <div class="report-text" id="rptSupuestosFiscal"></div>
-  </div>
+    const freqMap = {'12':'Mensual','4':'Trimestral','2':'Semestral','1':'Anual'};
 
-  <div class="report-section">
-    <div class="report-section-title">2. El costo de esperar</div>
-    <table class="report-table"><thead><tr><th>Momento de inicio</th><th>Aportación mensual para mismo fondo</th><th>Costo adicional vs hoy</th></tr></thead><tbody><tr><td><strong>Empiezas hoy</strong></td><td id="rptHoyMonto">—</td><td id="rptHoyDelta">—</td></tr><tr><td>Dentro de 1 año</td><td id="rpt1Monto">—</td><td id="rpt1Delta">—</td></tr><tr><td>Dentro de 3 años</td><td id="rpt3Monto">—</td><td id="rpt3Delta">—</td></tr><tr><td>Dentro de 5 años</td><td id="rpt5Monto">—</td><td id="rpt5Delta">—</td></tr></tbody></table>
-    <div class="report-highlight"><strong>Conclusión:</strong> <span id="rptMensajePosponer"></span></div>
-  </div>
+    const reportState = {
+      nombre:'',edad:null,metaHoy:null,planYears:null,pmtSugerido:null,
+      infl:null,rAcc:null,rRet:null,yrsRet:null,
+      totalAportado:0,rendimiento:0,fondoPlan:0,fondo65:0,benefFiscal:0,
+      ingresoMensual:0,tasaRealMes:0,regimenFiscal:'ninguno',isrPct:0,
+      delayScenarios:null,chartData:null,edadFinPlan:0,yearsGrowth:0
+    };
 
-  <div class="report-footer">
-    <div class="report-contact"><strong>Christian GarBa</strong> · Distribuidor Autorizado Allianz<br>Tel. 662 417 6032 · Escribe RETIRO por WhatsApp</div>
-    <div class="report-disclaimer"><strong>Nota técnica:</strong> Proyección matemática basada en rendimiento nominal anual del <span id="rptRendimientoNota">10</span>% compuesto. Los resultados son estimaciones informativas y no constituyen garantía de rendimiento futuro.</div>
-  </div>
-</div>
+    let myChart = null;
+    let userEditedPMT = false;
 
-<script>
-const $ = id => document.getElementById(id);
-const money = v => new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',minimumFractionDigits:0,maximumFractionDigits:0}).format(Number(v)||0);
-const freqMap = {'12':'Mensual','4':'Trimestral','2':'Semestral','1':'Anual'};
+    $('regimenFiscal').addEventListener('change',function(){
+      const is151 = this.value === '151';
+      const is93 = this.value === '93';
 
-const reportState = {nombre:'',edad:null,metaHoy:null,planYears:null,pmtSugerido:null,infl:null,rAcc:null,rRet:null,yrsRet:null,totalAportado:0,rendimiento:0,fondoPlan:0,fondo65:0,benefFiscal:0,ingresoMensual:0,tasaRealMes:0,regimenFiscal:'ninguno',isrPct:0,delayScenarios:null,chartData:null,edadFinPlan:0,yearsGrowth:0};
-let myChart=null;
-let userEditedPMT=false;
+      if(is93){
+        $('isrPct').disabled = true;
+        $('reinvertISR').disabled = true;
+        $('isrPct').parentElement.style.opacity = '0.55';
+        $('reinvertISR').parentElement.style.opacity = '0.55';
+      }else if(is151){
+        $('isrPct').disabled = false;
+        $('reinvertISR').disabled = false;
+        $('isrPct').parentElement.style.opacity = '1';
+        $('reinvertISR').parentElement.style.opacity = '1';
+      }else{
+        $('isrPct').disabled = true;
+        $('reinvertISR').disabled = true;
+        $('isrPct').parentElement.style.opacity = '0.55';
+        $('reinvertISR').parentElement.style.opacity = '0.55';
+      }
+    });
 
-$('regimenFiscal').addEventListener('change',function(){
-  const is151=this.value==='151';
-  const is93=this.value==='93';
-  if(is93){$('isrPct').disabled=true;$('reinvertISR').disabled=true;$('isrPct').parentElement.style.opacity='0.5';$('reinvertISR').parentElement.style.opacity='0.5';}
-  else if(is151){$('isrPct').disabled=false;$('reinvertISR').disabled=false;$('isrPct').parentElement.style.opacity='1';$('reinvertISR').parentElement.style.opacity='1';}
-  else{$('isrPct').disabled=true;$('reinvertISR').disabled=true;$('isrPct').parentElement.style.opacity='0.5';$('reinvertISR').parentElement.style.opacity='0.5';}
-});
+    function linkWhatsApp(){
+      const nombre = ($('nombreOpt').value||'').trim();
+      const msg = [
+        'Hola Christian, me interesa revisar mi plan de retiro.',
+        nombre ? ('Soy ' + nombre + '.') : '',
+        '*Datos:*',
+        `• Edad: ${$('edad').value} años`,
+        `• Años de aportación: ${$('years').value}`,
+        `• Aportación ${freqMap[$('frequency').value]}: $${$('pmt').value}`
+      ].filter(Boolean).join('\n');
 
-function linkWhatsApp(){
-  const nombre=($('nombreOpt').value||'').trim();
-  const msg=['Hola Christian, me interesa revisar mi plan de retiro.',nombre?('Soy '+nombre+'.'):'','*Datos:*',`• Edad: ${$('edad').value} años`,`• Años de aportación: ${$('years').value}`,`• Aportación ${freqMap[$('frequency').value]}: $${$('pmt').value}`].filter(Boolean).join('\n');
-  $('waBtn').href='https://wa.me/5216624176032?text='+encodeURIComponent(msg);
-}
-
-function calcularPMTRequerido(edadInicio, planY, metaHoy, infl, rAcc, rRet, yrsRet, freq){
-  if(!(edadInicio>0 && planY>0 && metaHoy>0)) return 0;
-  const yrsTo65=Math.max(0,65-edadInicio);
-  const yrsAport=Math.min(planY,yrsTo65);
-  const gapYears=Math.max(0,yrsTo65-yrsAport);
-  if(yrsAport<=0)return 0;
-  const inflDec=infl/100,rAccDec=rAcc/100,rRetDec=rRet/100;
-  const metaNom65=metaHoy*Math.pow(1+inflDec,yrsTo65);
-  const iRet=rRetDec/freq,nRet=yrsRet*freq;
-  const PVneed65=Math.abs(iRet)<1e-12?metaNom65*nRet:metaNom65*((1-Math.pow(1+iRet,-nRet))/iRet);
-  const iAcc=rAccDec/freq,N=yrsAport*freq;
-  let FV_pagos=0,pmtYear=1;
-  for(let y=0;y<yrsAport;y++){
-    if(y>0)pmtYear*=(1+inflDec);
-    for(let m=0;m<freq;m++){
-      const perRest=N-(y*freq+m);
-      FV_pagos+=pmtYear*Math.pow(1+iAcc,perRest);
+      $('waBtn').href = 'https://wa.me/5216624176032?text=' + encodeURIComponent(msg);
     }
-  }
-  const growTo65=Math.pow(1+iAcc,gapYears*freq);
-  const totalFactor=FV_pagos*growTo65;
-  return totalFactor<=0?0:PVneed65/totalFactor;
-}
 
-function updateSuggestion(){
-  const edad=parseFloat($('edad').value);
-  const planY=parseFloat($('years').value);
-  const metaHoy=parseFloat($('metaHoy').value||0);
-  const infl=parseFloat($('inflation').value);
-  const rAcc=parseFloat($('rate').value);
-  const rRet=7;
-  const yrsRet=parseInt($('yrsRetSel').value||20,10);
-  const freq=12;
-  if(!(edad>0&&planY>0&&metaHoy>0)) return;
-  const pmt0=calcularPMTRequerido(edad,planY,metaHoy,infl,rAcc,rRet,yrsRet,freq);
-  const delays=[0,1,3,5];
-  const escenarios={};
-  delays.forEach(d=>{escenarios[d]=calcularPMTRequerido(edad+d,planY,metaHoy,infl,rAcc,rRet,yrsRet,freq);});
-  reportState.metaHoy=metaHoy;reportState.pmtSugerido=pmt0;reportState.infl=infl;reportState.rAcc=rAcc;reportState.rRet=rRet;reportState.yrsRet=yrsRet;reportState.delayScenarios=escenarios;
-  if(!userEditedPMT){$('pmt').value=String(pmt0.toFixed(2));$('pmt').classList.add('suggested');}
-  $('suggestedBadge').style.display='inline-block';
-  $('pmtHint').innerHTML=`Referencia inicial: <strong>${money(pmt0)}</strong>. Puedes cambiarla.`;
-}
+    function calcularPMTRequerido(edadInicio, planY, metaHoy, infl, rAcc, rRet, yrsRet, freq){
+      if(!(edadInicio>0 && planY>0 && metaHoy>0)) return 0;
+      const yrsTo65 = Math.max(0,65-edadInicio);
+      const yrsAport = Math.min(planY,yrsTo65);
+      const gapYears = Math.max(0,yrsTo65-yrsAport);
+      if(yrsAport<=0) return 0;
 
-function calcAccum(){
-  const edad=parseFloat($('edad').value);
-  const years=parseFloat($('years').value);
-  const pmt0=parseFloat($('pmt').value);
-  const lump=parseFloat($('lumpSum').value);
-  const rate=parseFloat($('rate').value)/100;
-  const freq=parseFloat($('frequency').value);
-  const infl=parseFloat($('inflation').value)/100;
-  const regimen=$('regimenFiscal').value;
-  const isrPct=parseFloat($('isrPct').value)/100;
-  const reinv=$('reinvertISR').checked;
-  if([edad,years,pmt0,lump,rate,freq,infl].some(x=>isNaN(x))){const e=$('errorMsg');e.textContent='❌ Completa todos los campos correctamente.';e.classList.add('visible');return;}else{$('errorMsg').classList.remove('visible');}
-  const yrsTo65=Math.max(0,65-edad);
-  const yrsAport=Math.min(years,yrsTo65);
-  const yrsExtra=Math.max(0,yrsTo65-yrsAport);
-  const i=rate/freq;
-  let saldo=lump,totalAportado=lump,benefFiscal=0,edadAct=edad,pmtYear=pmt0,fondoPlan=lump;
-  const tbody=$('tbody');tbody.innerHTML='';
-  const totalYearsSim=yrsAport+yrsExtra;
-  const chartLabels=[],chartData=[];
-  for(let yr=1;yr<=totalYearsSim;yr++){
-    edadAct++;let aportAno=0,benefAno=0;
-    if(yr<=yrsAport){if(yr>1)pmtYear*=(1+infl);for(let k=0;k<freq;k++){saldo*=(1+i);saldo+=pmtYear;aportAno+=pmtYear;totalAportado+=pmtYear;}if(regimen==='151'&&reinv&&isrPct>0){benefAno=aportAno*isrPct;saldo+=benefAno;benefFiscal+=benefAno;}}
-    else{for(let k=0;k<freq;k++)saldo*=(1+i);}    
-    if(yr===yrsAport)fondoPlan=saldo;
-    chartLabels.push(`Año ${yr}`);chartData.push(saldo);
-    const tr=document.createElement('tr');
-    if(yr>yrsAport)tr.style.opacity='.5';
-    tr.innerHTML=`<td>${yr}</td><td>${Math.round(edadAct)}</td><td>${yr>yrsAport?'—':money(aportAno)}</td><td>${benefAno>0?money(benefAno):'—'}</td><td>${money(saldo)}</td>`;
-    tbody.appendChild(tr);
-  }
-  const fondo65=saldo; const rendimiento=fondo65-totalAportado; const edadFinPlan=edad+yrsAport;
-  $('edadFinPlan').textContent=String(Math.round(edadFinPlan)); $('fondoPlan').textContent=money(fondoPlan); $('yearsPlan').textContent=`${yrsAport} años`; $('totalAportado').textContent=money(totalAportado); $('rendimiento').textContent=money(rendimiento); $('fondo65').textContent=money(fondo65); $('pvRet').value=String(fondo65); $('compTitle').textContent=`¿Dónde estaría tu dinero en ${yrsAport} años?`;
-  Object.assign(reportState,{edad,planYears:yrsAport,totalAportado,rendimiento,fondoPlan,fondo65,benefFiscal,regimenFiscal:regimen,isrPct:isrPct*100,chartData:{labels:chartLabels,data:chartData},edadFinPlan,yearsGrowth:yrsExtra});
-  const totalMeses=years*12; const aportMensual=pmt0; const colchonNominal=totalMeses*aportMensual; const colchonReal=colchonNominal/Math.pow(1+infl,years);
-  const iBanco=0.02/12; let saldoBanco=0; for(let m=0;m<totalMeses;m++){saldoBanco*=(1+iBanco);saldoBanco+=aportMensual;} const bancoReal=saldoBanco/Math.pow(1+infl,years);
-  const iAfore=0.0347/12; let saldoAfore=0; for(let m=0;m<totalMeses;m++){saldoAfore*=(1+iAfore);saldoAfore+=aportMensual;}
-  $('compMattress').textContent=money(colchonNominal); $('compMattressLoss').textContent=`Vale: ${money(colchonReal)}`; $('compBank').textContent=money(saldoBanco); $('compBankLoss').textContent=`Vale: ${money(bancoReal)}`; $('compAfore').textContent=money(saldoAfore); $('compAforeLoss').textContent='Pensión limitada'; $('compPlan').textContent=money(fondoPlan);
-  const diffTotal=fondoPlan-colchonNominal; $('compMessage').textContent=`Mismo esfuerzo. Cuatro caminos. Diferencia de ${money(diffTotal)} entre el peor y el mejor escenario.`;
-  actualizarGrafica(chartLabels,chartData); actualizarReporteBase(); linkWhatsApp();
-}
+      const inflDec = infl/100, rAccDec = rAcc/100, rRetDec = rRet/100;
+      const metaNom65 = metaHoy*Math.pow(1+inflDec,yrsTo65);
+      const iRet = rRetDec/freq, nRet = yrsRet*freq;
+      const PVneed65 = Math.abs(iRet)<1e-12 ? metaNom65*nRet : metaNom65*((1-Math.pow(1+iRet,-nRet))/iRet);
+      const iAcc = rAccDec/freq, N = yrsAport*freq;
 
-function actualizarGrafica(labels,data){
-  const ctx=$('chartCanvas'); if(!ctx) return; const context=ctx.getContext('2d'); if(myChart) myChart.destroy();
-  myChart=new Chart(context,{type:'line',data:{labels,datasets:[{label:'Fondo Acumulado (MXN)',data,borderColor:'#F5B731',backgroundColor:'rgba(245,183,49,.06)',borderWidth:2,fill:true,tension:0.4,pointRadius:0,pointHoverRadius:5,pointBackgroundColor:'#F5B731'}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(17,24,39,.97)',padding:12,titleFont:{size:12,weight:'bold'},bodyFont:{size:11},callbacks:{label:function(ctx){return 'Fondo: '+money(ctx.parsed.y);}}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'$'+(v/1000000).toFixed(1)+'M',font:{size:10},color:'rgba(240,244,255,.35)'},grid:{color:'rgba(255,255,255,.04)'}},x:{ticks:{font:{size:9},color:'rgba(240,244,255,.35)',maxRotation:0,autoSkip:true,maxTicksLimit:10},grid:{display:false}}}}});
-}
+      let FV_pagos = 0, pmtYear = 1;
+      for(let y=0;y<yrsAport;y++){
+        if(y>0) pmtYear *= (1+inflDec);
+        for(let m=0;m<freq;m++){
+          const perRest = N-(y*freq+m);
+          FV_pagos += pmtYear*Math.pow(1+iAcc,perRest);
+        }
+      }
 
-function calcRet(){
-  const PV=parseFloat($('pvRet').value)||0; const yrs=parseInt($('yrsRetSel').value,10); const rateRet=7/100; const infl=4/100; if(PV<=0){alert('⚠️ Primero calcula tu ahorro.');return;}
-  const iNom=rateRet/12; const n=yrs*12; const PMT=Math.abs(iNom)<1e-9?PV/n:PV*(iNom/(1-Math.pow(1+iNom,-n))); const rReal=((1+rateRet)/(1+infl))-1; const iReal=rReal/12;
-  $('retBox').classList.add('visible'); $('pmtReal').textContent=money(PMT); $('nMeses').textContent=`${n}`; $('iRealMes').textContent=`${(iReal*100).toFixed(3)}%`; $('rule4').textContent=`${money(PV*0.04)} /año`;
-  const tbodyRet=$('tbodyRet'); tbodyRet.innerHTML=''; let saldo=PV;
-  for(let m=1;m<=Math.min(n,240);m++){const interes=saldo*iNom; const retiro=PMT; const saldoDesp=Math.max(0,saldo+interes-retiro); const yearsAdd=Math.floor(m/12); const edadTxt=`${65+yearsAdd}`; const tr=document.createElement('tr'); tr.innerHTML=`<td>${m}</td><td>${edadTxt}</td><td>${money(retiro)}</td><td>${money(interes)}</td><td>${money(saldoDesp)}</td>`; tbodyRet.appendChild(tr); saldo=saldoDesp;}
-  reportState.ingresoMensual=PMT; reportState.yrsRet=yrs; reportState.tasaRealMes=iReal; reportState.rRet=7; actualizarReporteBase();
-}
+      const growTo65 = Math.pow(1+iAcc,gapYears*freq);
+      const totalFactor = FV_pagos*growTo65;
+      return totalFactor<=0 ? 0 : PVneed65/totalFactor;
+    }
 
-function actualizarReporteBase(){
-  const nombre=($('nombreOpt').value||'').trim(); reportState.nombre=nombre;
-  const hoy=new Date(); $('rptFecha').textContent=hoy.toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});
-  $('rptNombre').textContent=nombre||'—'; const edad=reportState.edad!=null?reportState.edad:parseFloat($('edad').value||0); $('rptEdad').textContent=edad?`${edad} años`:'—'; $('rptEdadHoy').textContent=edad||'—';
-  const years=reportState.planYears!=null?reportState.planYears:parseFloat($('years').value||0); $('rptPlazo').textContent=years?`${years} años`:'—'; $('rptPlazoDetalle').textContent=years?`${years} años`:'—';
-  const pmtReal=parseFloat($('pmt').value||0); $('rptAportReal').textContent=pmtReal?money(pmtReal):'—'; $('rptAportMensual').textContent=pmtReal?money(pmtReal):'—';
-  const infl=reportState.infl!=null?reportState.infl:parseFloat($('inflation').value||0); const rAcc=reportState.rAcc!=null?reportState.rAcc:parseFloat($('rate').value||0); const yrsRet=reportState.yrsRet!=null?reportState.yrsRet:parseInt($('yrsRetSel').value||20,10); const rRet=reportState.rRet!=null?reportState.rRet:7;
-  $('rptSupuestos1').textContent=`Supuestos: Inflación ${infl.toFixed(1)}% anual, rendimiento en acumulación ${rAcc.toFixed(1)}% nominal, retiro de ${yrsRet} años con ${rRet.toFixed(1)}% nominal.`;
-  if(reportState.regimenFiscal==='151'&&reportState.isrPct>0&&reportState.benefFiscal>0){$('rptSupuestosFiscal').textContent=`Tratamiento fiscal: Art. 151 (deducible), devolución ISR ~${reportState.isrPct.toFixed(0)}% reinvertida en el plan.`;} else if(reportState.regimenFiscal==='93'){$('rptSupuestosFiscal').textContent='Tratamiento fiscal: Art. 93 (diferido). No se modela devolución anual.';} else {$('rptSupuestosFiscal').textContent='Sin beneficio fiscal inmediato modelado en esta proyección.';}
-  $('rptTotalAportado').textContent=reportState.totalAportado?money(reportState.totalAportado):'—'; $('rptFondoPlan').textContent=reportState.fondoPlan?money(reportState.fondoPlan):'—'; $('rptFondo65').textContent=reportState.fondo65?money(reportState.fondo65):'—'; $('rptIngresoMensual').textContent=reportState.ingresoMensual?money(reportState.ingresoMensual):'—'; $('rptRendimientoNota').textContent=(reportState.rAcc||10).toFixed(0);
-  const edadFinPlanCalc=reportState.edadFinPlan||0; const planCruza65=edadFinPlanCalc>=65;
-  if(planCruza65){$('rptEdadFinPlan').textContent='65';$('rptLabelFinPlan').textContent='RETIRO (65)';$('rptFondoFinPlan').textContent=reportState.fondo65?money(reportState.fondo65):'—';$('timelineArrow2').style.display='none';$('timelineRetPoint').style.display='none';$('rptYearsGrowth').parentElement.style.display='none';}
-  else {$('rptEdadFinPlan').textContent=edadFinPlanCalc||'—';$('rptLabelFinPlan').textContent='FIN APORTACIONES';$('rptFondoFinPlan').textContent=reportState.fondoPlan?money(reportState.fondoPlan):'—';$('timelineArrow2').style.display='';$('timelineRetPoint').style.display='';$('rptYearsGrowth').parentElement.style.display='';$('rptFondo65Timeline').textContent=reportState.fondo65?money(reportState.fondo65):'—';$('rptYearsGrowth').textContent=reportState.yearsGrowth?`${reportState.yearsGrowth} años`:'0 años';}
-  $('rptCompTitle').textContent=`¿Dónde está tu dinero en ${years} años?`;
-  if(reportState.totalAportado>0&&years>0){const totalMeses=years*12; const aportMensual=pmtReal; const inflDec=infl/100; const colchonNominal=totalMeses*aportMensual; const colchonReal=colchonNominal/Math.pow(1+inflDec,years); const iBanco=0.02/12; let saldoBanco=0; for(let m=0;m<totalMeses;m++){saldoBanco*=(1+iBanco);saldoBanco+=aportMensual;} const bancoReal=saldoBanco/Math.pow(1+inflDec,years); const iAfore=0.0347/12; let saldoAfore=0; for(let m=0;m<totalMeses;m++){saldoAfore*=(1+iAfore);saldoAfore+=aportMensual;} $('rptCompMattress').textContent=money(colchonNominal); $('rptCompMattressLoss').textContent=`Vale ${money(colchonReal)}`; $('rptCompBank').textContent=money(saldoBanco); $('rptCompBankLoss').textContent=`Vale ${money(bancoReal)}`; $('rptCompAfore').textContent=money(saldoAfore); $('rptCompAforeLoss').textContent='Pensión limitada'; $('rptCompPlan').textContent=money(reportState.fondoPlan);}
-  if(reportState.fondo65>0){const base=pmtReal; const inflDec=(reportState.infl!=null?reportState.infl:infl)/100; const rAccDec=(reportState.rAcc!=null?reportState.rAcc:parseFloat($('rate').value))/100; const freqVal=parseFloat($('frequency').value); const edadHoy=reportState.edad!=null?reportState.edad:parseFloat($('edad').value); const planYears=reportState.planYears!=null?reportState.planYears:parseFloat($('years').value); const targetFondo65=reportState.fondo65;
-    function pmtParaFondo65(delayYears){const edadNueva=edadHoy+delayYears; const yrsTo65nuevo=Math.max(0,65-edadNueva); const yrsAportNuevo=Math.min(planYears,yrsTo65nuevo); const yrsExtraNuevo=Math.max(0,yrsTo65nuevo-yrsAportNuevo); if(yrsAportNuevo<=0)return null; const iAcc=rAccDec/freqVal; const N=yrsAportNuevo*freqVal; let FV_pagos=0,pmtYearSim=1; for(let y=0;y<yrsAportNuevo;y++){if(y>0)pmtYearSim*=(1+inflDec); for(let m=0;m<freqVal;m++){const perRest=N-(y*freqVal+m); FV_pagos+=pmtYearSim*Math.pow(1+iAcc,perRest);}} const growTo65=Math.pow(1+iAcc,yrsExtraNuevo*freqVal); const totalFactor=FV_pagos*growTo65; return totalFactor>0?targetFondo65/totalFactor:null;}
-    const pmt1=pmtParaFondo65(1), pmt3=pmtParaFondo65(3), pmt5=pmtParaFondo65(5);
-    function deltaTxt(pmtDelay){if(!base||pmtDelay==null)return '—'; const diff=pmtDelay-base; if(diff<=0)return 'Igual'; const pct=diff/base*100; return `+${money(diff)} (+${pct.toFixed(1)}%)`;}
-    $('rptHoyMonto').textContent=base?money(base):'—'; $('rptHoyDelta').textContent='Base'; $('rpt1Monto').textContent=pmt1!=null?money(pmt1):'—'; $('rpt1Delta').textContent=deltaTxt(pmt1); $('rpt3Monto').textContent=pmt3!=null?money(pmt3):'—'; $('rpt3Delta').textContent=deltaTxt(pmt3); $('rpt5Monto').textContent=pmt5!=null?money(pmt5):'—'; $('rpt5Delta').textContent=deltaTxt(pmt5);
-    $('rptMensajePosponer').textContent=`Para alcanzar el mismo fondo a los 65 años (${money(targetFondo65)}), esperar obliga a aumentar la aportación mensual. Empezar antes normalmente reduce el esfuerzo.`;
-  }
-}
+    function updateSuggestion(){
+      const edad = parseFloat($('edad').value);
+      const planY = parseFloat($('years').value);
+      const metaHoy = parseFloat($('metaHoy').value||0);
+      const infl = parseFloat($('inflation').value);
+      const rAcc = parseFloat($('rate').value);
+      const rRet = 7;
+      const yrsRet = parseInt($('yrsRetSel').value||20,10);
+      const freq = 12;
 
-function exportCSV(){const rows=[['Año','Edad','Aportado (MXN)','Beneficio fiscal (MXN)','Saldo (MXN)']]; document.querySelectorAll('#tbody tr').forEach(tr=>{const t=[...tr.querySelectorAll('td')].map(td=>td.textContent.replace(/[^\d.,\-a-zñ ]/gi,'')); rows.push(t);}); const blob=new Blob([rows.map(r=>r.join(',')).join('\n')],{type:'text/csv;charset=utf-8;'}); const a=document.createElement('a'); const name=$('nombreOpt').value||'Proyeccion'; const f=new Date().toISOString().slice(0,10); a.href=URL.createObjectURL(blob); a.download=`${name}_plan_retiro_${f}.csv`; a.click(); URL.revokeObjectURL(a.href);}
-function prepararPDF(){actualizarReporteBase(); requestAnimationFrame(()=>setTimeout(()=>window.print(),180));}
+      if(!(edad>0&&planY>0&&metaHoy>0)) return;
 
-$('pmt').addEventListener('input',()=>{userEditedPMT=true;$('pmt').classList.remove('suggested');});
-$('calcBtn').addEventListener('click',()=>{updateSuggestion();calcAccum();});
-$('resetBtn').addEventListener('click',()=>{$('nombreOpt').value='';$('edad').value=29;$('years').value=15;$('metaHoy').value=32000;$('pmt').value=2500;userEditedPMT=false;$('pmt').classList.remove('suggested');$('suggestedBadge').style.display='none';$('frequency').value=12;$('lumpSum').value=0;$('rate').value=10;$('inflation').value=4;$('regimenFiscal').value='ninguno';$('isrPct').value='20';$('reinvertISR').checked=true;$('regimenFiscal').dispatchEvent(new Event('change'));updateSuggestion();calcAccum();});
-$('calcRet').addEventListener('click',calcRet); $('csvBtn').addEventListener('click',exportCSV); $('printBtn').addEventListener('click',prepararPDF);
-$('advancedToggle').addEventListener('click',function(){const c=$('advancedContent'); c.classList.toggle('visible'); this.classList.toggle('open');});
-$('toggleTable').addEventListener('click',function(){$('details').classList.toggle('visible'); this.classList.toggle('open');});
-$('toggleTableRet').addEventListener('click',function(){$('detailsRet').classList.toggle('visible'); this.classList.toggle('open');});
-['edad','years','metaHoy','rate','inflation','yrsRetSel'].forEach(id=>{$(id).addEventListener('change',()=>{updateSuggestion();});});
-['frequency','lumpSum','regimenFiscal','isrPct','reinvertISR'].forEach(id=>{$(id).addEventListener('change',()=>{if(reportState.planYears){calcAccum();}});});
-window.addEventListener('load',()=>{$('regimenFiscal').dispatchEvent(new Event('change')); updateSuggestion(); calcAccum(); linkWhatsApp();});
-</script>
+      const pmt0 = calcularPMTRequerido(edad,planY,metaHoy,infl,rAcc,rRet,yrsRet,freq);
+
+      const delays = [0,1,3,5];
+      const escenarios = {};
+      delays.forEach(d=>{
+        escenarios[d] = calcularPMTRequerido(edad+d,planY,metaHoy,infl,rAcc,rRet,yrsRet,freq);
+      });
+
+      reportState.metaHoy = metaHoy;
+      reportState.pmtSugerido = pmt0;
+      reportState.infl = infl;
+      reportState.rAcc = rAcc;
+      reportState.rRet = rRet;
+      reportState.yrsRet = yrsRet;
+      reportState.delayScenarios = escenarios;
+
+      if(!userEditedPMT){
+        $('pmt').value = String(pmt0.toFixed(2));
+      }
+
+      $('suggestedBadge').style.display='inline-block';
+      $('pmtHint').innerHTML = `Referencia estimada: <strong>${money(pmt0)}</strong> para buscar la meta que elegiste.`;
+    }
+
+    function calcAccum(){
+      const edad = parseFloat($('edad').value);
+      const years = parseFloat($('years').value);
+      const pmt0 = parseFloat($('pmt').value);
+      const lump = parseFloat($('lumpSum').value);
+      const rate = parseFloat($('rate').value)/100;
+      const freq = parseFloat($('frequency').value);
+      const infl = parseFloat($('inflation').value)/100;
+
+      const regimen = $('regimenFiscal').value;
+      const isrPct = parseFloat($('isrPct').value)/100;
+      const reinv = $('reinvertISR').checked;
+
+      if([edad,years,pmt0,lump,rate,freq,infl].some(x=>isNaN(x))){
+        const e = $('errorMsg');
+        e.textContent = 'Completa todos los campos correctamente.';
+        e.classList.add('visible');
+        return;
+      }else{
+        $('errorMsg').classList.remove('visible');
+      }
+
+      const yrsTo65 = Math.max(0,65-edad);
+      const yrsAport = Math.min(years,yrsTo65);
+      const yrsExtra = Math.max(0,yrsTo65-yrsAport);
+      const i = rate/freq;
+
+      let saldo=lump,totalAportado=lump,benefFiscal=0,edadAct=edad,pmtYear=pmt0,fondoPlan=lump;
+      const tbody=$('tbody');
+      tbody.innerHTML='';
+
+      const totalYearsSim = yrsAport+yrsExtra;
+      const chartLabels=[],chartData=[];
+
+      for(let yr=1;yr<=totalYearsSim;yr++){
+        edadAct++;
+        let aportAno=0,benefAno=0;
+
+        if(yr<=yrsAport){
+          if(yr>1) pmtYear *= (1+infl);
+          for(let k=0;k<freq;k++){
+            saldo *= (1+i);
+            saldo += pmtYear;
+            aportAno += pmtYear;
+            totalAportado += pmtYear;
+          }
+
+          if(regimen==='151'&&reinv&&isrPct>0){
+            benefAno = aportAno*isrPct;
+            saldo += benefAno;
+            benefFiscal += benefAno;
+          }
+        }else{
+          for(let k=0;k<freq;k++) saldo *= (1+i);
+        }
+
+        if(yr===yrsAport) fondoPlan = saldo;
+
+        chartLabels.push(`Año ${yr}`);
+        chartData.push(saldo);
+
+        const tr=document.createElement('tr');
+        if(yr>yrsAport) tr.style.background='rgba(255,255,255,.03)';
+        tr.innerHTML=`
+          <td>${yr}</td>
+          <td>${Math.round(edadAct)}</td>
+          <td>${yr>yrsAport?'—':money(aportAno)}</td>
+          <td>${benefAno>0?money(benefAno):'—'}</td>
+          <td>${money(saldo)}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+
+      const fondo65 = saldo;
+      const rendimiento = fondo65-totalAportado;
+      const edadFinPlan = edad+yrsAport;
+
+      $('edadFinPlan').textContent = String(Math.round(edadFinPlan));
+      $('fondoPlan').textContent = money(fondoPlan);
+      $('yearsPlan').textContent = String(yrsAport);
+      $('totalAportado').textContent = money(totalAportado);
+      $('rendimiento').textContent = money(rendimiento);
+      $('fondo65').textContent = money(fondo65);
+      $('pvRet').value = String(fondo65);
+
+      $('compTitle').textContent = `¿Dónde estaría tu dinero en ${yrsAport} años?`;
+
+      reportState.edad = edad;
+      reportState.planYears = yrsAport;
+      reportState.totalAportado = totalAportado;
+      reportState.rendimiento = rendimiento;
+      reportState.fondoPlan = fondoPlan;
+      reportState.fondo65 = fondo65;
+      reportState.benefFiscal = benefFiscal;
+      reportState.regimenFiscal = regimen;
+      reportState.isrPct = isrPct*100;
+      reportState.chartData = {labels:chartLabels,data:chartData};
+      reportState.edadFinPlan = edadFinPlan;
+      reportState.yearsGrowth = yrsExtra;
+
+      const totalMeses=years*12;
+      const aportMensual=pmt0;
+
+      const colchonNominal = totalMeses*aportMensual;
+      const colchonReal = colchonNominal/Math.pow(1+infl,years);
+
+      const iBanco=0.02/12;
+      let saldoBanco=0;
+      for(let m=0;m<totalMeses;m++){
+        saldoBanco *= (1+iBanco);
+        saldoBanco += aportMensual;
+      }
+      const bancoReal = saldoBanco/Math.pow(1+infl,years);
+
+      const iAfore=0.0347/12;
+      let saldoAfore=0;
+      for(let m=0;m<totalMeses;m++){
+        saldoAfore *= (1+iAfore);
+        saldoAfore += aportMensual;
+      }
+
+      $('compMattress').textContent = money(colchonNominal);
+      $('compMattressLoss').textContent = `Valor real aprox.: ${money(colchonReal)}`;
+      $('compBank').textContent = money(saldoBanco);
+      $('compBankLoss').textContent = `Valor real aprox.: ${money(bancoReal)}`;
+      $('compAfore').textContent = money(saldoAfore);
+      $('compAforeLoss').textContent = `Pensión limitada`;
+      $('compPlan').textContent = money(fondoPlan);
+
+      const diffTotal = fondoPlan-colchonNominal;
+      $('compMessage').textContent = `Con el mismo esfuerzo, la diferencia entre dejar pasar el tiempo o poner tu dinero a trabajar puede ser de ${money(diffTotal)}.`;
+
+      actualizarGrafica(chartLabels,chartData);
+      actualizarReporteBase();
+      linkWhatsApp();
+    }
+
+    function actualizarGrafica(labels,data){
+      const ctx=$('chartCanvas');
+      const context = ctx.getContext('2d');
+      if(myChart) myChart.destroy();
+
+      const gradient = context.createLinearGradient(0,0,0,320);
+      gradient.addColorStop(0,'rgba(122,162,255,.35)');
+      gradient.addColorStop(1,'rgba(122,162,255,.03)');
+
+      myChart = new Chart(context,{
+        type:'line',
+        data:{
+          labels:labels,
+          datasets:[{
+            label:'Fondo acumulado',
+            data:data,
+            borderColor:'#8DB0FF',
+            backgroundColor:gradient,
+            borderWidth:3,
+            fill:true,
+            tension:.34,
+            pointRadius:0,
+            pointHoverRadius:5,
+            pointBackgroundColor:'#F5B63D'
+          }]
+        },
+        options:{
+          responsive:true,
+          maintainAspectRatio:true,
+          plugins:{
+            legend:{display:false},
+            tooltip:{
+              backgroundColor:'rgba(7,18,40,.96)',
+              borderColor:'rgba(255,255,255,.1)',
+              borderWidth:1,
+              padding:12,
+              callbacks:{
+                label:(context)=>'Fondo: '+money(context.parsed.y)
+              }
+            }
+          },
+          scales:{
+            y:{
+              ticks:{
+                color:'rgba(255,255,255,.6)',
+                callback:(value)=>'$'+(value/1000000).toFixed(1)+'M'
+              },
+              grid:{color:'rgba(255,255,255,.06)'}
+            },
+            x:{
+              ticks:{
+                color:'rgba(255,255,255,.5)',
+                maxRotation:0,
+                autoSkip:true,
+                maxTicksLimit:10
+              },
+              grid:{display:false}
+            }
+          }
+        }
+      });
+    }
+
+    function calcRet(){
+      const PV=parseFloat($('pvRet').value)||0;
+      const yrs=parseInt($('yrsRetSel').value,10);
+      const rateRet=7/100;
+      const infl=4/100;
+      if(PV<=0){
+        alert('Primero calcula tu ahorro.');
+        return;
+      }
+
+      const iNom=rateRet/12;
+      const n=yrs*12;
+      const PMT=Math.abs(iNom)<1e-9?PV/n:PV*(iNom/(1-Math.pow(1+iNom,-n)));
+      const rReal=((1+rateRet)/(1+infl))-1;
+      const iReal=rReal/12;
+
+      $('retBox').classList.add('visible');
+      $('pmtReal').textContent=money(PMT);
+      $('nMeses').textContent=`${n}`;
+      $('iRealMes').textContent=`${(iReal*100).toFixed(3)}%`;
+      $('rule4').textContent=`${money(PV*0.04)} / año`;
+
+      const tbodyRet=$('tbodyRet');
+      tbodyRet.innerHTML='';
+      let saldo=PV;
+
+      for(let m=1;m<=Math.min(n,240);m++){
+        const interes=saldo*iNom;
+        const retiro=PMT;
+        const saldoDesp=Math.max(0,saldo+interes-retiro);
+        const yearsAdd=Math.floor(m/12);
+        const edadTxt=`${65+yearsAdd}`;
+        const tr=document.createElement('tr');
+        tr.innerHTML=`<td>${m}</td><td>${edadTxt}</td><td>${money(retiro)}</td><td>${money(interes)}</td><td>${money(saldoDesp)}</td>`;
+        tbodyRet.appendChild(tr);
+        saldo=saldoDesp;
+      }
+
+      reportState.ingresoMensual=PMT;
+      reportState.yrsRet=yrs;
+      reportState.tasaRealMes=iReal;
+      reportState.rRet=7;
+      actualizarReporteBase();
+    }
+
+    function actualizarReporteBase(){
+      const nombre=($('nombreOpt').value||'').trim();
+      reportState.nombre=nombre;
+
+      const hoy=new Date();
+      $('rptFecha').textContent=hoy.toLocaleDateString('es-MX',{year:'numeric',month:'long',day:'numeric'});
+      $('rptNombre').textContent=nombre||'—';
+
+      const edad=reportState.edad!=null?reportState.edad:parseFloat($('edad').value||0);
+      $('rptEdad').textContent=edad?`${edad} años`:'—';
+      $('rptEdadHoy').textContent=edad||'—';
+
+      const years=reportState.planYears!=null?reportState.planYears:parseFloat($('years').value||0);
+      $('rptPlazo').textContent=years?`${years} años`:'—';
+      $('rptPlazoDetalle').textContent=years?`${years} años`:'—';
+
+      const pmtReal=parseFloat($('pmt').value||0);
+      $('rptAportReal').textContent=pmtReal?money(pmtReal):'—';
+      $('rptAportMensual').textContent=pmtReal?money(pmtReal):'—';
+
+      const infl=reportState.infl!=null?reportState.infl:parseFloat($('inflation').value||0);
+      const rAcc=reportState.rAcc!=null?reportState.rAcc:parseFloat($('rate').value||0);
+      const yrsRet=reportState.yrsRet!=null?reportState.yrsRet:parseInt($('yrsRetSel').value||20,10);
+      const rRet=reportState.rRet!=null?reportState.rRet:7;
+
+      $('rptSupuestos1').textContent =
+        `Supuestos: inflación ${infl.toFixed(1)}% anual, rendimiento en acumulación ${rAcc.toFixed(1)}% nominal, retiro de ${yrsRet} años con ${rRet.toFixed(1)}% nominal.`;
+
+      if(reportState.regimenFiscal==='151'&&reportState.isrPct>0&&reportState.benefFiscal>0){
+        $('rptSupuestosFiscal').textContent = `Tratamiento fiscal estimado: Art. 151 con devolución ISR aproximada del ${reportState.isrPct.toFixed(0)}% reinvertida en el plan.`;
+      }else if(reportState.regimenFiscal==='93'){
+        $('rptSupuestosFiscal').textContent = `Tratamiento fiscal estimado: Art. 93 (diferido).`;
+      }else{
+        $('rptSupuestosFiscal').textContent = `Sin beneficio fiscal inmediato modelado en esta proyección.`;
+      }
+
+      $('rptTotalAportado').textContent=reportState.totalAportado?money(reportState.totalAportado):'—';
+      $('rptFondoPlan').textContent=reportState.fondoPlan?money(reportState.fondoPlan):'—';
+      $('rptFondo65').textContent=reportState.fondo65?money(reportState.fondo65):'—';
+      $('rptIngresoMensual').textContent=reportState.ingresoMensual?money(reportState.ingresoMensual):'—';
+      $('rptRendimientoNota').textContent=(reportState.rAcc ?? rAcc).toFixed(0);
+
+      const edadFinPlanCalc = reportState.edadFinPlan || 0;
+      const planCruza65 = edadFinPlanCalc >= 65;
+
+      if(planCruza65){
+        $('rptEdadFinPlan').textContent = '65';
+        $('rptLabelFinPlan').textContent = 'Retiro (65)';
+        $('rptFondoFinPlan').textContent = reportState.fondo65 ? money(reportState.fondo65) : '—';
+        $('timelineArrow2').style.display = 'none';
+        $('timelineRetPoint').style.display = 'none';
+        $('rptYearsGrowth').parentElement.style.display = 'none';
+      } else {
+        $('rptEdadFinPlan').textContent = edadFinPlanCalc || '—';
+        $('rptLabelFinPlan').textContent = 'Fin de aportaciones';
+        $('rptFondoFinPlan').textContent = reportState.fondoPlan ? money(reportState.fondoPlan) : '—';
+        $('timelineArrow2').style.display = '';
+        $('timelineRetPoint').style.display = '';
+        $('rptYearsGrowth').parentElement.style.display = '';
+        $('rptFondo65Timeline').textContent = reportState.fondo65 ? money(reportState.fondo65) : '—';
+        $('rptYearsGrowth').textContent = reportState.yearsGrowth ? `${reportState.yearsGrowth} años` : '0 años';
+      }
+
+      $('rptCompTitle').textContent=`¿Dónde estaría tu dinero en ${years} años?`;
+
+      if(reportState.totalAportado>0 && years>0){
+        const totalMeses=years*12;
+        const aportMensual=pmtReal;
+        const inflDec=infl/100;
+
+        const colchonNominal=totalMeses*aportMensual;
+        const colchonReal=colchonNominal/Math.pow(1+inflDec,years);
+
+        const iBanco=0.02/12;
+        let saldoBanco=0;
+        for(let m=0;m<totalMeses;m++){
+          saldoBanco*=(1+iBanco);
+          saldoBanco+=aportMensual;
+        }
+        const bancoReal=saldoBanco/Math.pow(1+inflDec,years);
+
+        const iAfore=0.0347/12;
+        let saldoAfore=0;
+        for(let m=0;m<totalMeses;m++){
+          saldoAfore*=(1+iAfore);
+          saldoAfore+=aportMensual;
+        }
+
+        $('rptCompMattress').textContent=money(colchonNominal);
+        $('rptCompMattressLoss').textContent=`Valor real aprox. ${money(colchonReal)}`;
+        $('rptCompBank').textContent=money(saldoBanco);
+        $('rptCompBankLoss').textContent=`Valor real aprox. ${money(bancoReal)}`;
+        $('rptCompAfore').textContent=money(saldoAfore);
+        $('rptCompAforeLoss').textContent=`Pensión limitada`;
+        $('rptCompPlan').textContent=money(reportState.fondoPlan);
+      }
+
+      const esc=reportState.delayScenarios;
+      if(esc && reportState.fondo65>0){
+        const base=pmtReal;
+        const inflDec=(reportState.infl!=null?reportState.infl:infl)/100;
+        const rAccDec=(reportState.rAcc!=null?reportState.rAcc:parseFloat($('rate').value))/100;
+        const freqVal=parseFloat($('frequency').value);
+        const edadHoy=reportState.edad!=null?reportState.edad:parseFloat($('edad').value);
+        const planYears=reportState.planYears!=null?reportState.planYears:parseFloat($('years').value);
+        const targetFondo65=reportState.fondo65;
+
+        function pmtParaFondo65(delayYears){
+          const edadNueva=edadHoy+delayYears;
+          const yrsTo65nuevo=Math.max(0,65-edadNueva);
+          const yrsAportNuevo=Math.min(planYears,yrsTo65nuevo);
+          const yrsExtraNuevo=Math.max(0,yrsTo65nuevo-yrsAportNuevo);
+          if(yrsAportNuevo<=0) return null;
+
+          const iAcc=rAccDec/freqVal;
+          const N=yrsAportNuevo*freqVal;
+          let FV_pagos=0, pmtYearSim=1;
+
+          for(let y=0;y<yrsAportNuevo;y++){
+            if(y>0) pmtYearSim*=(1+inflDec);
+            for(let m=0;m<freqVal;m++){
+              const perRest=N-(y*freqVal+m);
+              FV_pagos+=pmtYearSim*Math.pow(1+iAcc,perRest);
+            }
+          }
+
+          const growTo65=Math.pow(1+iAcc,yrsExtraNuevo*freqVal);
+          const totalFactor=FV_pagos*growTo65;
+          return totalFactor>0?targetFondo65/totalFactor:null;
+        }
+
+        const pmt1=pmtParaFondo65(1);
+        const pmt3=pmtParaFondo65(3);
+        const pmt5=pmtParaFondo65(5);
+
+        function deltaTxt(pmtDelay){
+          if(!base||pmtDelay==null)return '—';
+          const diff=pmtDelay-base;
+          if(diff<=0)return 'Igual';
+          const pct=diff/base*100;
+          return `+${money(diff)} (+${pct.toFixed(1)}%)`;
+        }
+
+        $('rptHoyMonto').textContent=base?money(base):'—';
+        $('rptHoyDelta').textContent='Base';
+        $('rpt1Monto').textContent=pmt1!=null?money(pmt1):'—';
+        $('rpt1Delta').textContent=deltaTxt(pmt1);
+        $('rpt3Monto').textContent=pmt3!=null?money(pmt3):'—';
+        $('rpt3Delta').textContent=deltaTxt(pmt3);
+        $('rpt5Monto').textContent=pmt5!=null?money(pmt5):'—';
+        $('rpt5Delta').textContent=deltaTxt(pmt5);
+
+        const nombreShow=nombre||'Tu decisión';
+        $('rptMensajePosponer').textContent =
+          `${nombreShow} de hoy define tu esfuerzo mañana. Para buscar el mismo fondo a los 65 años (${money(targetFondo65)}), esperar 1, 3 o 5 años puede obligarte a aumentar de forma importante la aportación mensual.`;
+      }
+    }
+
+    function exportCSV(){
+      const rows=[['Año','Edad','Aportado (MXN)','Beneficio fiscal (MXN)','Saldo (MXN)']];
+      document.querySelectorAll('#tbody tr').forEach(tr=>{
+        const t=[...tr.querySelectorAll('td')].map(td=>td.textContent.replace(/[^\d.,\-a-zñ ]/gi,''));
+        rows.push(t);
+      });
+
+      const blob=new Blob([rows.map(r=>r.join(',')).join('\n')],{type:'text/csv;charset=utf-8;'});
+      const a=document.createElement('a');
+      const name=$('nombreOpt').value||'Proyeccion';
+      const f=new Date().toISOString().slice(0,10);
+      a.href=URL.createObjectURL(blob);
+      a.download=`${name}_plan_retiro_${f}.csv`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function prepararPDF(){
+      setTimeout(()=>{window.print()},250);
+    }
+
+    $('pmt').addEventListener('input',()=>{
+      userEditedPMT=true;
+    });
+
+    $('calcBtn').addEventListener('click',()=>{
+      updateSuggestion();
+      calcAccum();
+    });
+
+    $('resetBtn').addEventListener('click',()=>{
+      $('nombreOpt').value='';
+      $('edad').value=29;
+      $('years').value=15;
+      $('metaHoy').value=32000;
+      $('pmt').value=2500;
+      userEditedPMT=false;
+      $('suggestedBadge').style.display='none';
+      $('frequency').value=12;
+      $('lumpSum').value=0;
+      $('rate').value=10;
+      $('inflation').value=4;
+      $('regimenFiscal').value='ninguno';
+      $('isrPct').value='20';
+      $('reinvertISR').checked=true;
+      $('regimenFiscal').dispatchEvent(new Event('change'));
+      updateSuggestion();
+      calcAccum();
+    });
+
+    $('calcRet').addEventListener('click',calcRet);
+    $('csvBtn').addEventListener('click',exportCSV);
+    $('printBtn').addEventListener('click',prepararPDF);
+
+    $('advancedToggle').addEventListener('click',function(){
+      $('advancedContent').classList.toggle('visible');
+      this.classList.toggle('open');
+    });
+
+    $('toggleTable').addEventListener('click',function(){
+      $('details').classList.toggle('visible');
+      this.classList.toggle('open');
+    });
+
+    $('toggleTableRet').addEventListener('click',function(){
+      $('detailsRet').classList.toggle('visible');
+      this.classList.toggle('open');
+    });
+
+    ['edad','years','metaHoy','rate','inflation','yrsRetSel'].forEach(id=>{
+      $(id).addEventListener('change',()=>{ updateSuggestion(); });
+    });
+
+    ['frequency','lumpSum','regimenFiscal','isrPct','reinvertISR'].forEach(id=>{
+      $(id).addEventListener('change',()=>{
+        if(reportState.planYears) calcAccum();
+      });
+    });
+
+    window.addEventListener('load',()=>{
+      $('regimenFiscal').dispatchEvent(new Event('change'));
+      updateSuggestion();
+      calcAccum();
+      linkWhatsApp();
+    });
+  </script>
 </body>
 </html>
